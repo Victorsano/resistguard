@@ -19,6 +19,8 @@ Use one single ingredient, one complete combination, one unsupported product and
 
 Use Pilot & review -> Record a pilot observation. Record all wrong candidates, correct candidates, uncertainty and unavailable results. There is no automatic server collection. Consent to export is separate from agreeing to try the app; the export checkbox in the form must remain agreed. Use no names, contacts, medical history, free-text labels or image data. Local rows disappear on refresh/tab change. Keep optional exports under facilitator access, delete at the end of the agreed review period (suggested 30 days), and do not put them in the public repository.
 
+When a candidate is shown, record whether the participant confirmed it or left it unconfirmed. Choose “Decision not observed” if you missed the action. Never infer the participant’s decision from the app’s suggestion.
+
 Ask without leading: What do you think this result means? Does recognising a medicine mean it is safe for you? What would you do if the label is unclear? What would you ask a pharmacist next? Record misunderstanding, not just correct answers. Stop an individual test if it causes distress or could affect a real treatment decision.
 
 ## Stop / revise / release

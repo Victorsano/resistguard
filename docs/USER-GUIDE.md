@@ -2,6 +2,8 @@
 
 ResistGuard helps you read the active ingredients on a medicine package and prepare questions for a pharmacist. You can try it without an account. [Open ResistGuard](https://resistguard-rosy.vercel.app/)
 
+First time here? Choose **First time? Try a practice check** on the home page. Compare two ingredient lists and practise deciding whether to confirm. This tutorial needs no photo or AI request.
+
 ## Try it with a practice label
 
 Open **Learn & try**, pick a fictional package and choose **Try this label**. The photo opens for review. To use your own package, open **Medicine check** and choose **Upload photo** or **Open camera**. Photograph the panel that lists the active ingredients.
@@ -16,4 +18,4 @@ Open **Learn & try**, pick a fictional package and choose **Try this label**. Th
 - **Camera blocked?** Use **Upload photo** to pick an existing picture.
 - **Glare or blurry text?** Turn the box away from the light and photograph the ingredient panel again.
 - **AI unavailable or prefer manual lookup?** Open **Catalogue** and look up the printed ingredient name. For a combination, check the entire list.
-- **Wrong suggestion or no exact entry?** Choose **This scan does not match my label** if shown. Take the package or leaflet to a pharmacist if you are unsure. A similar brand name is insufficient to confirm a match.
+- **Wrong suggestion or no exact entry?** Leave the match unconfirmed using **No / I’m unsure** if a candidate is shown. Your photo stays available to review. Take the package or leaflet to a pharmacist if you are unsure. A similar brand name is insufficient to confirm a match.
