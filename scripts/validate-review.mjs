@@ -1,0 +1,10 @@
+import fs from 'node:fs/promises';
+const input=process.argv[2];if(!input)throw new Error('Pass a completed private review JSON file.');
+const packet=JSON.parse(await fs.readFile('public/review-packet.json','utf8'));
+const review=JSON.parse((await fs.readFile(input,'utf8')).replace(/^\uFEFF/,''));
+if(review.contentSha256!==packet.contentSha256||JSON.stringify(review.files)!==JSON.stringify(packet.files))throw new Error('Review is for a different content version. Generate and review the current packet.');
+if(review.reviewer?.role!=='pharmacist'||!review.reviewer.registrationEvidenceReference||!/^\d{4}-\d{2}-\d{2}$/.test(review.reviewer.reviewedOn||''))throw new Error('Pharmacist role, private registration evidence reference and review date are required.');
+const date=review.reviewer.reviewedOn;
+if(!Number.isFinite(Date.parse(date))||new Date(date).toISOString().slice(0,10)!==date||date<packet.generated.slice(0,10)||date>new Date().toISOString().slice(0,10))throw new Error('Review date must be valid, after packet generation and not in the future.');
+if(!Array.isArray(review.checklist)||review.checklist.length!==packet.checklist.length||!packet.checklist.every(item=>review.checklist.filter(r=>r.id===item.id&&r.decision==='approved').length===1))throw new Error('Every exact checklist item must be approved; resolve corrections before approval.');
+console.log('Checklist complete for current content. This validates the file, not the reviewer identity. Independently verify registration and retain signed evidence before configuring REVIEWED_CONTENT_SHA256.');

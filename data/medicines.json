@@ -1,0 +1,262 @@
+[
+  {
+    "id": "amoxicillin",
+    "name": "Amoxicillin",
+    "category": "Penicillin antibiotic",
+    "summary": "An antibiotic used for certain bacterial infections. It does not treat viral colds or flu.",
+    "caution": "Tell your pharmacist or prescriber about any previous penicillin allergy before taking it.",
+    "source": "https://www.nhs.uk/medicines/amoxicillin/about-amoxicillin/",
+    "checked": "2026-11-14",
+    "ingredients": [
+      "amoxicillin"
+    ],
+    "antibiotic": true,
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "azithromycin",
+    "name": "Azithromycin",
+    "category": "Macrolide antibiotic",
+    "summary": "A macrolide antibiotic used for certain bacterial infections. A clinician must decide whether it is appropriate.",
+    "caution": "Ask a pharmacist about interactions with other medicines and any health conditions before taking it.",
+    "source": "https://www.nhs.uk/medicines/azithromycin/about-azithromycin/",
+    "checked": "2026-11-14",
+    "ingredients": [
+      "azithromycin"
+    ],
+    "antibiotic": true,
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "metronidazole",
+    "name": "Metronidazole",
+    "category": "Antibiotic and antiprotozoal",
+    "summary": "Used for certain bacterial and parasitic infections. Its presence on a package does not establish what illness you have.",
+    "caution": "Avoid alcohol while taking oral metronidazole; ask your pharmacist how long to wait after finishing.",
+    "source": "https://www.nhs.uk/medicines/metronidazole/about-metronidazole/",
+    "checked": "2026-11-14",
+    "ingredients": [
+      "metronidazole"
+    ],
+    "antibiotic": true,
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "doxycycline",
+    "name": "Doxycycline",
+    "ingredients": [
+      "doxycycline"
+    ],
+    "antibiotic": true,
+    "category": "Antibiotic",
+    "summary": "An antibiotic for certain infections and other clinician-directed purposes. Recognition does not establish suitability.",
+    "caution": "Discuss other medicines, pregnancy or breastfeeding with a pharmacist or prescriber before using it.",
+    "source": "https://www.nhs.uk/medicines/doxycycline/",
+    "checked": "2026-11-14",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "ciprofloxacin",
+    "name": "Ciprofloxacin",
+    "ingredients": [
+      "ciprofloxacin"
+    ],
+    "antibiotic": true,
+    "category": "Antibiotic",
+    "summary": "An antibiotic for certain infections. It is often used only when other antibiotic options have not worked or are unsuitable.",
+    "caution": "It can cause rare but serious, sometimes lasting side effects. Discuss the risks with your prescriber.",
+    "source": "https://www.nhs.uk/medicines/ciprofloxacin/",
+    "checked": "2026-11-14",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "flucloxacillin",
+    "name": "Flucloxacillin",
+    "ingredients": [
+      "flucloxacillin"
+    ],
+    "antibiotic": true,
+    "category": "Penicillin antibiotic",
+    "summary": "A penicillin antibiotic used for some bacterial infections, including skin and wound infections.",
+    "caution": "Ask a pharmacist or prescriber about allergies, interactions and your own prescription.",
+    "source": "https://www.nhs.uk/medicines/flucloxacillin/about-flucloxacillin/",
+    "checked": "2026-11-14",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "cefalexin",
+    "name": "Cefalexin",
+    "ingredients": [
+      "cefalexin"
+    ],
+    "antibiotic": true,
+    "category": "Cephalosporin antibiotic",
+    "summary": "A cephalosporin antibiotic for certain bacterial infections. A professional assessment determines whether it is needed.",
+    "caution": "Ask a pharmacist about other medicines and supplements before using cefalexin.",
+    "source": "https://www.nhs.uk/medicines/cefalexin/about-cefalexin/",
+    "checked": "2026-11-14",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "nitrofurantoin",
+    "name": "Nitrofurantoin",
+    "ingredients": [
+      "nitrofurantoin"
+    ],
+    "antibiotic": true,
+    "category": "Antibiotic",
+    "summary": "An antibiotic used for certain urinary tract infections. It is not a general treatment for every infection.",
+    "caution": "Speak with a pharmacist or prescriber about health conditions and your own prescription.",
+    "source": "https://www.nhs.uk/medicines/nitrofurantoin/",
+    "checked": "2026-11-14",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "clarithromycin",
+    "name": "Clarithromycin",
+    "ingredients": [
+      "clarithromycin"
+    ],
+    "antibiotic": true,
+    "category": "Macrolide antibiotic",
+    "summary": "A macrolide antibiotic used for certain bacterial infections, sometimes together with other prescribed medicines.",
+    "caution": "Ask a pharmacist or prescriber to check interactions with your other medicines.",
+    "source": "https://www.nhs.uk/medicines/clarithromycin/about-clarithromycin/",
+    "checked": "2026-11-14",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "co-amoxiclav",
+    "name": "Co-amoxiclav",
+    "ingredients": [
+      "amoxicillin",
+      "clavulanic acid"
+    ],
+    "antibiotic": true,
+    "category": "Combination penicillin antibiotic",
+    "summary": "A combination medicine containing amoxicillin and clavulanic acid. It is a distinct record, not an amoxicillin-only product.",
+    "caution": "Both active ingredients must match the label. Ask a pharmacist about penicillin allergy and suitability.",
+    "source": "https://www.nhs.uk/medicines/co-amoxiclav/",
+    "checked": "2026-11-14",
+    "ingredientSource": "https://www.medicines.org.uk/emc/product/4078/pil",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "paracetamol",
+    "name": "Paracetamol",
+    "ingredients": [
+      "paracetamol"
+    ],
+    "antibiotic": false,
+    "category": "Pain and fever medicine",
+    "summary": "A medicine for pain and high temperature. It is not an antibiotic and does not treat a bacterial infection itself.",
+    "caution": "Check for paracetamol in other medicines too. Ask a pharmacist about safe use; this app does not provide doses.",
+    "source": "https://www.nhs.uk/medicines/paracetamol-for-adults/",
+    "checked": "2026-11-14",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "ibuprofen",
+    "name": "Ibuprofen",
+    "ingredients": [
+      "ibuprofen"
+    ],
+    "antibiotic": false,
+    "category": "Anti-inflammatory pain medicine",
+    "summary": "A non-steroidal anti-inflammatory medicine for pain, inflammation and fever. It is not an antibiotic.",
+    "caution": "Ibuprofen is not suitable for everyone. Ask a pharmacist about health conditions, other medicines and safe use.",
+    "source": "https://www.nhs.uk/medicines/ibuprofen-for-adults/",
+    "checked": "2026-11-14",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "trimethoprim",
+    "name": "Trimethoprim",
+    "ingredients": [
+      "trimethoprim"
+    ],
+    "antibiotic": true,
+    "category": "Antibiotic",
+    "summary": "An antibiotic used for certain bacterial infections, including some urinary tract infections. A professional decides whether it is appropriate.",
+    "caution": "Ask a pharmacist or prescriber to check other medicines and health conditions before use.",
+    "source": "https://www.nhs.uk/medicines/trimethoprim/about-trimethoprim/",
+    "checked": "2026-11-15",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "phenoxymethylpenicillin",
+    "name": "Phenoxymethylpenicillin",
+    "ingredients": [
+      "phenoxymethylpenicillin"
+    ],
+    "antibiotic": true,
+    "category": "Penicillin antibiotic",
+    "summary": "A prescription antibiotic for certain bacterial infections. Label recognition does not establish a need for treatment.",
+    "caution": "Discuss previous penicillin allergy and your own prescription with a pharmacist or prescriber.",
+    "source": "https://www.nhs.uk/medicines/phenoxymethylpenicillin/",
+    "checked": "2026-11-15",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "erythromycin",
+    "name": "Erythromycin",
+    "ingredients": [
+      "erythromycin"
+    ],
+    "antibiotic": true,
+    "category": "Macrolide antibiotic",
+    "summary": "A prescription antibiotic used for certain bacterial infections. It is not a treatment recommendation for symptoms entered in this app.",
+    "caution": "Ask a pharmacist to check interactions and whether it is suitable for your health conditions.",
+    "source": "https://www.nhs.uk/medicines/erythromycin/",
+    "checked": "2026-11-15",
+    "sourceLabel": "NHS",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  },
+  {
+    "id": "co-trimoxazole",
+    "name": "Co-trimoxazole",
+    "ingredients": [
+      "sulfamethoxazole",
+      "trimethoprim"
+    ],
+    "antibiotic": true,
+    "category": "Combination antibiotic",
+    "summary": "A combination of sulfamethoxazole and trimethoprim for certain bacterial infections. Both active ingredients belong to this record.",
+    "caution": "Confirm both active ingredients. Discuss allergies, other medicines and personal suitability with a pharmacist or prescriber.",
+    "source": "https://www.medicines.org.uk/emc/product/6999/pil",
+    "ingredientSource": "https://www.medicines.org.uk/emc/product/6999/pil",
+    "checked": "2026-11-15",
+    "sourceLabel": "Manufacturer leaflet",
+    "reviewStatus": "pending_pharmacist",
+    "reviewDue": "2027-02-15"
+  }
+]

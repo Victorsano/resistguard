@@ -1,0 +1,17 @@
+.env*
+!.env.example
+node_modules
+.next
+.git
+.playwright-cli
+output
+tests
+scripts
+*.zip
+*.tsbuildinfo
+AGENTS.md
+VERIFICATION.md
+
+work/
+private/
+

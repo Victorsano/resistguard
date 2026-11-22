@@ -1,0 +1,63 @@
+{
+  "checkedAt": "2026-11-15T15:55:40.150Z",
+  "base": "http://127.0.0.1:3000",
+  "scope": "published label artwork, not physical-device photography",
+  "results": [
+    {
+      "id": "amoxicillin",
+      "source": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4fb7837e-964c-4d38-a3a5-b384b1bd6e08",
+      "imageUrl": "https://dailymed.nlm.nih.gov/dailymed/image.cfm?setid=4fb7837e-964c-4d38-a3a5-b384b1bd6e08&name=amoxicillin-capsules-250-mg-and-500-mg-2.jpg",
+      "kind": "published_manufacturer_label_artwork_not_phone_photo",
+      "sha256": "5a31061d79170bcc00d35691642632b2a447e84ffa37238b97d6508bba956ded",
+      "expectedId": "amoxicillin",
+      "actualId": "amoxicillin",
+      "status": "candidate",
+      "reason": null,
+      "http": 200,
+      "outcome": "correct_candidate",
+      "durationMs": 1923
+    },
+    {
+      "id": "acetaminophen",
+      "source": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fc5d92c2-4bbe-8ad1-e053-6294a90a65b6",
+      "imageUrl": "https://dailymed.nlm.nih.gov/dailymed/image.cfm?setid=fc5d92c2-4bbe-8ad1-e053-6294a90a65b6&name=otcm00021+v1+rj23hnd+label.jpg",
+      "kind": "published_manufacturer_label_artwork_not_phone_photo",
+      "sha256": "56fd7f6cd689455eaaa194e58a4a5662faf46f5146e35398bf7adc5bf1f770bb",
+      "expectedId": "paracetamol",
+      "actualId": "paracetamol",
+      "status": "non_antibiotic",
+      "reason": null,
+      "http": 200,
+      "outcome": "correct_candidate",
+      "durationMs": 18108,
+      "previousAttempts": [
+        {
+          "status": "unavailable",
+          "reason": "timeout",
+          "outcome": "unavailable"
+        }
+      ]
+    },
+    {
+      "id": "co-trimoxazole",
+      "source": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d60c218c-6529-4944-af0b-a9dc720f32e9",
+      "imageUrl": "https://dailymed.nlm.nih.gov/dailymed/image.cfm?setid=d60c218c-6529-4944-af0b-a9dc720f32e9&name=sulfatrime-fig2.jpg",
+      "kind": "published_manufacturer_label_artwork_not_phone_photo",
+      "sha256": "228c26f6ce9f88c4f84b4213d6942889e30bd3f6057972c66c960a9d3e1d783f",
+      "expectedId": "co-trimoxazole",
+      "actualId": "co-trimoxazole",
+      "status": "combination",
+      "reason": null,
+      "http": 200,
+      "outcome": "correct_candidate",
+      "durationMs": 1282
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "correct": 3,
+    "incorrect": 0,
+    "abstained": 0,
+    "unavailable": 0
+  }
+}

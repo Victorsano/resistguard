@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-11-15T16:14:13.561Z",
+  "base": "https://resistguard-rosy.vercel.app",
+  "passed": 1,
+  "total": 1,
+  "results": [
+    {
+      "fixture": "amoxicillin",
+      "expectedStatus": "candidate",
+      "actualStatus": "candidate",
+      "expectedId": "amoxicillin",
+      "actualId": "amoxicillin",
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 1783
+    }
+  ]
+}

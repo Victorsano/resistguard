@@ -1,0 +1,1 @@
+{"label":"Synthetic demonstration dataset — not real users or surveillance","sessions":240,"catalogueMatches":186,"learningChecks":154,"scenarios":[{"name":"Cold or flu","value":96},{"name":"Sharing medicines","value":62},{"name":"Leftover antibiotics","value":48},{"name":"Prescription questions","value":34}],"weekly":[28,35,30,42,31,39,35]}

@@ -1,0 +1,10 @@
+{
+  "backend": "isolated temporary Redis, not production",
+  "checkedAt": "2026-11-15T15:54:37.222Z",
+  "parallelRequests": 10,
+  "acceptedSameClient": 2,
+  "globalMinuteEnforced": true,
+  "dailyBudgetEnforcedAcrossMinuteBoundaries": true,
+  "rawClientIdsStored": false,
+  "productionConnected": false
+}

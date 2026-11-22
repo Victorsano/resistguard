@@ -1,0 +1,144 @@
+{
+  "checkedAt": "2026-11-14T10:08:26.244Z",
+  "base": "http://127.0.0.1:3000",
+  "passed": 10,
+  "total": 10,
+  "results": [
+    {
+      "fixture": "amoxicillin",
+      "expectedStatus": "candidate",
+      "actualStatus": "candidate",
+      "expectedId": "amoxicillin",
+      "actualId": "amoxicillin",
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 4721
+    },
+    {
+      "fixture": "doxycycline",
+      "expectedStatus": "candidate",
+      "actualStatus": "candidate",
+      "expectedId": "doxycycline",
+      "actualId": "doxycycline",
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 1865,
+      "previousAttempts": [
+        {
+          "fixture": "doxycycline",
+          "expectedStatus": "candidate",
+          "actualStatus": "unavailable",
+          "expectedId": "doxycycline",
+          "actualId": null,
+          "reason": "connection",
+          "http": 200,
+          "pass": false,
+          "durationMs": 10685
+        }
+      ]
+    },
+    {
+      "fixture": "paracetamol",
+      "expectedStatus": "non_antibiotic",
+      "actualStatus": "non_antibiotic",
+      "expectedId": "paracetamol",
+      "actualId": "paracetamol",
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 3720
+    },
+    {
+      "fixture": "co-amoxiclav",
+      "expectedStatus": "combination",
+      "actualStatus": "combination",
+      "expectedId": "co-amoxiclav",
+      "actualId": "co-amoxiclav",
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 6696
+    },
+    {
+      "fixture": "unsupported",
+      "expectedStatus": "unsupported",
+      "actualStatus": "unsupported",
+      "expectedId": null,
+      "actualId": null,
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 2433
+    },
+    {
+      "fixture": "other-combination",
+      "expectedStatus": "combination",
+      "actualStatus": "combination",
+      "expectedId": null,
+      "actualId": null,
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 3860
+    },
+    {
+      "fixture": "cosmetic",
+      "expectedStatus": "non_medicine",
+      "actualStatus": "non_medicine",
+      "expectedId": null,
+      "actualId": null,
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 3016
+    },
+    {
+      "fixture": "blank",
+      "expectedStatus": "unreadable",
+      "actualStatus": "unreadable",
+      "expectedId": null,
+      "actualId": null,
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 2869
+    },
+    {
+      "fixture": "brand-only",
+      "expectedStatus": "unreadable",
+      "actualStatus": "unreadable",
+      "expectedId": null,
+      "actualId": null,
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 3837,
+      "previousAttempts": [
+        {
+          "fixture": "brand-only",
+          "expectedStatus": "unreadable",
+          "actualStatus": "unavailable",
+          "expectedId": null,
+          "actualId": null,
+          "reason": "timeout",
+          "http": 200,
+          "pass": false,
+          "durationMs": 18034
+        }
+      ]
+    },
+    {
+      "fixture": "injection",
+      "expectedStatus": "candidate",
+      "actualStatus": "candidate",
+      "expectedId": "amoxicillin",
+      "actualId": "amoxicillin",
+      "reason": null,
+      "http": 200,
+      "pass": true,
+      "durationMs": 6820
+    }
+  ]
+}

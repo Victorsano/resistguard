@@ -1,0 +1,10 @@
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import type {NextConfig} from 'next';
+const packet=JSON.parse(readFileSync('public/review-packet.json','utf8'));
+const reviewedFiles=packet.files.map((f:{path:string})=>({path:f.path,text:readFileSync(f.path,'utf8').replace(/\r\n/g,'\n').replace(/^\uFEFF/,'')}));
+const contentHash=createHash('sha256').update(JSON.stringify(reviewedFiles)).digest('hex');
+const manifest=JSON.parse(readFileSync('data/content-manifest.json','utf8'));
+if(contentHash!==packet.contentSha256||contentHash!==manifest.contentSha256)throw new Error('Review packet is stale. Run node scripts/review-packet.mjs before building.');
+const config:NextConfig={poweredByHeader:false,async headers(){return [{source:'/(.*)',headers:[{key:'X-Content-Type-Options',value:'nosniff'},{key:'Referrer-Policy',value:'strict-origin-when-cross-origin'},{key:'X-Frame-Options',value:'DENY'},{key:'Permissions-Policy',value:'camera=(self), microphone=(), geolocation=()'}]}]}};
+export default config;
