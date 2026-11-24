@@ -3,5 +3,21 @@
   "cephalexin": "cefalexin",
   "clavulanate": "clavulanic acid",
   "potassium clavulanate": "clavulanic acid",
-  "sulphamethoxazole": "sulfamethoxazole"
+  "sulphamethoxazole": "sulfamethoxazole",
+  "ampicillin trihydrate": "ampicillin",
+  "ampicillin sodium": "ampicillin",
+  "cloxacillin sodium": "cloxacillin",
+  "cefixime trihydrate": "cefixime",
+  "ceftriaxone sodium": "ceftriaxone",
+  "cefuroxime axetil": "cefuroxime",
+  "cefuroxime sodium": "cefuroxime",
+  "cefazolin sodium": "cefazolin",
+  "cefpodoxime proxetil": "cefpodoxime",
+  "clindamycin hydrochloride": "clindamycin",
+  "clindamycin phosphate": "clindamycin",
+  "gentamicin sulfate": "gentamicin",
+  "mupirocin calcium": "mupirocin",
+  "bacitracin zinc": "bacitracin",
+  "neomycin sulfate": "neomycin",
+  "polymyxin b sulfate": "polymyxin b"
 }

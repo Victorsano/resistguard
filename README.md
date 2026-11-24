@@ -4,7 +4,7 @@
 
 See what each of the six pages is for and how they fit together. [Product overview](docs/PRODUCT-OVERVIEW.md)
 
-Next.js + TypeScript educational app. No authentication, stored uploads, health history, tracking SDK or clinical validation. Sixteen source-checked generic records; every record is explicitly awaiting pharmacist review. Source checking is not professional approval.
+Next.js + TypeScript educational app. No authentication, stored uploads, health history, tracking SDK or clinical validation. The catalogue has 28 source-checked generic records awaiting pharmacist review. [See how the technology and Nigerian sources fit together](docs/DATA-AND-ARCHITECTURE.md).
 
 ## Current release state
 

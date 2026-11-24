@@ -29,6 +29,36 @@
       "name": "DailyMed · Diclofenac sodium tablet, delayed release",
       "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f92576d7-3ad9-43a3-8b10-3a29fbf712a4",
       "version": "Label record, boxed warning and warnings"
+    },
+    "ncdc": {
+      "name": "NCDC · Antimicrobial resistance",
+      "url": "https://ncdc.gov.ng/diseases/factsheet/70",
+      "version": "Online fact sheet · stewardship section"
+    },
+    "uti": {
+      "name": "NHS · Urinary tract infections",
+      "url": "https://www.nhs.uk/conditions/urinary-tract-infections-utis/",
+      "version": "Online patient guidance"
+    },
+    "pneumonia": {
+      "name": "WHO · Pneumonia in children",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+      "version": "Fact sheet · 11 November 2022"
+    },
+    "tonsillitis": {
+      "name": "NHS · Tonsillitis",
+      "url": "https://www.nhs.uk/conditions/tonsillitis/",
+      "version": "Online patient guidance"
+    },
+    "typhoid": {
+      "name": "WHO · Typhoid",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/typhoid",
+      "version": "Fact sheet · 30 March 2023"
+    },
+    "wound": {
+      "name": "NHS · Cuts and grazes",
+      "url": "https://www.nhs.uk/conditions/cuts-and-grazes/",
+      "version": "Online patient guidance"
     }
   },
   "checked": "2026-11-24",
@@ -100,6 +130,42 @@
       "text": "Antibiotics can cause side effects in children. Discuss concerns or side effects with a qualified health professional, and use the instructions prescribed for the child.",
       "source": "cdc",
       "section": "Children and side effects"
+    },
+    "nigeria_amr": {
+      "title": "Antibiotic stewardship in Nigeria",
+      "text": "NCDC describes stewardship as improving how antimicrobials are used while reducing avoidable harms and resistance. For this example, ask a health professional whether an antibiotic is needed before starting one yourself.",
+      "source": "ncdc",
+      "section": "Stewardship"
+    },
+    "uti_assessment": {
+      "title": "Urinary symptoms deserve an assessment",
+      "text": "A health professional can assess urinary symptoms and decide if testing or treatment is needed. Suspected urinary infection in a child or during pregnancy warrants prompt professional advice.",
+      "source": "uti",
+      "section": "When to seek help and treatment"
+    },
+    "pneumonia_assessment": {
+      "title": "Breathing difficulty needs prompt care",
+      "text": "Pneumonia in children can have different causes and requires assessment. If a child is having difficulty breathing, seek urgent medical care.",
+      "source": "pneumonia",
+      "section": "Signs and symptoms and treatment"
+    },
+    "tonsillitis_assessment": {
+      "title": "Sore throat can have different causes",
+      "text": "Tonsillitis is commonly caused by viruses and can also have a bacterial cause. A professional can assess whether antibiotics are appropriate.",
+      "source": "tonsillitis",
+      "section": "Causes and treatment"
+    },
+    "typhoid_assessment": {
+      "title": "Fever needs proper assessment",
+      "text": "Typhoid can be serious and can be confirmed by blood testing. Seek medical care for suspected typhoid and let a professional establish what treatment is appropriate.",
+      "source": "typhoid",
+      "section": "Symptoms, diagnosis and treatment"
+    },
+    "wound_assessment": {
+      "title": "A wound may require more than an antibiotic",
+      "text": "Seek medical assessment if a wound becomes increasingly painful, red or swollen, or has pus. A professional can assess the wound and decide what care it needs.",
+      "source": "wound",
+      "section": "When to seek urgent advice"
     }
   }
 }

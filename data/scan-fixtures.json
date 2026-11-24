@@ -59,9 +59,9 @@
     "id": "unsupported",
     "title": "Cefixime",
     "file": "unsupported.png",
-    "kind": "Outside this catalogue",
-    "expectedStatus": "unsupported",
-    "expectedId": null,
+    "kind": "Nigeria Essential Medicines List",
+    "expectedStatus": "candidate",
+    "expectedId": "cefixime",
     "lines": [
       "SIMULATED PACKAGING - SOFTWARE TEST ONLY",
       "Cefixime",

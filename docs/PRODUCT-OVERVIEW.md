@@ -8,7 +8,7 @@ ResistGuard helps people understand medicine labels, recognise situations where 
 |---|---|
 | **Medicine check** | Use the camera or upload a photo to read active ingredients. Compare every ingredient with a suggested catalogue entry before confirming. The practice tutorial shows why an incomplete list can lead to a wrong match. |
 | **Antibiotic use** | Explore fictional examples involving eczema, a boil, sildenafil with nitrates, or diclofenac and a history of ulcers. Read source-linked guidance, prepare questions for a pharmacist and try the interactive AMR lesson. |
-| **Catalogue** | Browse 16 source-checked generic medicine entries by active ingredient. Use it for manual lookup when a photo is unnecessary or scanning is unavailable. Pharmacist review is pending. |
+| **Catalogue** | Browse 28 source-checked generic records. Search ingredients, selected Nigerian brands or NAFDAC numbers, and view sourced formulation examples from adult and children’s lists. Pharmacist review is pending. |
 | **Learn & try** | Practise with fictional package labels, answer short knowledge checks and explore the sources. |
 | **Example insights** | Preview how an education dashboard could present activity and topics using synthetic data. |
 | **Pilot & review** | Download the pharmacist review packet and pilot protocol. Record consented facilitator observations separately from the scan result and export them when the participant agrees. The participant pilot has yet to start. |

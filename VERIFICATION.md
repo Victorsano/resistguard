@@ -45,3 +45,9 @@ Final public Edge browser check: upload -> all photo checks and consent -> Groq 
 - The supplied triple-antibiotic Drug Facts photo returned a clear observation with all three ingredients, no product name and a complete list through the real local vision endpoint. The result was an unsupported combination, with no selected catalogue ID.
 - The regression test separately checks that an incomplete observation with the same ingredients remains unconfirmed and that a complete supported record can still match without a brand.
 - The user-supplied image remains outside the repository. The regression fixture records only the observed ingredient names and classification.
+
+## Nigerian catalogue expansion, 24 November 2026
+
+- All 35 automated tests and the production build passed. The review packet covers 28 generic records, the formulation examples, the five linked Greenbook products and the educational passages.
+- A phone-width browser check verified lookup by registration number, the recorded Greenbook status, the children’s list filter, confirmation of a full ingredient list, and retrieval of NCDC and condition-specific evidence.
+- Cefixime and the complete triple-antibiotic ingredient set now have catalogue entries. Incomplete combinations still leave the medicine unselected.

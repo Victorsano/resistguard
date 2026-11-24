@@ -1,7 +1,28 @@
 import aliases from '@/data/ingredient-aliases.json';
-import medicines from '@/data/medicines.json';
-export { medicines };
+import baseMedicines from '@/data/medicines.json';
+import nigeria from '@/data/nigeria-catalogue.json';
+
+export const nigeriaSources=nigeria.sources;
+type NigeriaSource=keyof typeof nigeriaSources;
+type Formulation={source:string;section:string;form:string;strengths:string[]};
+const formulations:Record<string,Formulation[]>=nigeria.formulations;
+export const nigeriaProducts=nigeria.products;
+export const medicines=[
+  ...baseMedicines,
+  ...nigeria.records.map(({sourceKey,sourceSection,...record})=>{
+    const reference=nigeriaSources[sourceKey as NigeriaSource];
+    return {...record,source:reference.url,sourceLabel:reference.name,sourceSection,
+      checked:nigeria.checked,reviewStatus:nigeria.reviewStatus,reviewDue:nigeria.reviewDue};
+  })
+];
 export type Medicine = typeof medicines[number];
+
+export function nigeriaCatalogueDetails(id:string){
+  return {
+    forms:(formulations[id]??[]).map(form=>({...form,reference:nigeriaSources[form.source as NigeriaSource]})),
+    products:nigeriaProducts.filter(product=>product.medicineId===id).map(product=>({...product,checked:nigeria.checked}))
+  };
+}
 export const scenarios = {
   general: {label:'Understand this medicine',title:'Recognition is the beginning, not approval',text:'A label can help identify an ingredient. It cannot establish which illness you have, whether the medicine is genuine or whether it is appropriate for you. Read the leaflet and ask a qualified pharmacist or prescriber.'},
   cold: {label:'A cold or flu',title:'Antibiotics do not treat viruses',text:'Colds and flu are caused by viruses. Antibiotics target bacteria, so they do not treat these illnesses. Symptoms alone cannot identify the cause of an infection. Ask a healthcare professional if symptoms worsen or concern you.'},

@@ -19,6 +19,10 @@ Open **Learn & try**, pick a fictional package and choose **Try this label**. Th
 
 Choose **Antibiotic use** from the navigation or **Before taking an antibiotic** on the home page. Try the eczema, boil, medicine-interaction or ulcer-history example. For an antibiotic example, choose how the person would obtain or use the medicine. Select the topics they could discuss with a pharmacist, then choose **See what to consider**. Each education passage links to its original source. The optional AI button organises the evidence without sending your answer choices. The interactive AMR lesson below explains why responsible use matters.
 
+## Look up Nigerian products
+
+Open **Catalogue** and search for an ingredient, a listed example such as **Emzoclox**, or its NAFDAC number. Expand **Formulations and product references** to see the exact source. The adult and children’s list filters show entries with checked formulation examples. Confirm every ingredient from your own package before using **Check this label**. Ask a pharmacist about suitability and instructions.
+
 ## If you get stuck
 
 - **Camera blocked?** Use **Upload photo** to pick an existing picture.

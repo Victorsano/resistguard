@@ -11,6 +11,6 @@
 
 ## Content maintenance
 
-Treat these examples as educational material. The first release uses selected WHO, CDC, NICE, NHS and DailyMed passages. The Nigerian Essential Medicines List is a future catalogue reference, NAFDAC Greenbook is a registration reference, and NCDC and NHIA are candidates for local guidance. Review the specific documents and reconcile newer guidance before extending the library. WHO notes that its 2022 AWaRe book is being updated. This is a staged expansion, without ingestion of dosing schedules or clinical treatment protocols.
+Treat these examples as educational material. The expanded catalogue uses the Nigerian adult and children’s Essential Medicines Lists and selected NAFDAC Greenbook records. The evidence library includes NCDC’s stewardship fact sheet alongside WHO, CDC, NICE, NHS and DailyMed passages. NHIA 2026 and WHO AWaRe remain references for chapter-level professional review. [Data and architecture](DATA-AND-ARCHITECTURE.md)
 
 For each new passage, record the specific source and section, paraphrase the narrow education claim, record when it was checked, and have a pharmacist review the exact version. Keep the original source link in the UI, reject unknown IDs in model output, add a test for each new rule, regenerate the review packet and recheck the demo. Recheck changes to guidance at the recorded review date. The pilot should measure whether participants recognise when to stop and seek clarification, using fictional examples.

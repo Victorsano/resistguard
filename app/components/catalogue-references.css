@@ -1,0 +1,24 @@
+.catalogue-references {
+  border-top: 1px solid var(--line);
+  margin: 1rem 0;
+  padding-top: .8rem;
+  overflow-wrap: anywhere;
+}
+.catalogue-references summary {
+  cursor: pointer;
+  color: #244ac8;
+  font-weight: 700;
+}
+.catalogue-references div {
+  display: grid;
+  gap: .35rem;
+  margin: .75rem 0;
+}
+.catalogue-references a {
+  color: #244ac8;
+  font-size: .85rem;
+  text-decoration: underline;
+}
+.catalogue-source-register {
+  margin: 2rem 0;
+}

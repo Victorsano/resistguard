@@ -3,9 +3,14 @@ import evidence from '@/data/use-evidence.json';
 export type PassageId = keyof typeof evidence.passages;
 export type SourceId = keyof typeof evidence.sources;
 export const useTopics = {
-  general: {kind:'antibiotic',title:'General antibiotic use', example:'Someone is unsure whether they need an antibiotic for an illness.', passages:['need','prescription','leftovers','amr']},
+  general: {kind:'antibiotic',title:'General antibiotic use', example:'Someone is unsure whether they need an antibiotic for an illness.', passages:['need','prescription','leftovers','amr','nigeria_amr']},
   eczema: {kind:'antibiotic',title:'Antibiotics for eczema', example:'Someone has an eczema flare and is considering starting an antibiotic on their own.', passages:['eczema','eczema_review','need','amr']},
   boil: {kind:'antibiotic',title:'Antibiotics for a boil', example:'Someone has a boil and is thinking of using antibiotics left over from a previous illness.', passages:['boil','boil_review','leftovers','amr']},
+  uti: {kind:'antibiotic',title:'Possible urinary infection',example:'Someone has urinary symptoms and is thinking of using another person’s antibiotic.',passages:['uti_assessment','leftovers','nigeria_amr']},
+  pneumonia: {kind:'antibiotic',title:'Possible pneumonia in a child',example:'A caregiver is concerned about a child’s breathing and is unsure where to seek care.',passages:['pneumonia_assessment','need','children']},
+  tonsillitis: {kind:'antibiotic',title:'Sore throat or tonsillitis',example:'Someone has a sore throat and assumes they need an antibiotic.',passages:['tonsillitis_assessment','need','amr']},
+  typhoid: {kind:'antibiotic',title:'Fever and suspected typhoid',example:'Someone with fever assumes it is typhoid and considers starting antibiotics before being assessed.',passages:['typhoid_assessment','need','nigeria_amr']},
+  wound: {kind:'antibiotic',title:'A wound that may be infected',example:'Someone notices a wound becoming more painful and wonders if leftover antibiotics will help.',passages:['wound_assessment','leftovers','nigeria_amr']},
   safety: {kind:'medicine-safety',title:'Medicine interaction example', example:'In a fictional case, an adult considering sildenafil already takes a nitrate medicine. Both medicines are confirmed from their labels.', passages:['interaction']},
   ulcer: {kind:'medicine-safety',title:'Medicine and ulcer history', example:'In a fictional case, an adult with a history of stomach ulcers is considering oral diclofenac, an anti-inflammatory pain medicine.', passages:['ulcer']}
 } as const satisfies Record<string,{kind:'antibiotic'|'medicine-safety';title:string;example:string;passages:readonly PassageId[]}>;

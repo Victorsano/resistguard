@@ -1,0 +1,512 @@
+{
+  "checked": "2026-11-24",
+  "reviewDue": "2027-02-24",
+  "reviewStatus": "pending_pharmacist",
+  "sources": {
+    "adult": {
+      "name": "Nigeria Essential Medicines List for Adults",
+      "version": "8th edition · 2024",
+      "url": "https://www.health.gov.ng/wp-content/uploads/2025/08/Final-NEML-Adult-8th-Edition.pdf",
+      "scope": "Generic ingredient and formulation reference"
+    },
+    "child": {
+      "name": "Nigeria Essential Medicines List for Children",
+      "version": "2nd edition · 2024",
+      "url": "https://health.gov.ng/wp-content/uploads/2025/08/Final-NEMLc-2nd-Edition.pdf",
+      "scope": "Paediatric formulation reference"
+    },
+    "greenbook": {
+      "name": "NAFDAC Greenbook",
+      "version": "Online register",
+      "url": "https://greenbook.nafdac.gov.ng/",
+      "scope": "Product records and NAFDAC registration numbers"
+    },
+    "nhia": {
+      "name": "NHIA Standard Treatment Guidelines and Referral Protocol",
+      "version": "2026 download",
+      "url": "https://www.nhia.gov.ng/download/nhia-book-3/",
+      "scope": "Reference for future chapter-level review"
+    },
+    "ncdc": {
+      "name": "NCDC · Antimicrobial resistance",
+      "version": "Online fact sheet",
+      "url": "https://ncdc.gov.ng/diseases/factsheet/70",
+      "scope": "Nigerian stewardship context"
+    },
+    "aware": {
+      "name": "WHO AWaRe Antibiotic Book",
+      "version": "2022 book with later updates listed",
+      "url": "https://www.who.int/publications/i/item/9789240062382",
+      "scope": "Clinician reference for review"
+    },
+    "triple": {
+      "name": "DailyMed · Safetec Triple Antibiotic Ointment",
+      "version": "Drug Facts",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=59494d5c-dd8a-431c-8e6a-4e1151ba7460",
+      "scope": "Product-specific ingredient and warning reference"
+    },
+    "euroclox": {
+      "name": "NAFDAC Greenbook · Euroclox-500 product characteristics",
+      "version": "Sections 1–3",
+      "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2023/10/02/2023100254627596-886a-56ef-84c2-4303afc55ae6.pdf",
+      "scope": "Exact combination and capsule formulation"
+    }
+  },
+  "records": [
+    {
+      "id": "cefixime",
+      "name": "Cefixime",
+      "ingredients": [
+        "cefixime"
+      ],
+      "category": "Cephalosporin antibiotic",
+      "antibiotic": true,
+      "sourceKey": "adult",
+      "sourceSection": "p. 7",
+      "summary": "Cefixime is an antibiotic. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "ceftriaxone",
+      "name": "Ceftriaxone",
+      "ingredients": [
+        "ceftriaxone"
+      ],
+      "category": "Cephalosporin antibiotic",
+      "antibiotic": true,
+      "sourceKey": "adult",
+      "sourceSection": "p. 7",
+      "summary": "Ceftriaxone is an antibiotic. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "cefuroxime",
+      "name": "Cefuroxime",
+      "ingredients": [
+        "cefuroxime"
+      ],
+      "category": "Cephalosporin antibiotic",
+      "antibiotic": true,
+      "sourceKey": "adult",
+      "sourceSection": "p. 7",
+      "summary": "Cefuroxime is an antibiotic. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "cefpodoxime",
+      "name": "Cefpodoxime",
+      "ingredients": [
+        "cefpodoxime"
+      ],
+      "category": "Cephalosporin antibiotic",
+      "antibiotic": true,
+      "sourceKey": "adult",
+      "sourceSection": "p. 7",
+      "summary": "Cefpodoxime is an antibiotic. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "cefazolin",
+      "name": "Cefazolin",
+      "ingredients": [
+        "cefazolin"
+      ],
+      "category": "Cephalosporin antibiotic",
+      "antibiotic": true,
+      "sourceKey": "adult",
+      "sourceSection": "p. 7",
+      "summary": "Cefazolin is an antibiotic. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "ampicillin",
+      "name": "Ampicillin",
+      "ingredients": [
+        "ampicillin"
+      ],
+      "category": "Penicillin antibiotic",
+      "antibiotic": true,
+      "sourceKey": "adult",
+      "sourceSection": "p. 6",
+      "summary": "Ampicillin is an antibiotic. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "cloxacillin",
+      "name": "Cloxacillin",
+      "ingredients": [
+        "cloxacillin"
+      ],
+      "category": "Penicillin antibiotic",
+      "antibiotic": true,
+      "sourceKey": "adult",
+      "sourceSection": "p. 6",
+      "summary": "Cloxacillin is an antibiotic. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "clindamycin",
+      "name": "Clindamycin",
+      "ingredients": [
+        "clindamycin"
+      ],
+      "category": "Lincosamide antibiotic",
+      "antibiotic": true,
+      "sourceKey": "adult",
+      "sourceSection": "p. 6",
+      "summary": "Clindamycin is an antibiotic. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "gentamicin",
+      "name": "Gentamicin",
+      "ingredients": [
+        "gentamicin"
+      ],
+      "category": "Aminoglycoside antibiotic",
+      "antibiotic": true,
+      "sourceKey": "adult",
+      "sourceSection": "p. 6",
+      "summary": "Gentamicin is an antibiotic. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "mupirocin",
+      "name": "Mupirocin",
+      "ingredients": [
+        "mupirocin"
+      ],
+      "category": "Topical antibiotic",
+      "antibiotic": true,
+      "sourceKey": "adult",
+      "sourceSection": "Section 12.3",
+      "summary": "Mupirocin is an antibiotic. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "ampicillin-cloxacillin",
+      "name": "Ampicillin + cloxacillin",
+      "ingredients": [
+        "ampicillin",
+        "cloxacillin"
+      ],
+      "category": "Combination antibiotic",
+      "antibiotic": true,
+      "sourceKey": "euroclox",
+      "sourceSection": "Sections 1–3",
+      "summary": "Ampicillin + cloxacillin is a combination of antibiotics. Compare the printed active-ingredient list with this catalogue entry.",
+      "caution": "Ask a pharmacist or prescriber to check the exact product, route, and suitability, including allergies and other medicines."
+    },
+    {
+      "id": "triple-antibiotic",
+      "name": "Bacitracin + neomycin + polymyxin B",
+      "ingredients": [
+        "bacitracin",
+        "neomycin",
+        "polymyxin b"
+      ],
+      "category": "Topical combination antibiotic",
+      "antibiotic": true,
+      "sourceKey": "triple",
+      "sourceSection": "Active ingredients and warnings",
+      "summary": "The referenced ointment contains three topical antibiotics. Compare all three printed ingredient names.",
+      "caution": "The referenced ointment is for external use. Ask a healthcare professional about deep wounds, bites or serious burns."
+    }
+  ],
+  "formulations": {
+    "cefixime": [
+      {
+        "source": "adult",
+        "section": "p. 7",
+        "form": "Tablet",
+        "strengths": [
+          "200 mg",
+          "400 mg"
+        ]
+      },
+      {
+        "source": "child",
+        "section": "p. 7",
+        "form": "Oral liquid",
+        "strengths": [
+          "100 mg/5 mL"
+        ]
+      }
+    ],
+    "ceftriaxone": [
+      {
+        "source": "adult",
+        "section": "p. 7",
+        "form": "Injection powder",
+        "strengths": [
+          "250 mg",
+          "500 mg",
+          "1 g"
+        ]
+      },
+      {
+        "source": "child",
+        "section": "p. 7",
+        "form": "Injection powder",
+        "strengths": [
+          "250 mg",
+          "1 g"
+        ]
+      }
+    ],
+    "cefuroxime": [
+      {
+        "source": "adult",
+        "section": "p. 7",
+        "form": "Tablet",
+        "strengths": [
+          "250 mg",
+          "500 mg"
+        ]
+      },
+      {
+        "source": "child",
+        "section": "p. 7",
+        "form": "Oral suspension",
+        "strengths": [
+          "125 mg/5 mL",
+          "250 mg/5 mL"
+        ]
+      }
+    ],
+    "cefpodoxime": [
+      {
+        "source": "adult",
+        "section": "p. 7",
+        "form": "Tablet",
+        "strengths": [
+          "200 mg",
+          "400 mg"
+        ]
+      },
+      {
+        "source": "child",
+        "section": "p. 7",
+        "form": "Oral suspension",
+        "strengths": [
+          "50 mg/5 mL",
+          "100 mg/5 mL"
+        ]
+      }
+    ],
+    "cefazolin": [
+      {
+        "source": "adult",
+        "section": "p. 7",
+        "form": "Injection powder",
+        "strengths": [
+          "500 mg",
+          "1 g",
+          "2 g"
+        ]
+      }
+    ],
+    "ampicillin": [
+      {
+        "source": "adult",
+        "section": "p. 6",
+        "form": "Capsule",
+        "strengths": [
+          "250 mg",
+          "500 mg"
+        ]
+      },
+      {
+        "source": "child",
+        "section": "p. 6",
+        "form": "Powder for oral liquid",
+        "strengths": [
+          "125 mg/5 mL",
+          "250 mg/5 mL"
+        ]
+      }
+    ],
+    "cloxacillin": [
+      {
+        "source": "adult",
+        "section": "p. 6",
+        "form": "Capsule",
+        "strengths": [
+          "250 mg",
+          "500 mg"
+        ]
+      },
+      {
+        "source": "child",
+        "section": "p. 6",
+        "form": "Powder for oral solution",
+        "strengths": [
+          "125 mg/5 mL"
+        ]
+      }
+    ],
+    "clindamycin": [
+      {
+        "source": "adult",
+        "section": "p. 6",
+        "form": "Capsule",
+        "strengths": [
+          "150 mg",
+          "300 mg"
+        ]
+      },
+      {
+        "source": "child",
+        "section": "p. 6",
+        "form": "Oral liquid",
+        "strengths": [
+          "75 mg/5 mL"
+        ]
+      }
+    ],
+    "gentamicin": [
+      {
+        "source": "adult",
+        "section": "p. 6",
+        "form": "Injection",
+        "strengths": [
+          "40 mg/mL"
+        ]
+      }
+    ],
+    "mupirocin": [
+      {
+        "source": "adult",
+        "section": "Section 12.3",
+        "form": "Ointment",
+        "strengths": [
+          "2%"
+        ]
+      }
+    ],
+    "ampicillin-cloxacillin": [
+      {
+        "source": "euroclox",
+        "section": "Section 2",
+        "form": "Capsule",
+        "strengths": [
+          "250 mg + 250 mg"
+        ]
+      }
+    ],
+    "triple-antibiotic": [
+      {
+        "source": "triple",
+        "section": "Drug Facts · each gram",
+        "form": "Topical ointment",
+        "strengths": [
+          "400 units bacitracin + 3.5 mg neomycin + 5,000 units polymyxin B"
+        ]
+      }
+    ],
+    "co-amoxiclav": [
+      {
+        "source": "adult",
+        "section": "p. 6",
+        "form": "Tablet",
+        "strengths": [
+          "500 mg + 125 mg"
+        ]
+      },
+      {
+        "source": "child",
+        "section": "p. 6",
+        "form": "Oral liquid",
+        "strengths": [
+          "125 mg + 31.25 mg/5 mL",
+          "250 mg + 62.5 mg/5 mL"
+        ]
+      }
+    ],
+    "metronidazole": [
+      {
+        "source": "adult",
+        "section": "p. 6",
+        "form": "Tablet",
+        "strengths": [
+          "200 mg",
+          "400 mg"
+        ]
+      },
+      {
+        "source": "child",
+        "section": "p. 6",
+        "form": "Oral liquid",
+        "strengths": [
+          "200 mg/5 mL"
+        ]
+      }
+    ],
+    "azithromycin": [
+      {
+        "source": "adult",
+        "section": "p. 7",
+        "form": "Tablet",
+        "strengths": [
+          "250 mg",
+          "500 mg"
+        ]
+      },
+      {
+        "source": "child",
+        "section": "p. 7",
+        "form": "Powder for oral liquid",
+        "strengths": [
+          "200 mg/5 mL"
+        ]
+      }
+    ]
+  },
+  "products": [
+    {
+      "medicineId": "cefixime",
+      "name": "Emzifix 400 mg Tablet",
+      "number": "A4-8312",
+      "registerStatus": "Active",
+      "form": "Tablet",
+      "strength": "400 mg",
+      "url": "https://greenbook.nafdac.gov.ng/products/details/4888"
+    },
+    {
+      "medicineId": "ampicillin-cloxacillin",
+      "name": "Emzoclox Capsule",
+      "number": "04-5729",
+      "registerStatus": "Expired",
+      "form": "Capsule",
+      "strength": "250 mg + 250 mg",
+      "url": "https://greenbook.nafdac.gov.ng/products/details/3931"
+    },
+    {
+      "medicineId": "ampicillin",
+      "name": "Emcillin Suspension",
+      "number": "04-0396",
+      "registerStatus": "Expired",
+      "form": "Suspension",
+      "strength": "125 mg/5 mL",
+      "url": "https://greenbook.nafdac.gov.ng/products/details/3911"
+    },
+    {
+      "medicineId": "amoxicillin",
+      "name": "Emmox-250 Dispersible Tablet",
+      "number": "B4-3237",
+      "registerStatus": "Ongoing Renewal",
+      "form": "Dispersible tablet",
+      "strength": "250 mg",
+      "url": "https://greenbook.nafdac.gov.ng/products/details/4031"
+    },
+    {
+      "medicineId": "cefuroxime",
+      "name": "Zinnat 250 mg Tablets",
+      "number": "04-0433",
+      "registerStatus": "Ongoing Renewal",
+      "form": "Tablet",
+      "strength": "250 mg",
+      "url": "https://greenbook.nafdac.gov.ng/products/details/466"
+    }
+  ]
+}
