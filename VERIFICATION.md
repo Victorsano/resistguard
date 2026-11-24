@@ -39,3 +39,9 @@ Final public Edge browser check: upload -> all photo checks and consent -> Groq 
 - Edge browser checks at 390px and 1280px exercised the eczema, boil, sildenafil/nitrate and diclofenac/ulcer educational examples, optional evidence organisation with AI disabled, the conversation checklist and the interactive resistance lesson. No personal answers were included in the AI request.
 - The source-linked passages remain visible during provider failure. The AI response must contain precisely the retrieved passage IDs. Unknown, duplicate and missing IDs are rejected.
 - The generated review packet includes the new evidence and interface content. Pharmacist review remains pending. Participant studies are needed to establish impact on antibiotic use or resistance.
+
+## Brand-independent ingredient-panel regression, 24 November 2026
+
+- The supplied triple-antibiotic Drug Facts photo returned a clear observation with all three ingredients, no product name and a complete list through the real local vision endpoint. The result was an unsupported combination, with no selected catalogue ID.
+- The regression test separately checks that an incomplete observation with the same ingredients remains unconfirmed and that a complete supported record can still match without a brand.
+- The user-supplied image remains outside the repository. The regression fixture records only the observed ingredient names and classification.

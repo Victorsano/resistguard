@@ -20,6 +20,21 @@ test('scan distinguishes non-antibiotic and supported combination without substi
 test('incomplete or uncertain evidence never selects a medicine',()=>{
  for(const v of [{complete:false},{legibility:'partial'},{legibility:'unreadable'},{productType:'uncertain'},{ingredients:[]}]){const r=classifyObservation({...base,...v} as Observation);assert.equal(r.status,'unreadable');assert.equal(r.id,undefined);}
 });
+test('a fully readable Drug Facts panel can identify an unsupported combination without the brand',()=>{
+ const triple:Observation={productType:'medicine',label:null,ingredients:['bacitracin','neomycin','polymyxin b'],legibility:'clear',complete:true};
+ const result=classifyObservation(triple);
+ assert.equal(result.status,'combination');
+ assert.equal(result.id,undefined);
+ assert.match(result.title,/outside our catalogue/);
+ assert.match(result.message,/3 active ingredient names/);
+ assert.deepEqual(result.observation?.ingredients,triple.ingredients);
+ const uncertain=classifyObservation({...triple,complete:false});
+ assert.equal(uncertain.status,'unreadable');
+ assert.equal(uncertain.id,undefined);
+ assert.match(uncertain.message,/visible ingredient names have no exact catalogue entry/);
+ assert.equal(classifyObservation({...base,label:null}).id,'amoxicillin');
+ assert.equal(classifyObservation({...base,label:null,complete:false}).id,undefined);
+});
 test('cosmetics and unknown ingredients have different safe outcomes',()=>{
  const cosmetic=classifyObservation({...base,productType:'non_medicine',ingredients:[]});assert.equal(cosmetic.status,'non_medicine');assert.equal(cosmetic.id,undefined);
  const unknown=classifyObservation({...base,ingredients:['cefixime']});assert.equal(unknown.status,'unsupported');assert.equal(unknown.id,undefined);

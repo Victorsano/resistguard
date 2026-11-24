@@ -20,6 +20,6 @@ Choose **Antibiotic use** from the navigation or **Before taking an antibiotic**
 ## If you get stuck
 
 - **Camera blocked?** Use **Upload photo** to pick an existing picture.
-- **Glare or blurry text?** Turn the box away from the light and photograph the ingredient panel again.
+- **Glare or blurry text?** Turn the box away from the light and photograph the ingredient panel again. A brand name is optional if the entire active-ingredient section is readable.
 - **AI unavailable or prefer manual lookup?** Open **Catalogue** and look up the printed ingredient name. For a combination, check the entire list.
 - **Wrong suggestion or no exact entry?** Leave the match unconfirmed using **No / I’m unsure** if a candidate is shown. Your photo stays available to review. Take the package or leaflet to a pharmacist if you are unsure. A similar brand name is insufficient to confirm a match.
