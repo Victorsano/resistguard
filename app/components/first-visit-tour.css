@@ -1,0 +1,33 @@
+.first-visit-tour {
+  margin: .875rem 0;
+  padding: .9rem 1rem;
+  border: 1px solid #a6b5e4;
+  border-left: 4px solid #244ac8;
+  background: #edf1ff;
+  color: #192538;
+}
+.first-visit-tour-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+  justify-content: space-between;
+  font-size: .8rem;
+  color: #244ac8;
+}
+.first-visit-tour-header span {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-weight: 700;
+}
+.first-visit-tour h3 { margin: .35rem 0 .25rem; font-size: 1.04rem; }
+.first-visit-tour p { margin: .25rem 0 .5rem; font-size: .92rem; line-height: 1.5; }
+.first-visit-tour button { min-height: 36px; }
+.first-visit-highlight,
+.check-panel:has(.first-visit-tour[data-step="2"]) .intake-actions,
+.check-panel:has(.first-visit-tour[data-step="3"]) .read-label,
+.check-panel:has(.first-visit-tour[data-step="4"]) .confirm {
+  outline: 2px solid #244ac8;
+  outline-offset: 4px;
+}

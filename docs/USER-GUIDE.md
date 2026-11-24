@@ -2,7 +2,9 @@
 
 ResistGuard helps you read the active ingredients on a medicine package and prepare questions for a pharmacist. You can try it without an account. [Open ResistGuard](https://resistguard-rosy.vercel.app/)
 
-First time here? Choose **First time? Try a practice check** on the home page. Compare two ingredient lists and practise deciding whether to confirm. This tutorial needs no photo or AI request.
+The first-visit tour points out where to start, how to review a photo and what to check in a scan result. Choose **Read a label** to follow it or **Skip tour** to dismiss it. The browser remembers when you skip or finish.
+
+Choose **First time? Try a practice check** to compare two ingredient lists and practise deciding whether to confirm. This exercise needs no photo or AI request.
 
 ## Try it with a practice label
 

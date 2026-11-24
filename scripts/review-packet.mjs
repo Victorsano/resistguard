@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-const files=['data/medicines.json','data/ingredient-aliases.json','lib/safety.ts','lib/education.ts','lib/scan.ts','app/page.tsx','app/components/MedicineCheck.tsx','app/components/Learning.tsx','app/components/ScanGuide.tsx','app/components/FirstCheckGuide.tsx','app/components/Pilot.tsx','lib/scan-guide.ts','public/pilot-protocol.md','data/use-evidence.json','lib/use-check.ts','app/components/UseCheck.tsx','app/api/use-evidence/route.ts'];
+const files=['data/medicines.json','data/ingredient-aliases.json','lib/safety.ts','lib/education.ts','lib/scan.ts','app/page.tsx','app/components/MedicineCheck.tsx','app/components/Learning.tsx','app/components/ScanGuide.tsx','app/components/FirstCheckGuide.tsx','app/components/FirstVisitTour.tsx','app/components/Pilot.tsx','lib/scan-guide.ts','public/pilot-protocol.md','data/use-evidence.json','lib/use-check.ts','app/components/UseCheck.tsx','app/api/use-evidence/route.ts'];
 const contents=await Promise.all(files.map(async path=>({path,text:(await fs.readFile(path,'utf8')).replace(/\r\n/g,'\n').replace(/^\uFEFF/,'')})));
 const digest=createHash('sha256').update(JSON.stringify(contents)).digest('hex');
 const medicines=JSON.parse(contents[0].text.replace(/^\uFEFF/,''));
