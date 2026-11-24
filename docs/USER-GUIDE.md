@@ -15,6 +15,10 @@ Open **Learn & try**, pick a fictional package and choose **Try this label**. Th
 3. **Compare every ingredient.** Look back at the printed panel. Choose **Yes, the complete list matches** only if every active ingredient matches and none are missing or extra. If one name differs or you cannot read it, choose **No / I’m unsure**.
 4. **Read the explanation.** After confirming, choose **Explain this simply**. Explore the source links and questions you can take to a pharmacist. A match identifies a catalogue entry. A pharmacist can advise whether a medicine is suitable for you.
 
+## Ask ResistGuard
+
+Tap **Ask ResistGuard** at the bottom right for questions about label photos, NAFDAC numbers and responsible antibiotic use. After you confirm a complete ingredient list, **Explain this simply** opens the assistant with the medicine and topic you selected. Look for the source links and questions to take to a pharmacist. The conversation clears when the assistant closes.
+
 ## Before taking an antibiotic
 
 Choose **Antibiotic use** from the navigation or **Before taking an antibiotic** on the home page. Try the eczema, boil, medicine-interaction or ulcer-history example. For an antibiotic example, choose how the person would obtain or use the medicine. Select the topics they could discuss with a pharmacist, then choose **See what to consider**. Each education passage links to its original source. The optional AI button organises the evidence without sending your answer choices. The interactive AMR lesson below explains why responsible use matters.
