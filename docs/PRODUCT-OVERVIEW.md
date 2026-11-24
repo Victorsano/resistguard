@@ -1,13 +1,27 @@
 # What we are building
 
-ResistGuard is an educational medicine-label web app. It helps people understand ingredients and prepare better questions for a pharmacist. It does not diagnose, prescribe, confirm authenticity or approve personal suitability.
+ResistGuard helps people understand medicine labels, recognise situations where antibiotics may be misused, and prepare questions for a pharmacist. It is an educational demo for learning about responsible antibiotic use and antimicrobial resistance (AMR).
+
+## What each page is for
+
+| Page | Purpose |
+|---|---|
+| **Medicine check** | Use the camera or upload a photo to read active ingredients. Compare every ingredient with a suggested catalogue entry before confirming. The practice tutorial shows why an incomplete list can lead to a wrong match. |
+| **Antibiotic use** | Explore fictional examples involving eczema, a boil, sildenafil with nitrates, or diclofenac and a history of ulcers. Read source-linked guidance, prepare questions for a pharmacist and try the interactive AMR lesson. |
+| **Catalogue** | Browse 16 source-checked generic medicine entries by active ingredient. Use it for manual lookup when a photo is unnecessary or scanning is unavailable. Pharmacist review is pending. |
+| **Learn & try** | Practise with fictional package labels, answer short knowledge checks and explore the sources. |
+| **Example insights** | Preview how an education dashboard could present activity and topics using synthetic data. |
+| **Pilot & review** | Download the pharmacist review packet and pilot protocol. Record consented facilitator observations separately from the scan result and export them when the participant agrees. The participant pilot has yet to start. |
+
+## How a label check works
 
 ```mermaid
 flowchart LR
     A[Upload photo or use camera] --> B[Groq reads the ingredient label]
-    B --> C[User confirms every ingredient]
+    B --> C[User confirms every ingredient in a suggested entry]
     C --> D[Sourced guidance and pharmacist questions]
     B --> E[Unclear or unavailable: retake or use catalogue]
+    B --> F[Readable list outside catalogue: show ingredients]
 ```
 
 # What we want to achieve
@@ -18,6 +32,4 @@ flowchart LR
     B --> C[Support efforts to reduce antibiotic misuse]
 ```
 
-Built: guided scanning, 16 sourced records, conservative matching, approved explanations, learning tools and pilot/review tools.
-
-Still to demonstrate: usability on physical phones, professional content approval, participant understanding and real-world impact. The final goal is an ambition, not an outcome already proven by this demo.
+The first evaluation will measure whether people catch ingredient mismatches and know when to ask for help. Physical-phone testing, pharmacist sign-off and participant evidence are still pending. [Verification record](../VERIFICATION.md)

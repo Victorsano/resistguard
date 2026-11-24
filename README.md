@@ -2,6 +2,8 @@
 
 **New to ResistGuard?** Use your phone or computer to check a medicine label. No account or installation required. [Open the demo](https://resistguard-rosy.vercel.app/) · [Read the quick user guide](docs/USER-GUIDE.md)
 
+See what each of the six pages is for and how they fit together. [Product overview](docs/PRODUCT-OVERVIEW.md)
+
 Next.js + TypeScript educational app. No authentication, stored uploads, health history, tracking SDK or clinical validation. Sixteen source-checked generic records; every record is explicitly awaiting pharmacist review. Source checking is not professional approval.
 
 ## Current release state

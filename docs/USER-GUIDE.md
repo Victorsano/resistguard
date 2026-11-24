@@ -15,11 +15,14 @@ Open **Learn & try**, pick a fictional package and choose **Try this label**. Th
 
 ## Before taking an antibiotic
 
-Choose **Antibiotic use** from the navigation or **Before taking an antibiotic** on the home page. Try the eczema, boil or medicine-interaction example. For an antibiotic example, choose how the person would obtain or use the medicine. Select the topics they could discuss with a pharmacist, then choose **See what to consider**. Each education passage links to its original source. The optional AI button organises the evidence without sending your answer choices. The interactive AMR lesson below explains why responsible use matters.
+Choose **Antibiotic use** from the navigation or **Before taking an antibiotic** on the home page. Try the eczema, boil, medicine-interaction or ulcer-history example. For an antibiotic example, choose how the person would obtain or use the medicine. Select the topics they could discuss with a pharmacist, then choose **See what to consider**. Each education passage links to its original source. The optional AI button organises the evidence without sending your answer choices. The interactive AMR lesson below explains why responsible use matters.
 
 ## If you get stuck
 
 - **Camera blocked?** Use **Upload photo** to pick an existing picture.
 - **Glare or blurry text?** Turn the box away from the light and photograph the ingredient panel again. A brand name is optional if the entire active-ingredient section is readable.
 - **AI unavailable or prefer manual lookup?** Open **Catalogue** and look up the printed ingredient name. For a combination, check the entire list.
-- **Wrong suggestion or no exact entry?** Leave the match unconfirmed using **No / I’m unsure** if a candidate is shown. Your photo stays available to review. Take the package or leaflet to a pharmacist if you are unsure. A similar brand name is insufficient to confirm a match.
+- **Wrong suggestion?** Choose **No / I’m unsure**. Your photo stays available for review.
+- **Combination detected outside the catalogue?** Compare the names the scanner read with the full package label. The app leaves the medicine unselected when it cannot find an exact entry. Take the package or leaflet to a pharmacist if you are unsure.
+
+For the purpose of each tab, see the [product overview](PRODUCT-OVERVIEW.md).
