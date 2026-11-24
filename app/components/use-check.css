@@ -1,0 +1,66 @@
+.use-check {margin-bottom:2rem}
+.use-intro {display:grid;grid-template-columns:minmax(0,2fr) minmax(230px,1fr);gap:2.5rem;align-items:end;margin-bottom:2.5rem}
+.use-intro h1 {margin:1rem 0;font-size:clamp(2.75rem,6vw,5rem);line-height:1.03}
+.use-intro-note {padding:1.5rem;border-left:3px solid #254cc8;background:#e9eefb}
+.use-intro-note svg {color:#244ac8;margin-bottom:.75rem}
+.use-intro-note strong {display:block;font-size:1.05rem}
+.use-intro-note p {margin:.5rem 0 0;font-size:.9rem}
+.use-check-workspace {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.16fr);border:1px solid #b7c1d3;background:#fffdf8}
+.use-questions,.use-result {padding:clamp(1rem,3.5vw,2.5rem);min-width:0}
+.use-result {border-left:1px solid #b7c1d3;background:#f2f4fb}
+.use-check h2 {margin:0 0 1rem;font-size:clamp(1.5rem,2.7vw,2rem);line-height:1.15}
+.use-check h3 {font-size:1.13rem;line-height:1.3}
+.use-check p {line-height:1.6}
+.use-topic-options {display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin:1.25rem 0}
+.use-topic-button {padding:.85rem;text-align:left;min-height:56px;background:#fff;border:1px solid #b7c1d3;color:#172237;font-weight:650;font-size:.9rem;cursor:pointer;line-height:1.3}
+.use-topic-button[aria-pressed=true] {border:2px solid #254cc8;background:#edf1ff;color:#193ca8}
+.use-example {padding:1rem;background:#eef1f6;margin-bottom:1.5rem;border-left:2px solid #254cc8}
+.use-example p {font-size:.95rem;margin:.5rem 0 0}
+.use-fieldset {border:0;padding:0;margin:0 0 1.6rem;min-width:0}
+.use-fieldset legend {font-weight:700;font-size:1.05rem;margin:0 0 .7rem}
+.use-fieldset>p {margin:0 0 .6rem;font-size:.85rem}
+.use-radio {display:flex;align-items:flex-start;gap:.75rem;padding:.75rem 0;border-bottom:1px solid #d6dde8;cursor:pointer;font-size:.92rem;line-height:1.4}
+.use-radio input {margin:.15rem 0 0;flex:none;width:18px;height:18px;accent-color:#244ac8}
+.use-empty {padding-top:1rem;max-width:32rem}
+.use-empty svg {margin-bottom:1.25rem;color:#254cc8}
+.use-evidence-card {padding:1.1rem 0;border-bottom:1px solid #c6d0e1}
+.use-evidence-card h3 {margin:0 0 .5rem}
+.use-evidence-card p {margin:0 0 .5rem;font-size:.94rem}
+.use-evidence-card a,.use-source-link {color:#244ac8;display:inline-flex;align-items:center;gap:.35rem;font-size:.8rem;line-height:1.4;text-decoration:underline}
+.use-evidence-card small {display:block;color:#53637c;font-size:.75rem;margin-top:.4rem}
+.use-priority {border-left:3px solid #254cc8;padding:0 1rem;background:#fff}
+.use-priority .use-evidence-card {border:0}
+.use-ai {margin:1.5rem 0}
+.use-next {padding:1.2rem;background:#fff;border:1px solid #c6d0e1;margin:1rem 0}
+.use-next h3 {margin:0 0 .65rem}
+.use-next ul {list-style:disc;padding-left:1.2rem;font-size:.9rem;line-height:1.5}
+.use-next li+li {margin-top:.55rem}
+.use-urgent {font-size:.85rem;background:#fff4e6;border-left:3px solid #b56325;padding:.85rem;margin:1rem 0}
+.resistance-lesson {background:#192538;color:#fff;padding:clamp(1.3rem,4vw,3rem);margin-top:2.5rem}
+.resistance-lesson .eyebrow,.resistance-lesson p,.resistance-lesson a {color:#dce5ff}
+.lesson-stages {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;list-style:none;padding:0;margin:2rem 0 1.5rem}
+.lesson-stages li {border-top:2px solid #697791}
+.lesson-stages li.lesson-current {border-color:#f4c778}
+.lesson-stages button {background:transparent;color:inherit;border:0;text-align:left;width:100%;padding:1rem 0;display:flex;align-items:center;gap:.75rem;cursor:pointer;font-size:.95rem;line-height:1.35}
+.lesson-number {width:30px;height:30px;flex:none;border:1px solid #8997b3;display:grid;place-items:center;font-weight:700}
+.lesson-current .lesson-number {background:#f4c778;color:#192538;border-color:#f4c778}
+.lesson-reading {padding:1.35rem 0;border-top:1px solid #697791;min-height:135px}
+.lesson-reading h3 {color:#f4c778;margin:0 0 .6rem}
+.lesson-reading p {margin:0;max-width:66ch}
+.lesson-controls {display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.lesson-controls span {font-size:.8rem;color:#dce5ff}
+.lesson-controls .secondary {background:white;color:#192538}
+.lesson-choice {border-top:1px solid #697791;padding-top:1.5rem;margin:1.5rem 0}
+.lesson-choice h3 {margin:0 0 .6rem}
+.lesson-choice .lesson-controls {margin-top:1rem;margin-bottom:1rem}
+.lesson-choice button[aria-pressed=true] {background:#f4c778;color:#192538;border:1px solid #f4c778}
+.lesson-feedback {border-left:3px solid #f4c778;background:#2b3a51;padding:1rem}
+.lesson-feedback p {margin:.5rem 0}
+.lesson-feedback a {font-size:.85rem;text-decoration:underline}
+@media(max-width:760px){
+  .use-intro{grid-template-columns:1fr;gap:1rem;margin-bottom:1.5rem}
+  .use-check-workspace{grid-template-columns:1fr}
+  .use-result{border-left:0;border-top:1px solid #b7c1d3}
+  .lesson-stages{grid-template-columns:1fr;gap:0}
+  .lesson-stages button{padding:.75rem 0}
+}

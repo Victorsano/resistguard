@@ -1,0 +1,105 @@
+{
+  "sources": {
+    "cdc": {
+      "name": "CDC · Healthy Habits: Antibiotic Do's and Don'ts",
+      "url": "https://www.cdc.gov/antibiotic-use/about/index.html",
+      "version": "23 September 2025"
+    },
+    "who": {
+      "name": "WHO · Antimicrobial resistance",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/antimicrobial-resistance",
+      "version": "Online fact sheet"
+    },
+    "eczema": {
+      "name": "NICE NG190 · Secondary bacterial infection of eczema",
+      "url": "https://www.nice.org.uk/guidance/ng190/chapter/Recommendations",
+      "version": "2 March 2021"
+    },
+    "boils": {
+      "name": "NHS · Boils",
+      "url": "https://www.nhs.uk/conditions/boils/",
+      "version": "Online patient guidance"
+    },
+    "sildenafil": {
+      "name": "DailyMed · Sildenafil tablet, film coated",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc1c1ddb-f16b-4d7a-aabe-cf8bdf8b7998",
+      "version": "Label record, sections 4.1 and 7.1"
+    },
+    "diclofenac": {
+      "name": "DailyMed · Diclofenac sodium tablet, delayed release",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f92576d7-3ad9-43a3-8b10-3a29fbf712a4",
+      "version": "Label record, boxed warning and warnings"
+    }
+  },
+  "checked": "2026-11-24",
+  "reviewStatus": "pending_pharmacist",
+  "reviewDue": "2027-02-24",
+  "passages": {
+    "need": {
+      "title": "The reason matters",
+      "text": "Antibiotics are useful for certain bacterial infections. Viral infections and many other illnesses will not benefit from antibiotics. A clinician can establish whether an antibiotic is needed.",
+      "source": "cdc",
+      "section": "Take antibiotics only when needed"
+    },
+    "prescription": {
+      "title": "Check your current prescription",
+      "text": "Follow the instructions given for your own prescription. Ask the prescriber or pharmacist if anything is unclear before making a change.",
+      "source": "cdc",
+      "section": "Take antibiotics exactly as prescribed"
+    },
+    "leftovers": {
+      "title": "Leftovers and sharing raise a concern",
+      "text": "Medicines kept from a previous illness or prescribed to someone else may be unsuitable and can delay appropriate care. Ask a pharmacist or prescriber what to do.",
+      "source": "cdc",
+      "section": "Take antibiotics exactly as prescribed"
+    },
+    "amr": {
+      "title": "Why appropriate use matters",
+      "text": "Unnecessary or inappropriate antibiotic use contributes to antimicrobial resistance. Drug-resistant infections may be more difficult to treat. Using antibiotics responsibly helps protect treatment options.",
+      "source": "who",
+      "section": "Overview and drivers of AMR"
+    },
+    "eczema": {
+      "title": "An eczema flare needs context",
+      "text": "An eczema flare can occur without a bacterial infection. Even changes in the skin that resemble infection do not establish that an antibiotic is needed. A clinician can assess the cause and suitable care.",
+      "source": "eczema",
+      "section": "Recommendations 1.1.3–1.1.5"
+    },
+    "eczema_review": {
+      "title": "When symptoms change",
+      "text": "Seek medical assessment if eczema worsens quickly or you feel very unwell. A professional should reassess symptoms that have not improved after treatment.",
+      "source": "eczema",
+      "section": "Recommendations 1.1.8–1.1.11"
+    },
+    "boil": {
+      "title": "A boil can need different care",
+      "text": "A healthcare professional can assess a boil and decide what care it needs. Antibiotics are only one possible part of treatment. An app cannot make that decision from a label.",
+      "source": "boils",
+      "section": "Treatment for boils"
+    },
+    "boil_review": {
+      "title": "Get a professional assessment",
+      "text": "If a boil is on the face, the surrounding skin becomes painful and swollen, or you feel feverish or shivery, seek prompt medical care. Repeated boils or a boil that does not improve also warrant assessment.",
+      "source": "boils",
+      "section": "When to see a GP and urgent advice"
+    },
+    "interaction": {
+      "title": "A documented medicine interaction",
+      "text": "The sildenafil label warns against taking it with nitrate medicines because the combination may cause a dangerous drop in blood pressure. A pharmacist or clinician should review the medicines promptly.",
+      "source": "sildenafil",
+      "section": "Contraindications 4.1; Drug interactions 7.1"
+    },
+    "ulcer": {
+      "title": "A documented medical-history concern",
+      "text": "The oral diclofenac label warns that a history of stomach ulcers or gastrointestinal bleeding is associated with a higher risk of serious gut complications. A pharmacist or clinician should assess this history and review the medicine.",
+      "source": "diclofenac",
+      "section": "Boxed warning; gastrointestinal bleeding, ulceration and perforation"
+    },
+    "children": {
+      "title": "Children need individual advice",
+      "text": "Antibiotics can cause side effects in children. Discuss concerns or side effects with a qualified health professional, and use the instructions prescribed for the child.",
+      "source": "cdc",
+      "section": "Children and side effects"
+    }
+  }
+}

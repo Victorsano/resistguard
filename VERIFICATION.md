@@ -33,3 +33,9 @@ Final public Edge browser check: upload -> all photo checks and consent -> Groq 
 - Edge browser checked all five views at 320, 390, 768, 1024 and 1440 widths with no horizontal page overflow. Mobile navigation has its own horizontal scrolling area.
 - Browser checks passed: new CTA scroll/focus, upload/consent gate, complete combination confirmation, catalogue search, non-antibiotic classification and quiz feedback. Only Edge's lazy-image informational message observed in that run.
 - Desktop and mobile screenshots visually inspected: ../resistguard-field-guide-desktop.png and ../resistguard-field-guide-mobile.png. Design conventions recorded in docs/DESIGN.md.
+# Verification — antibiotic-use education, 24 November 2026
+
+- 31 automated tests passed and the Next.js production build completed.
+- Edge browser checks at 390px and 1280px exercised the eczema, boil, sildenafil/nitrate and diclofenac/ulcer educational examples, optional evidence organisation with AI disabled, the conversation checklist and the interactive resistance lesson. No personal answers were included in the AI request.
+- The source-linked passages remain visible during provider failure. The AI response must contain precisely the retrieved passage IDs. Unknown, duplicate and missing IDs are rejected.
+- The generated review packet includes the new evidence and interface content. Pharmacist review remains pending. Participant studies are needed to establish impact on antibiotic use or resistance.

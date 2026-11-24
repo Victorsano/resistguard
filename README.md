@@ -6,6 +6,8 @@ Next.js + TypeScript educational app. No authentication, stored uploads, health 
 
 ## Current release state
 
+The Antibiotic use section offers a source-linked educational questionnaire, fictional examples and an interactive AMR lesson. It works without scanning or AI. Optional AI only organises retrieved passages, with no personal answers sent. The structured evidence and content-review process are described in [the implementation plan](docs/USE-CHECK-PLAN.md).
+
 Public educational AI is enabled when the server key is configured. The supervised pilot has not started and pharmacist review remains pending. Clinical review status is independent of AI availability. Static catalogue, learning, fictional test labels, source links, synthetic dashboard, review packet and local pilot observation tools remain usable during provider failures. Physical-phone trials and professional review have not been performed.
 
 The app now provides guided ingredient-panel photography, three photo-review checks, separate external-analysis consent, specific unreadable-label recovery, retake/replacement and rejection of a wrong suggestion. Every candidate still requires the full ingredient list to be confirmed. Recognition does not verify authenticity, strength, expiry or suitability.
