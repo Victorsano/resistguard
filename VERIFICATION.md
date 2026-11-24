@@ -51,3 +51,8 @@ Final public Edge browser check: upload -> all photo checks and consent -> Groq 
 - All 35 automated tests and the production build passed. The review packet covers 28 generic records, the formulation examples, the five linked Greenbook products and the educational passages.
 - A phone-width browser check verified lookup by registration number, the recorded Greenbook status, the children’s list filter, confirmation of a full ingredient list, and retrieval of NCDC and condition-specific evidence.
 - Cefixime and the complete triple-antibiotic ingredient set now have catalogue entries. Incomplete combinations still leave the medicine unselected.
+
+## Reflective blister scan mismatch
+
+- The Emzoclox regression reproduces the screenshot’s observation with the wrong amoxicillin and clavulanic acid pair. The classifier suppresses the conflicting reading and leaves the catalogue selection empty, including when the model claims the list was complete.
+- The regression also covers a brand-only photo, a complete but incomplete-length ingredient reading, and a correct ampicillin plus cloxacillin reading. A product reference can block a candidate. It cannot create one.

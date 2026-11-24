@@ -39,6 +39,19 @@ test('cosmetics and unknown ingredients have different safe outcomes',()=>{
  const unknown=classifyObservation({...base,ingredients:['tetracycline']});assert.equal(unknown.status,'unsupported');assert.equal(unknown.id,undefined);
  const conflict=classifyObservation({...base,productType:'non_medicine'});assert.equal(conflict.status,'unreadable');assert.equal(conflict.id,undefined);
 });
+test('Emzoclox conflict suppresses guessed co-amoxiclav and never selects a record',()=>{
+ const wrong={...base,label:'EMZO CLOX CAPSULES',ingredients:['amoxicillin','clavulanic acid']};
+ for(const observation of [wrong,{...wrong,legibility:'partial' as const,complete:false}]){
+  const rejected=classifyObservation(observation);
+  assert.equal(rejected.status,'unreadable');
+  assert.equal(rejected.id,undefined);
+  assert.deepEqual(rejected.observation?.ingredients,[]);
+ }
+ const accurate=classifyObservation({...wrong,ingredients:['ampicillin','cloxacillin']});
+ assert.equal(accurate.id,'ampicillin-cloxacillin');
+ assert.equal(classifyObservation({...wrong,label:'Emzoclox',ingredients:['ampicillin']}).id,undefined);
+ assert.equal(classifyObservation({...wrong,ingredients:[],complete:false}).id,undefined);
+});
 test('observation validation rejects model-written advice and malformed shapes',()=>{
  assert.deepEqual(parseObservation(JSON.stringify(base)),base);
  for(const v of [null,[],{}, {...base,advice:'Take this'},{...base,complete:'yes'},{...base,ingredients:['<script>']},{...base,ingredients:new Array(7).fill('x')},{...base,label:'x'.repeat(141)},{...base,productType:'safe'}])assert.throws(()=>parseObservation(JSON.stringify(v)));
