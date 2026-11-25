@@ -10,7 +10,7 @@ import CameraCapture from './CameraCapture';
 import ScanGuide from './ScanGuide';
 import NextSteps from './NextSteps';
 import {scanRecovery} from '@/lib/scan-guide';
-export default function MedicineCheck({initialId='',initialSample,onCatalogue,onUseCheck,showTour,onTourEnd,onTourSample,onExplain,onAssistantContext}:{initialId?:string;initialSample?:string;onCatalogue:()=>void;onUseCheck:()=>void;showTour:boolean;onTourEnd:()=>void;onTourSample:()=>void;onExplain:(context:AssistantContext)=>void;onAssistantContext:(context:AssistantContext)=>void}){
+export default function MedicineCheck({initialId='',initialSample,onCatalogue,onUseCheck,showTour,onTourEnd,onTourSample,onExplain}:{initialId?:string;initialSample?:string;onCatalogue:()=>void;onUseCheck:()=>void;showTour:boolean;onTourEnd:()=>void;onTourSample:()=>void;onExplain:(context:AssistantContext)=>void}){
  const [selected,setSelected]=useState(initialId);const [confirmed,setConfirmed]=useState(false);const [scenario,setScenario]=useState<Scenario>('general');
  const [photo,setPhoto]=useState<string|null>(null);const [photoName,setPhotoName]=useState('');const [consent,setConsent]=useState(false);const [busy,setBusy]=useState<'preparing'|'scan'|null>(null);const [error,setError]=useState('');const [scan,setScan]=useState<ScanResult|null>(null);const [camera,setCamera]=useState(false);
  const file=useRef<HTMLInputElement>(null);const native=useRef<HTMLInputElement>(null);const abort=useRef<AbortController|null>(null);const revision=useRef(0);const result=confirmed?assess(selected,scenario):null;
@@ -18,9 +18,6 @@ export default function MedicineCheck({initialId='',initialSample,onCatalogue,on
  const [hold,setHold]=useState(false);
  const holdHeading=useRef<HTMLHeadingElement>(null);
  const resultHeading=useRef<HTMLHeadingElement>(null);
- useEffect(()=>{
-   onAssistantContext(confirmed?{medicineId:selected,scenario}:{unclear:scan?.status==='unreadable'||hold});
- },[confirmed,selected,scenario,scan,hold,onAssistantContext]);
  useEffect(()=>{if(hold)holdHeading.current?.focus();},[hold]);
  useEffect(()=>{if(confirmed)resultHeading.current?.focus();},[confirmed]);
  useEffect(()=>{

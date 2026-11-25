@@ -24,7 +24,6 @@ Read PROJECT_MAP.md before you change the scan flow, the catalogue or any medica
 - Shapes: flat, no shadows, 3px corners, thin 1px rules between sections. Small labels use monospace (`.eyebrow`).
 - Result-panel sections use `.pharmacist-plan` (rule on top, h3 15px, p 13px). Buttons use `.primary` / `.secondary` (min height 47px).
 - Mobile breakpoint is 680px. Inputs and selects stay 16px on mobile so iPhones don't zoom.
-- The floating "Ask ResistGuard" button sits bottom-right on every page. Don't put anything there.
 - New CSS: one file per component, every class prefixed with the component name (for example `.next-steps-...`), so it can't change existing screens.
 - Check UI changes with the `ui-check` skill before saying they are done.
 

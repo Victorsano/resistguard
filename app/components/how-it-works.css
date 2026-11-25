@@ -1,0 +1,9 @@
+.how-it-works-answer{max-width:710px}
+.how-it-works-answer h2{font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.4;font-weight:700;letter-spacing:0;margin:0 0 8px;color:#18202d}
+.how-it-works-answer p{font-size:13px;line-height:1.8;margin:0}
+.how-it-works-answer .source-links{margin-top:12px}
+.how-it-works-answer .source-links a{color:#254cce}
+.how-it-works-catalogue{margin-top:14px;min-height:47px}
+.how-it-works-footer{max-width:710px;margin-top:28px;padding-top:14px;border-top:1px solid #18202d;font-size:12px}
+.how-it-works-footer-link{background:none;border:0;padding:0;min-height:44px;color:#254cce;font-size:11px;text-decoration:underline;text-underline-offset:3px}
+@media (max-width:680px){.how-it-works-answer p{font-size:14px}.how-it-works-footer-link{font-size:12px}}

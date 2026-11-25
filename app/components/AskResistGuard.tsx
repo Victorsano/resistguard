@@ -3,20 +3,13 @@
 import {useEffect,useRef,useState} from 'react';
 import {MessageCircle,X} from 'lucide-react';
 import {assess,questions,scenarios,type Scenario} from '@/lib/safety';
-import {getPassage} from '@/lib/use-check';
 import './ask-resistguard.css';
 
-export type AssistantContext={medicineId?:string;scenario?:Scenario;unclear?:boolean};
+export type AssistantContext={medicineId?:string;scenario?:Scenario};
 export type AssistantSession={context:AssistantContext;explain?:boolean};
 type Answer={question:string;text:string;paragraphs?:string[];questions?:string[];sources?:{name:string;url:string}[];notice?:string};
 
-const generalAnswers={
-  scan:{question:'How do I photograph the label?',text:'Turn the pack so the ingredient line is horizontal. Use even light and keep the entire ingredient line in frame. If glare hides a word, tilt the pack and try again.'},
-  registry:{question:'What does a NAFDAC number tell me?',text:'It points to a product record in the Greenbook. In Catalogue, search the number and compare the complete ingredient list with the pack.',sources:[{name:'NAFDAC Greenbook',url:'https://greenbook.nafdac.gov.ng/'}]},
-  amr:{question:'Why does responsible antibiotic use matter?',text:getPassage('amr').text,sources:[getPassage('amr').reference]}
-} satisfies Record<string,Answer>;
-
-export default function AskResistGuard({session,onClose,onCatalogue}:{session:AssistantSession;onClose:()=>void;onCatalogue:()=>void}){
+export default function AskResistGuard({session,onClose}:{session:AssistantSession;onClose:()=>void}){
   const dialog=useRef<HTMLDialogElement>(null);
   const lastTurn=useRef<HTMLDivElement>(null);
   const controller=useRef<AbortController|null>(null);
@@ -31,13 +24,6 @@ export default function AskResistGuard({session,onClose,onCatalogue}:{session:As
     el?.showModal();
     return ()=>{controller.current?.abort();el?.close();};
   },[]);
-
-  function add(answer:Answer){
-    controller.current?.abort();
-    controller.current=null;
-    setBusy(false);
-    setTurns(previous=>[...previous,answer]);
-  }
 
   async function explain(scenario:Scenario){
     const result=assess(context.medicineId,scenario);
@@ -78,11 +64,9 @@ export default function AskResistGuard({session,onClose,onCatalogue}:{session:As
     </header>
     <div className="ask-body">
       {selected&&<p className="ask-context">Confirmed ingredient entry · {selected.medicine.name}</p>}
-      {context.unclear&&<p className="ask-context">Scan needs a clearer ingredient label</p>}
       <div className="ask-prompts" aria-label="Suggested questions">
         {selected&&<button className="secondary" disabled={busy} onClick={()=>void explain(context.scenario??'general')}>Explain my selected topic</button>}
         {selected?.medicine.antibiotic&&context.scenario!=='cold'&&<button className="secondary" disabled={busy} onClick={()=>void explain('cold')}>Why doesn’t this antibiotic treat flu?</button>}
-        {Object.values(generalAnswers).map(answer=><button key={answer.question} className="secondary" disabled={busy} onClick={()=>add(answer)}>{answer.question}</button>)}
       </div>
       <div className="ask-conversation" aria-live="polite">
         {turns.map((turn,index)=><div className="ask-turn" key={index} ref={index===turns.length-1?lastTurn:undefined}>
@@ -93,7 +77,6 @@ export default function AskResistGuard({session,onClose,onCatalogue}:{session:As
             {turn.questions?.length?<><h3>Ask a pharmacist</h3><ul>{turn.questions.map(text=><li key={text}>{text}</li>)}</ul></>:null}
             {turn.notice&&<p className="field-help">{turn.notice}</p>}
             {turn.sources?.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.name} ↗</a>)}
-            {turn.question===generalAnswers.registry.question&&<button className="text-button" onClick={onCatalogue}>Open Catalogue</button>}
           </div>
         </div>)}
         {busy&&<p role="status">Preparing the explanation…</p>}
