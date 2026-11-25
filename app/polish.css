@@ -60,6 +60,6 @@ footer,.page-footer{font-size:16px;color:#3a4250;padding:16px 0 28px}
 .skip-link:focus{top:12px;font-size:18px}
 .content-view .field-help,.content-view small,.content-view .eyebrow,.content-view .pill,.content-view .review-label,.content-view .ingredient-list,.content-view .small-note,.content-view .catalogue-caution,.content-view .catalogue-card-footer a,.content-view .catalogue-card-footer button,.content-view label,.content-view legend,.content-view summary,.content-view .source-links,.content-view .source-links a,.content-view .catalogue-references p,.content-view .catalogue-references a,.content-view .catalogue-references strong{font-size:max(14px,1em)!important}
 .content-view p,.content-view li{font-size:16px}
-.pilot-view .learning-grid .secondary,.pilot-view .button-row .secondary,.pilot-view .button-row button{font-size:16px;min-height:52px}.pilot-plan,.pilot-results,.pilot-view .quiz>p,.pilot-view .consent,.pilot-view .field-help{font-size:16px!important}
+.pilot-view .learning-grid .secondary,.pilot-view .button-row .secondary,.pilot-view .button-row button{font-size:16px;min-height:52px}.pilot-plan,.pilot-results,.pilot-view .quiz>p,.pilot-view .consent,.pilot-view .field-help{font-size:16px!important;color:#3a4250}
 .content-view summary{min-height:52px;padding:14px 0;box-sizing:border-box;cursor:pointer}
 @media(max-width:680px){header{padding-top:12px;padding-bottom:12px}.primary,.secondary{font-size:18px;min-height:52px}.demo{font-size:14px}}
