@@ -1,0 +1,51 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {scenarios} from '../lib/safety';
+import {findMedicines,scanOutcome,staysOnPhoto,answerCards,allSources,capitalise} from '../lib/flow';
+import {unavailableScan,type ScanResult} from '../lib/scan';
+const ids=(q:string)=>findMedicines(q).map(m=>m.id);
+const scan=(over:Partial<ScanResult>&{reason?:string}):ScanResult&{reason?:string}=>({mode:'candidate',status:'unreadable',title:'t',message:'m',nextStep:'n',...over});
+const obs=(over:object={})=>({productType:'medicine' as const,label:null,ingredients:[] as string[],legibility:'clear' as const,complete:true,...over});
+test('find by name searches names, ingredients, brands and NAFDAC numbers like the Catalogue',()=>{
+ assert.deepEqual(ids('amoxicillin').sort(),['amoxicillin','co-amoxiclav']);
+ assert.deepEqual(ids('Emzoclox'),['ampicillin-cloxacillin']);
+ assert.deepEqual(ids('04-5729'),['ampicillin-cloxacillin']);
+ assert.deepEqual(ids('  PARACETAMOL '),['paracetamol']);
+ assert.deepEqual(ids(''),[]);
+ assert.deepEqual(ids('zzzz'),[]);
+});
+test('scan outcomes pick the right screen-3 message',()=>{
+ assert.equal(scanOutcome(scan({status:'candidate',id:'amoxicillin'})),'match');
+ assert.equal(scanOutcome(scan({status:'combination',id:'co-amoxiclav'})),'match');
+ assert.equal(scanOutcome(scan({status:'unsupported',observation:obs({ingredients:['fosfomycin']})})),'not_listed');
+ assert.equal(scanOutcome(scan({status:'combination',observation:obs({ingredients:['a','b']})})),'not_listed');
+ assert.equal(scanOutcome(scan({status:'non_medicine'})),'not_medicine');
+ assert.equal(scanOutcome(scan({observation:obs({label:'Emzoclox'})})),'brand_only');
+ assert.equal(scanOutcome(scan({observation:obs({legibility:'partial'})})),'unreadable');
+ assert.equal(scanOutcome(scan({})),'unreadable');
+ assert.equal(scanOutcome({...unavailableScan(),reason:'not_configured'}),'paused');
+ assert.equal(scanOutcome({...unavailableScan(),reason:'request_limit'}),'paused');
+ assert.equal(scanOutcome({...unavailableScan(),reason:'timeout'}),'timeout');
+ assert.equal(scanOutcome(unavailableScan(),true),'timeout');
+ assert.equal(scanOutcome({...unavailableScan(),reason:'connection'}),'failed');
+ assert.ok(['timeout','paused','failed'].every(o=>staysOnPhoto(o as never)));
+ assert.ok(!staysOnPhoto('match')&&!staysOnPhoto('not_listed'));
+});
+test('answer cards reuse the scenario text word for word',()=>{
+ const anti=answerCards({id:'amoxicillin',antibiotic:true});
+ assert.deepEqual(anti.map(c=>c.id),['cold','leftovers','sharing','prescribed','missedEffects']);
+ assert.deepEqual(anti.find(c=>c.id==='cold')!.rules,[{title:scenarios.cold.title,text:scenarios.cold.text}]);
+ assert.deepEqual(anti.find(c=>c.id==='missedEffects')!.rules.map(r=>r.text),[scenarios.missed.text,scenarios.effects.text]);
+ const other=answerCards({id:'paracetamol',antibiotic:false});
+ assert.deepEqual(other.map(c=>c.id),['cold','missedEffects','general']);
+ assert.equal(other[0].rules[0].title,'This ingredient is not an antibiotic');
+ for(const c of other)for(const r of c.rules)assert.ok(!/leftover|someone else/i.test(r.title));
+});
+test('sources page lists every link once',()=>{
+ const {medicines,guidance}=allSources();
+ const urls=[...medicines,...guidance].map(s=>s.url);
+ assert.ok(urls.length>5);
+ for(const list of [medicines,guidance])assert.equal(new Set(list.map(s=>s.url)).size,list.length);
+ assert.ok(urls.every(u=>u.startsWith('https://')));
+ assert.equal(capitalise('clavulanic acid'),'Clavulanic acid');
+});

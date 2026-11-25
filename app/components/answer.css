@@ -1,0 +1,18 @@
+.answer{display:block}
+.answer-verdict{display:flex;gap:16px;align-items:center;padding:18px;border-radius:3px}
+.answer-verdict h1{margin:0}
+.answer-verdict-icon{position:relative;display:flex;flex-shrink:0}
+.answer-verdict-alert{position:absolute;right:-8px;top:-6px}
+.answer-name{margin:4px 0 0}
+.answer-review{display:flex;align-items:center;gap:8px}
+.answer-heading{border-top:1px solid #c9ccc4;padding-top:16px;margin:24px 0 12px}
+.answer-cards{display:grid;gap:8px}
+.answer-card{border:1px solid #6b7480;border-radius:3px;background:#fffdf7}
+.answer-card>button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;border:0;background:none;text-align:left;padding:12px 16px}
+.answer-card>button[aria-expanded="true"] .answer-chevron{transform:rotate(180deg)}
+.answer-card-body{padding:0 16px 12px}
+.answer-another{width:100%;margin-top:12px}
+.answer-sources{margin-top:24px;border-top:1px solid #c9ccc4}
+.answer-sources summary{display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;padding:12px 0}
+.answer-sources summary::-webkit-details-marker{display:none}
+.answer-sources[open] .answer-chevron{transform:rotate(180deg)}

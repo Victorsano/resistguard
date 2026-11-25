@@ -38,3 +38,17 @@ export function whatsAppLink(medicine:ConfirmedMedicine,phone?:string){
  const number=pharmacistNumber(phone);
  return `https://wa.me/${number??''}?text=${encodeURIComponent(whatsAppMessage(medicine))}`;
 }
+// Not in our list: name only the ingredients the AI read. Never the product name, the photo or typed text.
+export function unlistedWhatsAppMessage(ingredients:readonly string[]){
+ return [
+  `Hello, I have a medicine. The label lists ${joinIngredients(ingredients.map(i=>i.toLowerCase()))}. ResistGuard doesn't have this medicine in its list, so it could not tell me if it is an antibiotic.`,
+  '',
+  '1. Do I need this medicine for my illness?',
+  '2. Is it safe with my other medicines, allergies or conditions?',
+  '3. How should I take it, and for how long?'
+ ].join('\n');
+}
+export function unlistedWhatsAppLink(ingredients:readonly string[],phone?:string){
+ const number=pharmacistNumber(phone);
+ return `https://wa.me/${number??''}?text=${encodeURIComponent(unlistedWhatsAppMessage(ingredients))}`;
+}

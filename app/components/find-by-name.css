@@ -1,0 +1,7 @@
+.find-by-name{margin-top:12px}
+.find-by-name-results{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.find-by-name-results button{display:flex;width:100%;align-items:center;gap:12px;border:1px solid #6b7480;border-radius:3px;background:#fffdf7;text-align:left;padding:10px 14px}
+.find-by-name-name{flex:1}
+.find-by-name-chip{display:inline-flex;align-items:center;gap:6px;border-radius:3px;padding:4px 8px;white-space:nowrap}
+.find-by-name-all{display:inline-flex;align-items:center;gap:8px;padding:0}
+.find-by-name-note{display:flex;align-items:center;gap:8px}
