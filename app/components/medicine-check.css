@@ -1,25 +1,43 @@
-.medicine-check-screen{max-width:600px;margin:0 auto;padding:12px 0 24px}
-.medicine-check-back{display:inline-flex;align-items:center;gap:8px;margin:0 0 4px;padding:0}
-.medicine-check-actions{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.medicine-check-screen{max-width:600px;margin:0 auto;padding:4px 0 28px;animation:medicine-check-in .18s ease-out}
+@keyframes medicine-check-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.medicine-check-screen h1{font-size:34px;line-height:1.12;letter-spacing:-.6px;font-weight:800;color:#18202d;margin:6px 0 10px}
+.medicine-check-home h1{font-size:36px;margin-top:12px}
+.medicine-check-lead{font-size:18px;line-height:1.5;color:#3a4250;margin:0 0 4px}
+.medicine-check-back{display:inline-flex;align-items:center;gap:8px;margin:0;padding:0;min-height:52px;font-size:18px;color:#254cce;text-decoration:none}
+.medicine-check-actions{display:flex;flex-direction:column;gap:12px;margin:18px 0}
 .medicine-check-actions>*{width:100%}
-.medicine-check-pair{flex-direction:row}
-.medicine-check-pair>*{flex:1}
-.medicine-check-search{display:flex;align-items:center;gap:10px;border:1px solid #6b7480;border-radius:3px;padding:0 14px;background:#fffdf7}
-.medicine-check-search input{flex:1;min-width:0;border:0;background:none;outline:0;font:inherit;padding:12px 0}
-.medicine-check-home-foot{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:8px}
-.medicine-check-example{display:inline-flex;align-items:center;gap:8px;margin:0;padding:0}
-.medicine-check-emergency{display:flex;gap:10px;align-items:flex-start;margin:12px 0 0}
+.medicine-check-pair{flex-direction:row;gap:10px;margin:12px 0}
+.medicine-check-pair>*{flex:1;width:auto}
+.medicine-check-search-label{display:block}
+.medicine-check-search-label>span:first-child{display:block;font-size:18px;font-weight:600;color:#18202d;margin:0 0 6px}
+.medicine-check-search{display:flex;align-items:center;gap:10px;min-height:56px;border:1px solid #59616d;border-radius:3px;padding:0 14px;background:#fffdf7;color:#254cce}
+.medicine-check-search:focus-within{outline:3px solid #254cce;outline-offset:2px}
+.medicine-check-search input{flex:1;min-width:0;border:0;background:none;outline:0;font:inherit;font-size:18px;color:#18202d;padding:14px 0}
+.medicine-check-home-foot{display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin-top:6px}
+.medicine-check-example{display:inline-flex;align-items:center;gap:8px;margin:0;padding:0;min-height:52px;font-size:18px;color:#254cce}
+.medicine-check-trust{font-size:16px;line-height:1.5;color:#3a4250;margin:0 0 4px}
+.medicine-check-emergency{position:sticky;bottom:0;z-index:5;display:flex;gap:10px;align-items:center;margin:14px 0 0;padding:12px 14px;background:#b3261e;color:#fff;font-size:16px;font-weight:700;line-height:1.4;border-radius:3px;width:100%}
 .medicine-check-emergency svg{flex-shrink:0}
-.medicine-check-preview{display:flex;align-items:center;justify-content:center;border:1px solid #6b7480;border-radius:3px;background:#fffdf7;overflow:hidden}
+.medicine-check-preview{display:flex;align-items:center;justify-content:center;height:200px;border:1px solid #59616d;border-radius:3px;background:#fffdf7;overflow:hidden}
 .medicine-check-preview img{display:block;width:100%;height:100%;object-fit:contain}
-.medicine-check-tips{list-style:none;padding:0;margin:12px 0;display:grid;gap:6px}
-.medicine-check-tips li{display:flex;gap:10px;align-items:flex-start}
-.medicine-check-tips svg{flex-shrink:0}
-.medicine-check-consent{display:flex;gap:12px;align-items:flex-start}
-.medicine-check-consent input{flex-shrink:0}
-.medicine-check-read{width:100%;margin-top:12px}
-.medicine-check-state p{display:flex;gap:10px;align-items:flex-start}
-.medicine-check-state svg{flex-shrink:0}
-.medicine-check-chips{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;gap:10px}
-.medicine-check-chips li{border:1px solid #18202d;border-radius:3px;padding:10px 16px}
+.medicine-check-preview p{font-size:18px;color:#3a4250;padding:16px;text-align:center}
+.medicine-check-tips{list-style:none;padding:0;margin:4px 0 12px;display:grid;gap:4px}
+.medicine-check-tips li{display:flex;gap:10px;align-items:center;font-size:18px;line-height:1.4;color:#18202d}
+.medicine-check-tips svg{flex-shrink:0;color:#254cce}
+.medicine-check-consent{display:flex;gap:12px;align-items:flex-start;font-size:17px;line-height:1.45;color:#18202d;border-top:1px solid #c9ccc4;padding-top:12px}
+.medicine-check-consent input{flex-shrink:0;width:26px;height:26px;margin:0;accent-color:#254cce}
+.medicine-check-consent a{color:#254cce;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.medicine-check-read{width:100%;margin-top:14px}
+.medicine-check-help{font-size:16px;line-height:1.5;color:#3a4250;margin:8px 0 0}
+.medicine-check-state{border-top:1px solid #c9ccc4;padding-top:12px}
+.medicine-check-state>p{display:flex;gap:10px;align-items:flex-start;font-size:18px;line-height:1.5;font-weight:600;color:#18202d;margin:0}
+.medicine-check-state svg{flex-shrink:0;margin-top:2px}
+.medicine-check-chips{list-style:none;padding:0;margin:18px 0;display:flex;flex-wrap:wrap;gap:10px}
+.medicine-check-chips li{border:1px solid #18202d;border-radius:3px;padding:12px 18px;background:#fffdf7;font-size:22px;font-weight:700;color:#18202d}
+.medicine-check-note{font-size:16px;line-height:1.5;color:#3a4250;margin:10px 0 0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .medicine-check-tip{border-top:1px solid #c9ccc4;padding-top:12px;margin-top:12px}
+.medicine-check-tip strong{font-size:18px;color:#18202d}
+.medicine-check-tip p{font-size:18px;line-height:1.5;color:#3a4250;margin:4px 0 0}
+.medicine-check .status{font-size:16px}
+@media (min-width:681px){.medicine-check-screen{padding-top:16px}.medicine-check-preview{height:260px}}
+@media (prefers-reduced-motion:reduce){.medicine-check-screen{animation:none}}

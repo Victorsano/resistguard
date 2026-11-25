@@ -1,7 +1,12 @@
-.find-by-name{margin-top:12px}
+.find-by-name{margin-top:14px}
 .find-by-name-results{list-style:none;padding:0;margin:0;display:grid;gap:8px}
-.find-by-name-results button{display:flex;width:100%;align-items:center;gap:12px;border:1px solid #6b7480;border-radius:3px;background:#fffdf7;text-align:left;padding:10px 14px}
-.find-by-name-name{flex:1}
-.find-by-name-chip{display:inline-flex;align-items:center;gap:6px;border-radius:3px;padding:4px 8px;white-space:nowrap}
-.find-by-name-all{display:inline-flex;align-items:center;gap:8px;padding:0}
-.find-by-name-note{display:flex;align-items:center;gap:8px}
+.find-by-name-results button{display:flex;width:100%;min-height:60px;align-items:center;gap:12px;border:1px solid #59616d;border-radius:3px;background:#fffdf7;text-align:left;padding:10px 14px;color:#18202d;cursor:pointer}
+.find-by-name-results button:hover{border-color:#254cce}
+.find-by-name-results button>svg{color:#254cce;flex-shrink:0}
+.find-by-name-name{flex:1;font-size:20px;font-weight:700}
+.find-by-name-chip{display:inline-flex;align-items:center;gap:6px;border-radius:3px;padding:4px 8px;white-space:nowrap;font-size:15px;font-weight:700;border:1px solid}
+.find-by-name-chip-antibiotic{background:#fff0d4;color:#6b3900;border-color:#b25e00}
+.find-by-name-chip-other{background:#e8eef5;color:#1d3350;border-color:#4f6b8a}
+.find-by-name-none{font-size:18px;line-height:1.5;color:#18202d;margin:0 0 6px}
+.find-by-name-all{display:inline-flex;align-items:center;gap:8px;padding:0;margin:8px 0 0;min-height:52px;font-size:18px;color:#254cce}
+.find-by-name-note{display:flex;align-items:center;gap:8px;font-size:16px;color:#3a4250;margin:4px 0 0}
