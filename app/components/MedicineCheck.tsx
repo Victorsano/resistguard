@@ -76,12 +76,12 @@ export default function MedicineCheck({command}:{command:{screen:'home'|'find';n
    <p className="medicine-check-help" role="status">{busy==='scan'?t.photo.loadingNote:readiness==='checking'?t.photo.checking:''}</p></>}
  </section>}
  {screen==='confirm'&&<section className="medicine-check-screen medicine-check-confirm">{backButton}
-  {declined?<div className="medicine-check-state"><h1>{t.confirm.exit}</h1>{retakeRow}</div>
+  {declined?<div className="medicine-check-state"><h1>{t.confirm.exitTitle}</h1><p className="medicine-check-lead">{t.confirm.exitBody}</p>{retakeRow}</div>
   :route!=='scan'&&candidate?<><h1>{t.confirm.chosen(candidate.name)}</h1>{chips(candidate.ingredients)}<p className="medicine-check-lead">{t.confirm.instruction}</p><ConfirmButtons onYes={()=>go('answer')} onNo={decline}/></>
   :outcome==='match'&&candidate?<><h1>{t.confirm.title}</h1>{chips(candidate.ingredients)}<p className="medicine-check-lead">{t.confirm.instruction}</p><p className="medicine-check-note">{t.confirm.note}</p><ConfirmButtons onYes={()=>go('answer')} onNo={decline}/></>
   :outcome==='not_listed'?<><h1>{t.confirm.notListed}</h1>{scan?.observation?.ingredients.length?chips(scan.observation.ingredients):null}<p className="medicine-check-lead">{t.confirm.notListedNote}</p><div className="medicine-check-actions"><PharmacistButton href={unlistedWhatsAppLink(scan?.observation?.ingredients??[],process.env.NEXT_PUBLIC_PHARMACIST_WHATSAPP)}/><button type="button" className="secondary" onClick={()=>setCamera(true)}><Camera size={22} aria-hidden="true"/>{t.confirm.retake}</button></div></>
-  :outcome==='not_medicine'?<><h1>{t.confirm.notMedicine}</h1>{retakeRow}</>
-  :outcome==='brand_only'?<><h1>{t.confirm.brandOnly}</h1>{retakeRow}</>
+  :outcome==='not_medicine'?<><h1>{t.confirm.notMedicineTitle}</h1><p className="medicine-check-lead">{t.confirm.notMedicineBody}</p>{retakeRow}</>
+  :outcome==='brand_only'?<><h1>{t.confirm.brandTitle}</h1><p className="medicine-check-lead">{t.confirm.brandBody}</p>{retakeRow}</>
   :<><h1>{t.confirm.unreadable}</h1><div className="medicine-check-tip"><strong>{scanRecovery(scan?.observation).title}</strong><p>{scanRecovery(scan?.observation).tip}</p></div>{retakeRow}</>}
  </section>}
  {screen==='answer'&&candidate&&<div className="medicine-check-screen medicine-check-answer">{backButton}<Answer medicine={candidate} onAnother={reset}/>{emergencyStrip}</div>}

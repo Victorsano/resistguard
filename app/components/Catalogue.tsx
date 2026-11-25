@@ -28,9 +28,9 @@ export default function Catalogue({onChoose}:{onChoose:(id:string)=>void}){
     </div>
     <p role="status" className="field-help">{results.length} records shown</p>
     <div className="medicine-grid">{results.map(({m,forms,products})=><article key={m.id}>
-      <span className={`pill ${m.antibiotic?'':'non-antibiotic-pill'}`}>{m.antibiotic?'Antibiotic':'Non-antibiotic'}</span>
+      <span className={`pill ${m.antibiotic?'':'non-antibiotic-pill'}`}>{m.antibiotic?'Antibiotic':'Not an antibiotic'}</span>
       <h2>{m.name}</h2>
-      <p className="review-label">Pharmacist review pending · Check due {m.reviewDue}</p>
+      <p className="review-label">Not yet reviewed by a pharmacist · Check due {m.reviewDue}</p>
       <p className="ingredient-list">{m.ingredients.join(' + ')}</p>
       <p>{m.summary}</p>
       <p className="catalogue-caution">{m.caution}</p>
@@ -49,7 +49,7 @@ export default function Catalogue({onChoose}:{onChoose:(id:string)=>void}){
         {products.length>0&&<p>Greenbook references describe listed products. Check current registration directly in the register and confirm the ingredients on your package.</p>}
       </details>}
       <div className="catalogue-card-footer">
-        <button className="secondary" onClick={()=>onChoose(m.id)}>Check this label <ArrowRight size={15}/></button>
+        <button className="secondary" onClick={()=>onChoose(m.id)}>Check this medicine <ArrowRight size={15}/></button>
         <a href={m.source} target="_blank" rel="noreferrer">{m.sourceLabel}{'sourceSection' in m?` · ${m.sourceSection}`:''} <ArrowUpRight size={14}/></a>
       </div>
     </article>)}</div>

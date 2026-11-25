@@ -1,72 +1,77 @@
-// Every label, heading, button and state on the check flow. Medical body text stays in lib/safety.ts and data/.
-import {emergency} from '@/lib/safety';
+// Every label, heading, button and state on the check flow, word for word from REVAMP_SPEC.md.
+// Medical body text stays in lib/safety.ts and data/.
+import {medicines} from '@/lib/safety';
+const lowerFirst=(name:string)=>name.charAt(0).toLowerCase()+name.slice(1);
 export const copy={
  back:'Back',
- emergency,
+ emergency:'Trouble breathing, a swollen face or throat, or fainting? Get emergency help now.',
  home:{
-  title:'What’s in that medicine?',
-  subline:'Photograph the ingredient list on a medicine package. Compare the reading with the small print, then see what to ask a pharmacist.',
-  scan:'Open camera',
-  upload:'Upload photo',
-  search:'Ingredient, brand or NAFDAC number',
-  example:'Try with a sample label',
-  trust:'No account. No saved health data.'
+  title:'Check your medicine before you take it',
+  subline:"Scan the label. In seconds, see if it's an antibiotic and what to ask your pharmacist.",
+  scan:'Scan your medicine',
+  upload:'Upload a photo',
+  search:'Or type a name, like amoxicillin or Emzoclox',
+  example:'See an example',
+  trust:'AI reads the label. You confirm it. Free, no account.'
  },
  photo:{
-  title:'Review your photo',
+  title:'Check your photo',
   retake:'Retake',
-  another:'Replace',
-  preparing:'Preparing the photo on your device…',
-  tips:['The whole active-ingredient panel is visible.','I can read the text without glare or blur.','There are no names or personal details.'],
-  consent:'I agree to send this prepared photo to Groq for label analysis. ResistGuard does not save it.',
-  consentLink:'Provider data policy',
-  read:'Read label',
-  loading:'Reading the label…',
-  loadingNote:'Checking the visible label. Usually takes a few seconds.',
-  checking:'Checking whether the scanner is available…',
-  timeout:'The scan could not finish. Check your connection or try again.',
+  another:'Choose another',
+  preparing:'Getting your photo ready…',
+  tips:['The whole ingredient list is in view','No glare or blur','No names or addresses'],
+  consent:"I agree to send this photo to Groq, our AI provider, to read the ingredients. ResistGuard doesn't keep it.",
+  consentLink:'How your photo is handled',
+  read:'Read the label',
+  loading:'Reading your label…',
+  loadingNote:'This usually takes under 20 seconds.',
+  checking:'Checking that photo reading is on…',
+  timeout:'That took too long.',
   tryAgain:'Try again',
-  typeInstead:'Use the catalogue',
-  paused:'The scanner is unavailable. Use the catalogue to look up the printed ingredients.',
-  typeName:'Use the catalogue'
+  typeInstead:'Type the name instead',
+  paused:'Photo reading is paused right now. Type the medicine name instead.',
+  typeName:'Type the name'
  },
  confirm:{
-  title:'Compare with the printed package',
-  chosen:(name:string)=>name,
-  instruction:'Does this match every active ingredient on your package, with no additional active ingredient?',
-  note:'What the AI read · check against your label',
-  yes:'Yes, the complete list matches',
-  no:'No / I’m unsure',
-  exit:'Look for “active ingredients” or “each tablet contains”. If you still can’t read every name, take the box or leaflet to a pharmacist and ask them to check the list with you.',
-  retake:'Use another photo',
-  typeName:'Use the catalogue',
-  unreadable:'We need a clearer ingredient label',
-  brandOnly:'The generic ingredient is missing. Turn the package over. The brand name alone is not enough; photograph the composition panel or leaflet.',
-  notListed:'This ingredient is outside our catalogue',
-  notListedNote:'No match does not mean it is not an antibiotic.',
-  notMedicine:'This appears to be a non-medicine product'
+  title:'Is this what your pack says?',
+  chosen:(name:string)=>`You chose ${lowerFirst(name)}`,
+  instruction:'Look at your pack. Does it list these, and nothing more?',
+  note:'AI read this from your photo. You have the final say.',
+  yes:"Yes, that's it",
+  no:"No, or I'm not sure",
+  exitTitle:'No problem.',
+  exitBody:'Try a clearer photo, or show the pack to a pharmacist.',
+  retake:'Retake photo',
+  typeName:'Type the name',
+  unreadable:"We couldn't read the label clearly.",
+  brandTitle:'We need the ingredient list, not just the brand.',
+  brandBody:"Turn the pack over and look for 'Each capsule contains' or 'Composition'.",
+  notListed:"We don't have this medicine yet.",
+  notListedNote:"That doesn't mean it isn't an antibiotic. Ask a pharmacist before you take it.",
+  notMedicineTitle:"This doesn't look like a medicine.",
+  notMedicineBody:'Scan the ingredient list on a medicine pack.'
  },
  answer:{
-  antibiotic:'Antibiotic',
-  notAntibiotic:'Not an antibiotic',
-  review:'Pharmacist review pending',
-  boundary:'A match means the ingredient names you checked appear together in our catalogue. It cannot tell you whether you need this medicine.',
-  before:'What would you like to understand?',
-  next:'A useful next conversation',
-  another:'Reset medicine check',
-  sources:'Sources',
-  checked:(date:string)=>`Source checked ${date}`,
-  cards:{cold:'A cold or flu',leftovers:'Using leftovers',sharing:'Sharing a medicine',prescribed:'My own prescription',missedEffects:'A missed dose, side effects or other medicines',general:'Understand this medicine'}
+  antibiotic:'This is an antibiotic',
+  notAntibiotic:'This is not an antibiotic',
+  review:'Not yet reviewed by a pharmacist',
+  boundary:"This tells you what's in the pack. Only a pharmacist or doctor can tell you if you need it.",
+  before:'Before you take it',
+  next:'Next steps',
+  another:'Check another medicine',
+  sources:'Where this information comes from',
+  checked:(date:string)=>`Sources checked on ${date}`,
+  cards:{cold:'I have a cold, flu or cough',leftovers:'These are left over from before',sharing:'Someone gave these to me',prescribed:'A doctor prescribed this for me',missedEffects:'I missed a dose or feel side effects',general:'What can this check tell me?'}
  },
  find:{
-  title:'Medicine catalogue',
-  search:'Ingredient, brand or NAFDAC number',
+  title:'Find by name',
+  search:'Type a name, brand or NAFDAC number',
   antibiotic:'Antibiotic',
-  notAntibiotic:'Non-antibiotic',
-  none:'No entries match this search. Try the generic ingredient printed on the package or ask a pharmacist.',
-  all:'Browse catalogue',
-  note:'28 sourced records · No brand or authenticity verification'
+  notAntibiotic:'Not an antibiotic',
+  none:"We don't have that medicine yet. That doesn't mean it isn't an antibiotic. Ask a pharmacist.",
+  all:`See all ${medicines.length} medicines`,
+  note:'Nothing you type leaves your phone.'
  },
  footer:{how:'How it works',pilot:'For pharmacists and testers',sources:'Sources'},
- sources:{title:'Sources',intro:'Every public source ResistGuard links to.',medicines:'Medicine information',guidance:'Antibiotic guidance',catalogue:'Browse catalogue'}
+ sources:{title:'Sources',intro:'Every public source ResistGuard links to.',medicines:'Medicine information',guidance:'Antibiotic guidance'}
 } as const;

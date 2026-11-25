@@ -49,3 +49,17 @@ test('sources page lists every link once',()=>{
  assert.ok(urls.every(u=>u.startsWith('https://')));
  assert.equal(capitalise('clavulanic acid'),'Clavulanic acid');
 });
+test('flow copy matches the spec and never implies a medicine is safe',async()=>{
+ const {copy}=await import('../lib/screen-copy');
+ assert.equal(copy.home.title,'Check your medicine before you take it');
+ assert.equal(copy.home.scan,'Scan your medicine');
+ assert.equal(copy.confirm.title,'Is this what your pack says?');
+ assert.equal(copy.confirm.chosen('Amoxicillin'),'You chose amoxicillin');
+ assert.equal(copy.answer.review,'Not yet reviewed by a pharmacist');
+ assert.equal(copy.answer.boundary,"This tells you what's in the pack. Only a pharmacist or doctor can tell you if you need it.");
+ assert.equal(copy.find.all,'See all 28 medicines');
+ assert.match(copy.photo.consent,/Groq/);
+ const text=JSON.stringify(copy);
+ assert.doesNotMatch(text,/\bsafe\b|approved|ok to take|genuine/i);
+ assert.doesNotMatch(text,/\b\d{5}\b/);
+});
