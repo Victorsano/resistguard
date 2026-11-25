@@ -1,0 +1,40 @@
+// Next steps after a confirmed match: hand the user to NAFDAC checks and to a pharmacist.
+// Plain functions only. Uses the confirmed record, never the scan, photo or product name.
+type ConfirmedMedicine={ingredients:readonly string[];antibiotic:boolean};
+export const greenbookUrl='https://greenbook.nafdac.gov.ng/';
+export const genuineCheck={
+ title:'Check the pack is genuine',
+ steps:[
+  {text:'Does your pack have a silver scratch panel? Scratch it and text the PIN to the number printed beside it. The text is free. The reply tells you if the pack is genuine.'},
+  {text:'Find the NAFDAC (Nigeria\'s drug regulator) number on the box. Look it up in the ',link:{label:'NAFDAC Greenbook',url:greenbookUrl},after:'.'},
+  {text:'If the reply says fake, or the box has no NAFDAC number, do not take it. Show it to a pharmacist and report it to NAFDAC.'}
+ ],
+ disclaimer:'ResistGuard cannot tell if a medicine is genuine. These checks come from NAFDAC.'
+} as const;
+export const pharmacistSection={
+ title:'Send your questions to a pharmacist',
+ text:'WhatsApp opens with three questions already typed. You choose who to send it to. No photo or name is included.',
+ button:'Ask a pharmacist on WhatsApp'
+} as const;
+export function joinIngredients(names:readonly string[]){
+ if(names.length<2)return names.join('');
+ return `${names.slice(0,-1).join(', ')} and ${names[names.length-1]}`;
+}
+export function whatsAppMessage(medicine:ConfirmedMedicine){
+ return [
+  `Hello, I have a medicine that contains ${joinIngredients(medicine.ingredients)}. ResistGuard says it is ${medicine.antibiotic?'an antibiotic':'not an antibiotic'}.`,
+  '',
+  '1. Do I need this medicine for my illness?',
+  '2. Is it safe with my other medicines, allergies or conditions?',
+  '3. How should I take it, and for how long?'
+ ].join('\n');
+}
+// Digits only, country code first, no leading zero. Anything else means "let the user pick a contact".
+export function pharmacistNumber(raw:string|undefined){
+ const digits=(raw??'').replace(/[\s+\-()]/g,'');
+ return /^[1-9]\d{7,14}$/.test(digits)?digits:null;
+}
+export function whatsAppLink(medicine:ConfirmedMedicine,phone?:string){
+ const number=pharmacistNumber(phone);
+ return `https://wa.me/${number??''}?text=${encodeURIComponent(whatsAppMessage(medicine))}`;
+}
