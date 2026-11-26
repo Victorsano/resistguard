@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {scenarios} from '../lib/safety';
-import {findMedicines,scanOutcome,staysOnPhoto,answerCards,allSources,capitalise} from '../lib/flow';
+import {addMedicineName,findMedicines,scanOutcome,staysOnPhoto,answerCards,allSources,capitalise} from '../lib/flow';
 import {unavailableScan,type ScanResult} from '../lib/scan';
 const ids=(q:string)=>findMedicines(q).map(m=>m.id);
 const scan=(over:Partial<ScanResult>&{reason?:string}):ScanResult&{reason?:string}=>({mode:'candidate',status:'unreadable',title:'t',message:'m',nextStep:'n',...over});
@@ -40,6 +40,13 @@ test('answer cards reuse the scenario text word for word',()=>{
  assert.deepEqual(other.map(c=>c.id),['cold','missedEffects','general']);
  assert.equal(other[0].rules[0].title,'This ingredient is not an antibiotic');
  for(const c of other)for(const r of c.rules)assert.ok(!/leftover|someone else/i.test(r.title));
+});
+test('typed medicine names ignore blanks and duplicates and keep the spelling the user entered',()=>{
+ const names=['Paracetamol'];
+ assert.deepEqual(addMedicineName(names,'  '),['Paracetamol']);
+ assert.deepEqual(addMedicineName(names,' paracetamol '),['Paracetamol']);
+ assert.deepEqual(addMedicineName(names,'  Brand from pack  '),['Paracetamol','Brand from pack']);
+ assert.deepEqual(names,['Paracetamol']);
 });
 test('sources page lists every link once',()=>{
  const {medicines,guidance}=allSources();

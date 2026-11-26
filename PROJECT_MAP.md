@@ -96,9 +96,10 @@ Diagnosing symptoms, choosing a treatment, doses, proving a pack is genuine, chi
 | **Catalogue** | All 28 records with filters (all, antibiotics, other, Nigerian sources, adult list, children's list), formulation examples and Greenbook references. | `Catalogue.tsx` |
 | **Check your photo** | See the prepared photo, retake or choose another, read three photo tips, tick the consent box, tap "Read the label". Timeouts, failures and paused states stay on this screen with "Try again" and "Type the name instead". | `MedicineCheck.tsx`, `lib/image.ts` |
 | **Is this what your pack says?** | Compare the ingredient chips with the pack: "Yes, that's it" or "No, or I'm not sure". The same screen shows the other outcomes: unreadable (with a tailored tip), brand only, not in our list (with a WhatsApp button), not a medicine. | `MedicineCheck.tsx`, `lib/scan-guide.ts`, `scanOutcome()` in `lib/flow.ts` |
-| **Answer** | Verdict in a green "check done" card with a check icon, the same colour for both outcomes (the words carry the meaning), name and category, "Not yet reviewed by a pharmacist", summary, caution, the boundary line, "Before you take it" cards, "Next steps" (WhatsApp a pharmacist, check the pack is genuine), "Check another medicine", and sources. | `Answer.tsx`, `NextSteps.tsx`, `answerCards()` in `lib/flow.ts`, `lib/next-steps.ts` |
+| **Check questions** | Type an optional reason. Choose whether it was prescribed and whether you take other medicines. If yes to other medicines, add the names from the packs or say you're unsure of the names. | `CheckQuestions.tsx`, `MedicineCheck.tsx` |
+| **Answer** | Verdict in a green "check done" card with a check icon, the same colour for both outcomes (the words carry the meaning), name and category, "Not yet reviewed by a pharmacist", summary, caution, the boundary line, your answers, "Before you take it" cards, "Next steps" (WhatsApp a pharmacist, check the pack is genuine), "Check another medicine", and sources. | `Answer.tsx`, `NextSteps.tsx`, `answerCards()` in `lib/flow.ts`, `lib/next-steps.ts` |
 
-The Answer screen opens **only** from "Yes, that's it". The flow has no URL per screen; state lives in React memory and resets on reload.
+Choosing "Yes, that's it" opens the check questions, followed by Answer. The flow has no URL per screen. The answers stay in React memory and reset on reload or when starting a new check.
 
 ### 4.3 Footer pages (inside `/check`)
 
@@ -222,7 +223,7 @@ Do not describe any of these as working:
 - Brand-name matching in the scan (deliberately excluded).
 - Authenticity, counterfeit, expiry or live registration checks. The app points to NAFDAC's own checks and says it cannot tell if a medicine is genuine.
 - A typed-question assistant or chatbot.
-- Asking why the user is taking the medicine, other medicines, a question bank about the user, or concern / no-concern results. Agreed and specced in `docs/specs/check-flow.md`, not started.
+- Reason matching, a question bank about the user, and concern / no-concern results. These are planned in `docs/specs/check-flow.md`.
 - Strength or dose reading, dose calculation, treatment plans.
 - Symptom checker or diagnosis.
 - Interaction checker.

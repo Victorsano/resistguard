@@ -1,0 +1,30 @@
+.check-questions-field{display:grid;gap:var(--s2);font-weight:600}
+.check-questions-field :is(input,textarea){
+ width:100%;min-height:var(--control);padding:var(--s3) var(--s4);
+ border:1px solid var(--line-strong);border-radius:var(--radius-control);
+ background:var(--card);color:var(--ink);font:inherit;font-weight:400
+}
+.check-questions-field textarea{resize:vertical}
+.check-questions-hint{margin:var(--s2) 0 0;color:var(--ink-2);font-size:var(--text-small)}
+.check-questions-toggle{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s3);margin:0;padding:0;border:0}
+.check-questions-choice{
+ display:flex;align-items:center;justify-content:center;gap:var(--s2);
+ min-height:var(--control);padding:var(--s3);
+ border:1px solid var(--line-strong);border-radius:var(--radius-control);
+ background:var(--card);font-weight:600;cursor:pointer
+}
+.check-questions-choice:has(:checked){border-color:var(--signal);background:var(--signal-50);color:var(--signal-ink)}
+.check-questions-choice input,.check-questions-unsure input{accent-color:var(--signal);width:var(--s4);height:var(--s4);flex-shrink:0}
+.check-questions-medicines{display:grid;gap:var(--s3);margin-top:var(--s5)}
+.check-questions-add{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--s3);align-items:end}
+.check-questions-names{display:grid;gap:var(--s2);margin:0;padding:0;list-style:none}
+.check-questions-names li{
+ display:flex;gap:var(--s3);align-items:center;justify-content:space-between;
+ padding:0 var(--s4);border:1px solid var(--line);border-radius:var(--radius-control);background:var(--card)
+}
+.check-questions-names li span{min-width:0;overflow-wrap:anywhere}
+.check-questions-unsure{display:flex;align-items:center;gap:var(--s3);min-height:var(--control);cursor:pointer}
+.check-questions-continue{width:100%;margin:var(--s5) 0}
+@media(max-width:420px){
+ .check-questions-add{grid-template-columns:minmax(0,1fr)}
+}

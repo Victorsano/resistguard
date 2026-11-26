@@ -1,10 +1,33 @@
-// The five-screen check flow: plain functions only, so node:test can import them.
+// The check flow: plain functions only, so node:test can import them.
 import {medicines,nigeriaCatalogueDetails,nigeriaSources,sources as guidanceSources,assess,type Medicine,type Scenario} from '@/lib/safety';
 import type {ScanResult} from '@/lib/scan';
 import evidence from '@/data/use-evidence.json';
 
-export type Screen='home'|'find'|'catalogue'|'photo'|'confirm'|'answer';
+export type CheckQuestion='reason'|'prescription'|'other-medicines';
+export type Screen='home'|'find'|'catalogue'|'photo'|'confirm'|CheckQuestion|'answer';
 export type Route='scan'|'name'|'catalogue';
+export type YesNo='yes'|'no';
+export type CheckDetails={
+ reason:string;
+ prescribed:YesNo|null;
+ otherMedicines:YesNo|null;
+ medicineNames:string[];
+ unsureAboutNames:boolean;
+};
+
+export const emptyCheckDetails:CheckDetails={
+ reason:'',
+ prescribed:null,
+ otherMedicines:null,
+ medicineNames:[],
+ unsureAboutNames:false
+};
+
+export function addMedicineName(names:string[],input:string){
+ const name=input.trim();
+ if(!name||names.some(existing=>existing.toLowerCase()===name.toLowerCase()))return names;
+ return [...names,name];
+}
 
 // Same fields the Catalogue searches: name, category, ingredients, product names and NAFDAC numbers.
 export function findMedicines(query:string){

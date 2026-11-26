@@ -3,12 +3,12 @@
 import {useState} from 'react';
 import {CircleCheck,Info,ChevronDown,RotateCcw,BadgeInfo} from 'lucide-react';
 import {assess,type Medicine} from '@/lib/safety';
-import {answerCards} from '@/lib/flow';
+import {answerCards,type CheckDetails} from '@/lib/flow';
 import {copy} from '@/lib/screen-copy';
 import NextSteps from './NextSteps';
 import './answer.css';
 
-export default function Answer({medicine,onAnother}:{medicine:Medicine;onAnother:()=>void}){
+export default function Answer({medicine,details,onAnother}:{medicine:Medicine;details:CheckDetails;onAnother:()=>void}){
  const [open,setOpen]=useState<string|null>(null);
  const base=assess(medicine.id,'general')!;
  const t=copy.answer;
@@ -18,6 +18,20 @@ export default function Answer({medicine,onAnother}:{medicine:Medicine;onAnother
   <p className="answer-summary">{medicine.summary}</p>
   <div className="caution answer-caution"><Info size={20} aria-hidden="true"/><p>{medicine.caution}</p></div>
   <p className="answer-boundary">{t.boundary}</p>
+  <div className="answer-details">
+   <h2 className="answer-heading">{t.yourAnswers}</h2>
+   <dl>
+    {details.reason.trim()&&<><dt>{t.reason}</dt><dd>{details.reason.trim()}</dd></>}
+    {details.prescribed&&<><dt>{t.prescription}</dt><dd>{copy.questions[details.prescribed]}</dd></>}
+    <dt>{t.otherMedicines}</dt>
+    <dd>
+     {details.otherMedicines==='no'&&t.noOtherMedicines}
+     {details.medicineNames.length>0&&<ul>{details.medicineNames.map(name=><li key={name}>{name}</li>)}</ul>}
+     {details.unsureAboutNames&&<p>{t.unsureAboutNames}</p>}
+    </dd>
+   </dl>
+   {details.otherMedicines==='yes'&&<p>{t.interactionNote}</p>}
+  </div>
   <h2 className="answer-heading">{t.before}</h2>
   <div className="answer-cards">{answerCards(medicine).map(card=><div key={card.id} className="answer-card"><button data-motion="press" type="button" aria-expanded={open===card.id} aria-controls={`answer-card-${card.id}`} onClick={()=>setOpen(open===card.id?null:card.id)}><span>{t.cards[card.id]}</span><ChevronDown size={22} aria-hidden="true" className="answer-chevron"/></button>{open===card.id&&<div className="answer-card-body" id={`answer-card-${card.id}`}>{card.rules.map(rule=><div key={rule.title}><h3>{rule.title}</h3><p>{rule.text}</p></div>)}</div>}</div>)}</div>
   <h2 className="answer-heading">{t.next}</h2>

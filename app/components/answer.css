@@ -11,6 +11,16 @@
 .answer-caution{margin-top:var(--s4)}
 .answer-boundary{margin:var(--s5) 0 0;padding-left:14px;border-left:3px solid var(--ink);font-size:var(--text-body);font-weight:600;line-height:1.5}
 .answer-heading{margin:var(--s7) 0 var(--s4);font-size:26px;font-weight:650;font-stretch:92%;line-height:1.15;letter-spacing:-.02em}
+.answer-details{
+ margin-top:var(--s6);padding:var(--s4);border:1px solid var(--line);
+ border-radius:var(--radius-card);background:var(--card)
+}
+.answer-details .answer-heading{margin:0 0 var(--s4)}
+.answer-details dt{font-weight:600}
+.answer-details dd{margin:0 0 var(--s3);overflow-wrap:anywhere}
+.answer-details dd :is(p,ul){margin:0}
+.answer-details ul{padding-inline-start:var(--s5);list-style:disc}
+.answer-details>p{margin:var(--s3) 0 0;color:var(--ink-2)}
 .answer-cards{display:grid;gap:10px}
 .answer-card{overflow:hidden;border:1px solid var(--line-strong);border-radius:var(--radius-card);background:var(--card)}
 .answer-card>button{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);width:100%;min-height:60px;padding:var(--s3) 18px;border:0;background:none;text-align:left;font-size:var(--text-body);font-weight:600;line-height:1.35;color:var(--ink)}

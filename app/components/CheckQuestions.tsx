@@ -1,0 +1,91 @@
+import {useRef} from 'react';
+import {addMedicineName,type CheckDetails,type CheckQuestion,type YesNo} from '@/lib/flow';
+import {copy} from '@/lib/screen-copy';
+import './check-questions.css';
+
+type Props={
+ step:CheckQuestion;
+ details:CheckDetails;
+ medicineName:string;
+ onChange:(details:CheckDetails)=>void;
+ onMedicineName:(name:string)=>void;
+ onContinue:()=>void;
+};
+
+const t=copy.questions;
+
+function YesNoToggle({value,onChange}:{value:YesNo|null;onChange:(answer:YesNo)=>void}){
+ return <fieldset className="check-questions-toggle" aria-labelledby="check-question-title">
+  {(['yes','no'] as const).map(answer=><label key={answer} className="check-questions-choice" data-motion="press">
+   <input type="radio" name="check-question-choice" value={answer} checked={value===answer} onChange={()=>onChange(answer)}/>
+   {t[answer]}
+  </label>)}
+ </fieldset>;
+}
+
+export default function CheckQuestions({step,details,medicineName,onChange,onMedicineName,onContinue}:Props){
+ const nameInput=useRef<HTMLInputElement>(null);
+ const title=step==='reason'?t.reason:step==='prescription'?t.prescription:t.otherMedicines;
+ const canContinue=step==='reason'||(step==='prescription'?details.prescribed!==null:
+  details.otherMedicines==='no'||(details.otherMedicines==='yes'&&
+   (details.medicineNames.length>0||!!medicineName.trim()||details.unsureAboutNames)));
+
+ function chooseOtherMedicines(answer:YesNo){
+  if(answer==='no'){
+   onChange({...details,otherMedicines:answer,medicineNames:[],unsureAboutNames:false});
+   onMedicineName('');
+  }else{
+   onChange({...details,otherMedicines:answer});
+  }
+ }
+
+ function addName(){
+  onChange({...details,medicineNames:addMedicineName(details.medicineNames,medicineName)});
+  onMedicineName('');
+ }
+
+ return <div className="check-questions">
+  <h1 id="check-question-title">{title}</h1>
+  {step==='reason'&&<>
+   <label className="check-questions-field">
+    <span>{t.reasonLabel}</span>
+    <textarea rows={3} value={details.reason} onChange={event=>onChange({...details,reason:event.target.value})} aria-describedby="check-questions-privacy" autoComplete="off"/>
+   </label>
+   <p className="check-questions-hint" id="check-questions-privacy">{t.privacy}</p>
+  </>}
+  {step==='prescription'&&<YesNoToggle value={details.prescribed} onChange={prescribed=>onChange({...details,prescribed})}/>}
+  {step==='other-medicines'&&<>
+   <YesNoToggle value={details.otherMedicines} onChange={chooseOtherMedicines}/>
+   {details.otherMedicines==='yes'&&<div className="check-questions-medicines">
+    <form className="check-questions-add" onSubmit={event=>{
+     event.preventDefault();
+     addName();
+     nameInput.current?.focus();
+    }}>
+     <label className="check-questions-field">
+      <span>{t.medicineName}</span>
+      <input ref={nameInput} type="text" value={medicineName} onChange={event=>onMedicineName(event.target.value)} autoComplete="off"/>
+     </label>
+     <button type="submit" className="secondary" data-motion="press" disabled={!medicineName.trim()}>{t.addMedicine}</button>
+    </form>
+    {details.medicineNames.length>0&&<ul className="check-questions-names">
+     {details.medicineNames.map(name=><li key={name}>
+      <span>{name}</span>
+      <button type="button" className="text-button" data-motion="press" aria-label={t.removeMedicine(name)} onClick={()=>{
+       onChange({...details,medicineNames:details.medicineNames.filter(existing=>existing!==name)});
+       nameInput.current?.focus();
+      }}>{t.remove}</button>
+     </li>)}
+    </ul>}
+    <label className="check-questions-unsure">
+     <input type="checkbox" checked={details.unsureAboutNames} onChange={event=>onChange({...details,unsureAboutNames:event.target.checked})}/>
+     {t.unsureAboutNames}
+    </label>
+   </div>}
+  </>}
+  <button type="button" className="primary check-questions-continue" data-motion="press" disabled={!canContinue} onClick={()=>{
+   if(step==='other-medicines'&&details.otherMedicines==='yes')addName();
+   onContinue();
+  }}>{t.continue}</button>
+ </div>;
+}
