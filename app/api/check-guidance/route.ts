@@ -56,7 +56,8 @@ export async function POST(request: Request) {
     [
       'In two short sentences, explain in plain language what the cited evidence helps clarify for this person.',
       'Use their stated reason and relevant follow-up details as things they reported. Do not repeat any identifying information.',
-      'Name a real evidence gap if the sources do not address their reason or a condition they reported. Do not claim a condition is a contraindication unless a supplied source explicitly supports that conclusion.',
+      'Name the reported symptom or condition when explaining a gap. If the source lacks an answer about it, say so plainly. Skip general advice that does not explain the gap. Only identify a contraindication if a supplied source explicitly supports it.',
+      'Use plain source names such as the medicine leaflet in the takeaway. Put citation IDs only in passageIds.',
       'Explain what a reported concern or missing detail means for this check. Keep different symptoms separate. Use the symptom words they used.',
       'The app already displays what the person reported about prescription and assessment. Do not repeat or infer either.',
       existingPlan?'They already have a clinician involved. Do not request another assessment or write a next action.':
@@ -109,9 +110,10 @@ export async function POST(request: Request) {
     const reported={prescribed:context.prescribed,assessment:outcome?.assessment,reason:context.reason};
     let synthesis:CheckGuidance['synthesis'];
     if(!asking){
-      synthesis=validateCheckSynthesis(model.takeaway,undefined,reported);
+      const takeaway=typeof model.takeaway==='string'?model.takeaway.replace(/\blabel[-‑]caution(?: source)?\b/gi,'medicine leaflet'):model.takeaway;
+      synthesis=validateCheckSynthesis(takeaway,undefined,reported);
       if(!existingPlan&&model.nextAction){
-        try{synthesis=validateCheckSynthesis(model.takeaway,model.nextAction,reported);}
+        try{synthesis=validateCheckSynthesis(takeaway,model.nextAction,reported);}
         catch{ /* The result can show its own next action. */ }
       }
     }
