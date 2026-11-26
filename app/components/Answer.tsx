@@ -2,9 +2,9 @@
 
 import {useState} from 'react';
 import {CircleCheck,Info,ChevronDown,RotateCcw,BadgeInfo} from 'lucide-react';
-import {assess,type Medicine} from '@/lib/safety';
-import {answerCards,type CheckDetails} from '@/lib/flow';
-import {copy} from '@/lib/screen-copy';
+import {assess,medicines,type Medicine} from '@/lib/safety';
+import {answerCards,keepTyped,type CheckDetails} from '@/lib/flow';
+import {copy,reasonLabels} from '@/lib/screen-copy';
 import NextSteps from './NextSteps';
 import './answer.css';
 
@@ -12,6 +12,7 @@ export default function Answer({medicine,details,onAnother}:{medicine:Medicine;d
  const [open,setOpen]=useState<string|null>(null);
  const base=assess(medicine.id,'general')!;
  const t=copy.answer;
+ const reason=details.reasonChoice&&details.reasonChoice!==keepTyped?reasonLabels[details.reasonChoice]:details.reason.trim();
  return <section className="answer" aria-labelledby="answer-verdict">
   <div data-motion="verdict" className={`answer-verdict ${medicine.antibiotic?'answer-verdict-antibiotic':'answer-verdict-other'}`}><span className="answer-verdict-icon" aria-hidden="true"><CircleCheck size={32} strokeWidth={2.25}/></span><div><h1 id="answer-verdict" tabIndex={-1} data-screen-heading>{medicine.antibiotic?t.antibiotic:t.notAntibiotic}</h1><p className="answer-name">{medicine.name} · {medicine.category}</p></div></div>
   <p className="answer-review"><BadgeInfo size={18} aria-hidden="true"/>{t.review}</p>
@@ -21,12 +22,15 @@ export default function Answer({medicine,details,onAnother}:{medicine:Medicine;d
   <div className="answer-details">
    <h2 className="answer-heading">{t.yourAnswers}</h2>
    <dl>
-    {details.reason.trim()&&<><dt>{t.reason}</dt><dd>{details.reason.trim()}</dd></>}
+    {reason&&<><dt>{t.reason}</dt><dd>{reason}</dd></>}
     {details.prescribed&&<><dt>{t.prescription}</dt><dd>{copy.questions[details.prescribed]}</dd></>}
     <dt>{t.otherMedicines}</dt>
     <dd>
      {details.otherMedicines==='no'&&t.noOtherMedicines}
-     {details.medicineNames.length>0&&<ul>{details.medicineNames.map(name=><li key={name}>{name}</li>)}</ul>}
+     {details.medicines.length>0&&<ul>{details.medicines.map(entry=>{
+      const match=medicines.find(other=>other.id===entry.choice);
+      return <li key={entry.name}>{match?.name??entry.name}{!match&&<small className="answer-as-typed">{t.asTyped}</small>}</li>;
+     })}</ul>}
      {details.unsureAboutNames&&<p>{t.unsureAboutNames}</p>}
     </dd>
    </dl>

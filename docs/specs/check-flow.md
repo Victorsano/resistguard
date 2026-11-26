@@ -6,7 +6,7 @@ File paths come from the repo snapshot of 25 November 2026. Check them against t
 
 ## 0. Notes against the current code (checked 26 November 2026)
 
-The first pass asks for an optional typed reason, a Yes/No prescription answer, and whether the user takes other medicines. A Yes answer lets them type names or say they are unsure of the names. The existing Answer screen shows a recap. Everything entered in these screens stays in the browser. A later interaction check should cite the relevant NAFDAC or WHO document for each entry.
+The checker asks for an optional typed reason, a Yes/No prescription answer, and whether the user takes other medicines. Users can type medicine names or say they are unsure of them. The browser suggests known reasons and catalogue entries for explicit confirmation. Users can also keep their own words. The Answer screen shows a recap. A later interaction check should cite the relevant NAFDAC or WHO document for each entry.
 
 Added when this spec was committed. Where these notes and the sections below disagree, these notes win. Fix the sections below as you build.
 
@@ -41,11 +41,11 @@ ResistGuard checks a medicine before someone takes it. The new flow adds three t
 
 ## 3. The flow
 
-| Step | What the user does | What AI does | Check after AI | Status |
+| Step | What the user does | How the app helps | What the user confirms | Status |
 |---|---|---|---|---|
 | 1. Scan and confirm | Takes or uploads a photo, or types a name | Reads the ingredients from the label | User taps "Yes, that's it". No result before this. | Built |
-| 2. Why and prescribed? | Types an optional reason and answers "Was it prescribed for you?" | Planned: map the typed reason to one reason ID from `reasons.json` | Planned: user confirms the matched reason or picks another from the list | Input built. Reason matching remains open. |
-| 3. Other medicines | Says whether they take any. If yes, types the names from the packs or marks that some names may be missing. | None in the first pass | The user can review and edit the list before leaving the checker. | Typed list built. Interaction checks remain open. |
+| 2. Why and prescribed? | Types an optional reason and answers "Was it prescribed for you?" | The browser suggests reasons using fixed phrases | User chooses a reason or keeps their own words | Built |
+| 3. Other medicines | Says whether they take any. If yes, types the names from the packs or marks that some names may be missing. | The browser suggests existing catalogue entries | User compares the ingredients with the pack and picks an entry or keeps the name as typed | Confirmation built. Interaction checks remain open. |
 | 4. Questions about you | Answers Yes / No / "I'm not sure" | Picks and orders question IDs from `question-bank.json` | Code validates the IDs. Mandatory questions are always added. | To build |
 | 5. Result | Reads the result | Nothing | Result decided by fixed rules in `result-rules.json` | To build |
 | 6. Next step | Taps to send the note on WhatsApp | Nothing | User sees the full message before sending | WhatsApp button built; add answers |
@@ -233,8 +233,9 @@ Proposed file names; adjust to the current structure.
 - [ ] Write `interactions.json` from leaflets
 - [ ] Write `result-rules.json`
 - [x] Build the step 2 screen with a typed reason and a Yes/No prescription choice
-- [ ] Decide whether to add reason matching and the reason route
+- [x] Suggest reason matches locally and let the user confirm or keep their own words
 - [x] Build the step 3 screen with a Yes/No question and a typed list
+- [x] Suggest catalogue matches and let the user confirm or keep typed names
 - [ ] Build the step 4 screen and pick-questions route with guardrails G2, G4 and G8
 - [ ] Build the step 5 result screen
 - [ ] Extend the WhatsApp note

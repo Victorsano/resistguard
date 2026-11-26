@@ -15,8 +15,9 @@ On the first screen, tap **See an example**. A made-up amoxicillin label opens, 
 3. **Agree and read.** Tick the box to agree to send the photo to Groq, our AI provider. ResistGuard doesn't keep it. Tap **Read the label**. It usually takes under 20 seconds.
 4. **Is this what your pack says?** Look at your pack. If it lists exactly these ingredients and nothing more, tap **Yes, that's it**. If anything differs, or you can't tell, tap **No, or I'm not sure**.
 5. **Answer a few questions.** You can type why you're taking the medicine. Choose whether it was prescribed for you and whether you take other medicines. If you do, type the names from the packs or say you're unsure of the names. Your answers stay in the browser.
-6. **Read the answer.** You'll see whether it is an antibiotic and can review your answers. Ask a pharmacist or prescriber to check possible interactions.
-7. **Next steps.** Tap **Ask a pharmacist on WhatsApp** to open WhatsApp with your question already written. It holds no photo and no name. Open **Check the pack is genuine** to see NAFDAC's own checks.
+6. **Confirm what you entered.** If you typed a reason or medicine name, choose a match or keep your words. Compare the ingredients on any catalogue suggestion with the pack before confirming.
+7. **Read the answer.** You'll see whether it is an antibiotic and can review your answers. Ask a pharmacist or prescriber to check possible interactions.
+8. **Next steps.** Tap **Ask a pharmacist on WhatsApp** to open WhatsApp with your question already written. It holds no photo and no name. Open **Check the pack is genuine** to see NAFDAC's own checks.
 
 ## Type the name instead
 

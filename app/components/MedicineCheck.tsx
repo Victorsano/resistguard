@@ -5,7 +5,7 @@ import {medicines} from '@/lib/safety';
 import {unavailableScan,type ScanResult} from '@/lib/scan';
 import {prepareImage} from '@/lib/image';
 import {scanRecovery} from '@/lib/scan-guide';
-import {scanOutcome,staysOnPhoto,capitalise,emptyCheckDetails,type Screen,type Route} from '@/lib/flow';
+import {scanOutcome,staysOnPhoto,capitalise,emptyCheckDetails,hasDetailsToReview,type Screen,type Route} from '@/lib/flow';
 import {unlistedWhatsAppLink} from '@/lib/next-steps';
 import {copy} from '@/lib/screen-copy';
 import CameraCapture from './CameraCapture';
@@ -13,11 +13,12 @@ import Catalogue from './Catalogue';
 import FindByName from './FindByName';
 import Answer from './Answer';
 import CheckQuestions from './CheckQuestions';
+import ReviewCheckDetails from './ReviewCheckDetails';
 import {PharmacistButton} from './NextSteps';
 import Emphasis from './Emphasis';
 import './medicine-check.css';
 type Scan=ScanResult&{reason?:string};
-const nextQuestionScreen={reason:'prescription',prescription:'other-medicines','other-medicines':'answer'} as const;
+const nextQuestionScreen={reason:'prescription',prescription:'other-medicines','other-medicines':'review-details'} as const;
 export default function MedicineCheck({command,aiPaused=false,example=false}:{command:{screen:'home'|'find';n:number};aiPaused?:boolean;example?:boolean}){
  const [screen,setScreen]=useState<Screen>('home');const [route,setRoute]=useState<Route>('scan');const [query,setQuery]=useState('');
  const [selected,setSelected]=useState('');const [declined,setDeclined]=useState(false);
@@ -57,7 +58,8 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  function back(){
   cancel();
   switch(screen){
-   case 'answer': go('other-medicines'); break;
+   case 'answer': go(hasDetailsToReview(details)?'review-details':'other-medicines'); break;
+   case 'review-details': go('other-medicines'); break;
    case 'other-medicines': go('prescription'); break;
    case 'prescription': go('reason'); break;
    case 'reason': go('confirm'); break;
@@ -109,7 +111,14 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  </section>}
  {askingQuestions&&candidate&&<section data-motion="screen" className="medicine-check-screen">
   {backButton}
-  <CheckQuestions step={screen} details={details} medicineName={medicineName} onChange={setDetails} onMedicineName={setMedicineName} onContinue={()=>go(nextQuestionScreen[screen])}/>
+  <CheckQuestions step={screen} details={details} medicineName={medicineName} onChange={setDetails} onMedicineName={setMedicineName} onContinue={nextDetails=>{
+   const next=nextQuestionScreen[screen];
+   go(next==='review-details'&&!hasDetailsToReview(nextDetails)?'answer':next);
+  }}/>
+ </section>}
+ {screen==='review-details'&&candidate&&<section data-motion="screen" className="medicine-check-screen">
+  {backButton}
+  <ReviewCheckDetails details={details} onChange={setDetails} onConfirm={()=>go('answer')}/>
  </section>}
  {screen==='answer'&&candidate&&<div data-motion="screen" className="medicine-check-screen medicine-check-answer">{backButton}<Answer medicine={candidate} details={details} onAnother={reset}/></div>}
  {camera&&<CameraCapture onClose={closeCamera} onCapture={choosePhoto} onNative={()=>native.current?.click()}/>}

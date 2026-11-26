@@ -97,6 +97,7 @@ Diagnosing symptoms, choosing a treatment, doses, proving a pack is genuine, chi
 | **Check your photo** | See the prepared photo, retake or choose another, read three photo tips, tick the consent box, tap "Read the label". Timeouts, failures and paused states stay on this screen with "Try again" and "Type the name instead". | `MedicineCheck.tsx`, `lib/image.ts` |
 | **Is this what your pack says?** | Compare the ingredient chips with the pack: "Yes, that's it" or "No, or I'm not sure". The same screen shows the other outcomes: unreadable (with a tailored tip), brand only, not in our list (with a WhatsApp button), not a medicine. | `MedicineCheck.tsx`, `lib/scan-guide.ts`, `scanOutcome()` in `lib/flow.ts` |
 | **Check questions** | Type an optional reason. Choose whether it was prescribed and whether you take other medicines. If yes to other medicines, add the names from the packs or say you're unsure of the names. | `CheckQuestions.tsx`, `MedicineCheck.tsx` |
+| **Confirm what you entered** | If you typed anything in the check questions, review the reason and medicine names. Select a reason or catalogue match, or keep the typed words. Compare the complete ingredient list with the pack. | `ReviewCheckDetails.tsx`, `suggestReasons()` and `suggestMedicines()` in `lib/flow.ts` |
 | **Answer** | Verdict in a green "check done" card with a check icon, the same colour for both outcomes (the words carry the meaning), name and category, "Not yet reviewed by a pharmacist", summary, caution, the boundary line, your answers, "Before you take it" cards, "Next steps" (WhatsApp a pharmacist, check the pack is genuine), "Check another medicine", and sources. | `Answer.tsx`, `NextSteps.tsx`, `answerCards()` in `lib/flow.ts`, `lib/next-steps.ts` |
 
 Choosing "Yes, that's it" opens the check questions, followed by Answer. The flow has no URL per screen. The answers stay in React memory and reset on reload or when starting a new check.
@@ -223,7 +224,7 @@ Do not describe any of these as working:
 - Brand-name matching in the scan (deliberately excluded).
 - Authenticity, counterfeit, expiry or live registration checks. The app points to NAFDAC's own checks and says it cannot tell if a medicine is genuine.
 - A typed-question assistant or chatbot.
-- Reason matching, a question bank about the user, and concern / no-concern results. These are planned in `docs/specs/check-flow.md`.
+- A question bank about the user and concern / no-concern results. These are planned in `docs/specs/check-flow.md`.
 - Strength or dose reading, dose calculation, treatment plans.
 - Symptom checker or diagnosis.
 - Interaction checker.

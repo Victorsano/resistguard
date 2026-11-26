@@ -1,32 +1,68 @@
 // The check flow: plain functions only, so node:test can import them.
-import {medicines,nigeriaCatalogueDetails,nigeriaSources,sources as guidanceSources,assess,type Medicine,type Scenario} from '@/lib/safety';
+import {medicines,nigeriaCatalogueDetails,nigeriaSources,sources as guidanceSources,assess,matchIngredient,matchIngredients,type Medicine,type Scenario} from '@/lib/safety';
 import type {ScanResult} from '@/lib/scan';
+import {reasonLabels} from '@/lib/screen-copy';
 import evidence from '@/data/use-evidence.json';
 
 export type CheckQuestion='reason'|'prescription'|'other-medicines';
-export type Screen='home'|'find'|'catalogue'|'photo'|'confirm'|CheckQuestion|'answer';
+export type Screen='home'|'find'|'catalogue'|'photo'|'confirm'|CheckQuestion|'review-details'|'answer';
 export type Route='scan'|'name'|'catalogue';
 export type YesNo='yes'|'no';
+export type ReasonId=keyof typeof reasonLabels;
+export const keepTyped='as-typed';
+export type ReasonChoice=ReasonId|typeof keepTyped;
+export type OtherMedicine={name:string;choice:string|null};
 export type CheckDetails={
  reason:string;
+ reasonChoice:ReasonChoice|null;
  prescribed:YesNo|null;
  otherMedicines:YesNo|null;
- medicineNames:string[];
+ medicines:OtherMedicine[];
  unsureAboutNames:boolean;
 };
 
 export const emptyCheckDetails:CheckDetails={
  reason:'',
+ reasonChoice:null,
  prescribed:null,
  otherMedicines:null,
- medicineNames:[],
+ medicines:[],
  unsureAboutNames:false
 };
 
-export function addMedicineName(names:string[],input:string){
+export function addMedicineName(entries:OtherMedicine[],input:string){
  const name=input.trim();
- if(!name||names.some(existing=>existing.toLowerCase()===name.toLowerCase()))return names;
- return [...names,name];
+ if(!name||entries.some(entry=>entry.name.toLowerCase()===name.toLowerCase()))return entries;
+ return [...entries,{name,choice:null}];
+}
+
+export function hasDetailsToReview(details:CheckDetails){
+ return Boolean(details.reason.trim()||details.medicines.length);
+}
+
+export function detailsAreConfirmed(details:CheckDetails){
+ return (!details.reason.trim()||details.reasonChoice!==null)&&details.medicines.every(entry=>entry.choice!==null);
+}
+
+const reasonPhrases:Record<ReasonId,readonly string[]>={
+ cold:['cold','flu','runny nose'],
+ throat:['sore throat','throat pain','tonsillitis'],
+ cough:['cough','coughing'],
+ fever:['fever','high temperature'],
+ typhoid:['typhoid'],
+ diarrhoea:['diarrhoea','diarrhea','loose stools','watery stool'],
+ urine:['pain when passing urine','pain when i pee','burning when i pee','painful urination'],
+ skin:['wound','boil','infected cut'],
+ dental:['tooth pain','toothache','tooth ache','dental pain'],
+ pain:['headache','backache','back pain','body aches','joint pain','other pain']
+};
+
+export function suggestReasons(input:string):ReasonId[]{
+ // Keep negated descriptions for the user to classify. These are text matches, never diagnoses.
+ if(/\b(?:no|not|without|never)\b|n['’]t\b/i.test(input))return [];
+ const words=` ${input.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim()} `;
+ const ids=Object.keys(reasonPhrases) as ReasonId[];
+ return ids.filter(id=>reasonPhrases[id].some(phrase=>words.includes(` ${phrase} `)));
 }
 
 // Same fields the Catalogue searches: name, category, ingredients, product names and NAFDAC numbers.
@@ -36,6 +72,26 @@ export function findMedicines(query:string){
  return medicines.filter(m=>{
   const {products}=nigeriaCatalogueDetails(m.id);
   return [m.name,m.category,...m.ingredients,...products.flatMap(p=>[p.name,p.number])].join(' ').toLowerCase().includes(term);
+ });
+}
+
+export function suggestMedicines(input:string):Medicine[]{
+ const name=input.trim().toLowerCase();
+ if(!name)return [];
+ const exact=medicines.filter(m=>m.name.toLowerCase()===name);
+ if(exact.length)return exact;
+ const ingredients=name.split(/\s*\+\s*|\s+and\s+/);
+ if(ingredients.length>1){
+  const combination=matchIngredients(ingredients);
+  return combination?[combination]:[];
+ }
+ const ingredient=matchIngredient(name);
+ if(ingredient)return [ingredient];
+ if(name.length<3)return [];
+ return findMedicines(name).filter(medicine=>{
+  const {products}=nigeriaCatalogueDetails(medicine.id);
+  const labels=[medicine.name,...products.flatMap(product=>[product.name,product.number])];
+  return labels.some(label=>label.toLowerCase().startsWith(name));
  });
 }
 

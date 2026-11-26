@@ -1,0 +1,11 @@
+.review-check-details-entry{
+ display:grid;gap:var(--s3);padding:var(--s4);margin-bottom:var(--s3);
+ border:1px solid var(--line);border-radius:var(--radius-card);background:var(--card)
+}
+.review-check-details-typed span{font-size:var(--text-small);color:var(--ink-2)}
+.review-check-details-typed p{margin:0;font-weight:600;white-space:pre-wrap;overflow-wrap:anywhere}
+.review-check-details-field{display:grid;gap:var(--s2);font-weight:600;overflow-wrap:anywhere}
+.review-check-details-field select{width:100%;min-width:0;border-color:var(--line-strong);font-weight:400}
+.review-check-details-note,.review-check-details-ingredients p{margin:0;color:var(--ink-2)}
+.review-check-details-ingredients ul{margin:var(--s2) 0 0;padding-inline-start:var(--s5);list-style:disc}
+.review-check-details-confirm{width:100%;margin:var(--s3) 0 var(--s5)}

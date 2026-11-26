@@ -9,7 +9,7 @@ type Props={
  medicineName:string;
  onChange:(details:CheckDetails)=>void;
  onMedicineName:(name:string)=>void;
- onContinue:()=>void;
+ onContinue:(details:CheckDetails)=>void;
 };
 
 const t=copy.questions;
@@ -28,11 +28,11 @@ export default function CheckQuestions({step,details,medicineName,onChange,onMed
  const title=step==='reason'?t.reason:step==='prescription'?t.prescription:t.otherMedicines;
  const canContinue=step==='reason'||(step==='prescription'?details.prescribed!==null:
   details.otherMedicines==='no'||(details.otherMedicines==='yes'&&
-   (details.medicineNames.length>0||!!medicineName.trim()||details.unsureAboutNames)));
+   (details.medicines.length>0||!!medicineName.trim()||details.unsureAboutNames)));
 
  function chooseOtherMedicines(answer:YesNo){
   if(answer==='no'){
-   onChange({...details,otherMedicines:answer,medicineNames:[],unsureAboutNames:false});
+   onChange({...details,otherMedicines:answer,medicines:[],unsureAboutNames:false});
    onMedicineName('');
   }else{
    onChange({...details,otherMedicines:answer});
@@ -40,8 +40,10 @@ export default function CheckQuestions({step,details,medicineName,onChange,onMed
  }
 
  function addName(){
-  onChange({...details,medicineNames:addMedicineName(details.medicineNames,medicineName)});
+  const nextDetails={...details,medicines:addMedicineName(details.medicines,medicineName)};
+  onChange(nextDetails);
   onMedicineName('');
+  return nextDetails;
  }
 
  return <div className="check-questions">
@@ -49,7 +51,7 @@ export default function CheckQuestions({step,details,medicineName,onChange,onMed
   {step==='reason'&&<>
    <label className="check-questions-field">
     <span>{t.reasonLabel}</span>
-    <textarea rows={3} value={details.reason} onChange={event=>onChange({...details,reason:event.target.value})} aria-describedby="check-questions-privacy" autoComplete="off"/>
+    <textarea rows={3} value={details.reason} onChange={event=>onChange({...details,reason:event.target.value,reasonChoice:null})} aria-describedby="check-questions-privacy" autoComplete="off"/>
    </label>
    <p className="check-questions-hint" id="check-questions-privacy">{t.privacy}</p>
   </>}
@@ -68,11 +70,11 @@ export default function CheckQuestions({step,details,medicineName,onChange,onMed
      </label>
      <button type="submit" className="secondary" data-motion="press" disabled={!medicineName.trim()}>{t.addMedicine}</button>
     </form>
-    {details.medicineNames.length>0&&<ul className="check-questions-names">
-     {details.medicineNames.map(name=><li key={name}>
+    {details.medicines.length>0&&<ul className="check-questions-names">
+     {details.medicines.map(({name})=><li key={name}>
       <span>{name}</span>
       <button type="button" className="text-button" data-motion="press" aria-label={t.removeMedicine(name)} onClick={()=>{
-       onChange({...details,medicineNames:details.medicineNames.filter(existing=>existing!==name)});
+       onChange({...details,medicines:details.medicines.filter(entry=>entry.name!==name)});
        nameInput.current?.focus();
       }}>{t.remove}</button>
      </li>)}
@@ -84,8 +86,7 @@ export default function CheckQuestions({step,details,medicineName,onChange,onMed
    </div>}
   </>}
   <button type="button" className="primary check-questions-continue" data-motion="press" disabled={!canContinue} onClick={()=>{
-   if(step==='other-medicines'&&details.otherMedicines==='yes')addName();
-   onContinue();
+   onContinue(step==='other-medicines'&&details.otherMedicines==='yes'?addName():details);
   }}>{t.continue}</button>
  </div>;
 }

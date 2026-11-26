@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {scenarios} from '../lib/safety';
-import {addMedicineName,findMedicines,scanOutcome,staysOnPhoto,answerCards,allSources,capitalise} from '../lib/flow';
+import {addMedicineName,detailsAreConfirmed,emptyCheckDetails,findMedicines,hasDetailsToReview,keepTyped,scanOutcome,staysOnPhoto,answerCards,allSources,capitalise,suggestMedicines,suggestReasons} from '../lib/flow';
 import {unavailableScan,type ScanResult} from '../lib/scan';
 const ids=(q:string)=>findMedicines(q).map(m=>m.id);
 const scan=(over:Partial<ScanResult>&{reason?:string}):ScanResult&{reason?:string}=>({mode:'candidate',status:'unreadable',title:'t',message:'m',nextStep:'n',...over});
@@ -42,11 +42,38 @@ test('answer cards reuse the scenario text word for word',()=>{
  for(const c of other)for(const r of c.rules)assert.ok(!/leftover|someone else/i.test(r.title));
 });
 test('typed medicine names ignore blanks and duplicates and keep the spelling the user entered',()=>{
- const names=['Paracetamol'];
- assert.deepEqual(addMedicineName(names,'  '),['Paracetamol']);
- assert.deepEqual(addMedicineName(names,' paracetamol '),['Paracetamol']);
- assert.deepEqual(addMedicineName(names,'  Brand from pack  '),['Paracetamol','Brand from pack']);
- assert.deepEqual(names,['Paracetamol']);
+ const names=[{name:'Paracetamol',choice:'paracetamol'}];
+ assert.equal(addMedicineName(names,'  '),names);
+ assert.equal(addMedicineName(names,' paracetamol '),names);
+ assert.deepEqual(addMedicineName(names,'  Brand from pack  '),[...names,{name:'Brand from pack',choice:null}]);
+ assert.deepEqual(names,[{name:'Paracetamol',choice:'paracetamol'}]);
+});
+test('reasons suggest known phrases without picking an option for the user',()=>{
+ assert.deepEqual(suggestReasons('I have a sore throat and fever.'),['throat','fever']);
+ assert.deepEqual(suggestReasons('My toothache'),['dental']);
+ assert.deepEqual(suggestReasons('I don’t have a cough'),[]);
+ assert.deepEqual(suggestReasons('I feel coldness in my fingers'),[]);
+});
+test('medicine suggestions prefer exact matches and never substitute one ingredient for a combination',()=>{
+ const ids=(input:string)=>suggestMedicines(input).map(medicine=>medicine.id);
+ assert.deepEqual(ids('AMOXICILLIN'),['amoxicillin']);
+ assert.deepEqual(ids('Emzoclox'),['ampicillin-cloxacillin']);
+ assert.deepEqual(ids('04-5729'),['ampicillin-cloxacillin']);
+ assert.deepEqual(ids('clavulanic acid and amoxicillin'),['co-amoxiclav']);
+ assert.deepEqual(ids('amoxicillin + unknown'),[]);
+ assert.deepEqual(ids('clavulanic acid'),[]);
+ assert.deepEqual(ids('antibiotic'),[]);
+ assert.deepEqual(ids('Brand from pack'),[]);
+});
+test('each typed entry needs a choice before confirmation, including unmatched entries',()=>{
+ const medicines=addMedicineName([], 'A brand from the pack');
+ const details={...emptyCheckDetails,reason:'Fever',medicines};
+ assert.equal(hasDetailsToReview(emptyCheckDetails),false);
+ assert.equal(detailsAreConfirmed(emptyCheckDetails),true);
+ assert.equal(hasDetailsToReview(details),true);
+ assert.equal(detailsAreConfirmed(details),false);
+ assert.equal(detailsAreConfirmed({...details,reasonChoice:'fever'}),false);
+ assert.equal(detailsAreConfirmed({...details,reasonChoice:'fever',medicines:[{...medicines[0],choice:keepTyped}]}),true);
 });
 test('sources page lists every link once',()=>{
  const {medicines,guidance}=allSources();

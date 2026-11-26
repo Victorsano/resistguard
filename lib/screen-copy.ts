@@ -2,6 +2,18 @@
 // Medical body text stays in lib/safety.ts and data/.
 import {medicines} from '@/lib/safety';
 const lowerFirst=(name:string)=>name.charAt(0).toLowerCase()+name.slice(1);
+export const reasonLabels={
+ cold:'Cold, flu or runny nose',
+ throat:'Sore throat',
+ cough:'Cough',
+ fever:'Fever',
+ typhoid:'Suspected typhoid',
+ diarrhoea:'Diarrhoea',
+ urine:'Pain when passing urine',
+ skin:'Wound or boil',
+ dental:'Tooth pain',
+ pain:'Other pain'
+} as const;
 export const copy={
  back:'Back',
  home:{
@@ -67,6 +79,20 @@ export const copy={
   no:'No',
   continue:'Continue'
  },
+ reviewDetails:{
+  title:'Confirm what you entered',
+  typed:'You typed',
+  reason:'Choose a reason',
+  medicine:(name:string)=>`Choose a match for ${name}`,
+  placeholder:'Choose an option',
+  suggested:'Suggested reasons',
+  otherReasons:'Other reasons',
+  keepReason:'Keep my words',
+  keepMedicine:'Keep as typed',
+  noMatch:'No catalogue match for this name.',
+  checkIngredients:'Compare these ingredients with the pack before confirming.',
+  confirm:'Confirm and continue'
+ },
  answer:{
   antibiotic:'This is an antibiotic',
   notAntibiotic:'This is not an antibiotic',
@@ -78,6 +104,7 @@ export const copy={
   otherMedicines:'Other medicines',
   noOtherMedicines:'None',
   unsureAboutNames:'Some names may be missing.',
+  asTyped:'As typed',
   interactionNote:'Ask a pharmacist or prescriber about possible interactions.',
   before:'Before you take it',
   next:'Next steps',
