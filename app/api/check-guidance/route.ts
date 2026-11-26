@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   const gate=await authorizeAI(request);
   if(!gate.ok)return Response.json(fallback,{headers});
 
-  const evidence=evidenceForCheck(medicine,context).candidates;
+  const {candidates:evidence,reasonPassages}=evidenceForCheck(medicine,context);
   const possible=context.otherMedicines.flatMap((entry,index)=>{
     if(entry.choice)return [];
     const candidates=spellingCandidates(entry.name);
@@ -58,8 +58,9 @@ export async function POST(request: Request) {
       }
     }
     const corrected=context.otherMedicines.map((entry,index)=>({...entry,choice:corrections.find(item=>item.index===index)?.id??entry.choice}));
+    const passageIds=[...new Set([...reasonPassages.map(item=>item.id),...selection.passageIds])].slice(0,4);
     const result:CheckGuidance={
-      passages:selection.passageIds.map(id=>evidence.find(item=>item.id===id)!),
+      passages:passageIds.map(id=>evidence.find(item=>item.id===id)!),
       ...interactionEvidence(medicine,corrected,context.namesIncomplete),
       corrections,suggestions,source:'groq'
     };

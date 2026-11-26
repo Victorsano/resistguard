@@ -107,7 +107,7 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     {id:'label-caution',title:'What to check on the label',text:medicine.caution,source:productSource},
     ...(medicine.antibiotic?[passage(context.prescribed?'prescription':'need'),passage('amr'),passage('nigeria_amr')]:[])
   ];
-  return {candidates:selection,fallback:selection.slice(0,3)};
+  return {candidates:selection,fallback:selection.slice(0,3),reasonPassages:relevant.filter(item=>item.id!=='cold-use')};
 }
 
 export function interactionEvidence(medicine: Medicine, entries: readonly OtherMedicine[], namesIncomplete: boolean) {
