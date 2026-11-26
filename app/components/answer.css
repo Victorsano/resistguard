@@ -44,3 +44,12 @@
 .answer-sources .source-links{padding:4px 18px 18px}
 .answer-sources.answer-details{padding:0}
 .answer-sources.answer-details dl{margin:0;padding:0 18px var(--s2)}
+.answer-lead[data-outcome=no_concern]{border-color:var(--line-strong);background:var(--card)}
+.answer-lead .answer-provider-note{margin-top:var(--s3);color:var(--ink-2);font-size:var(--text-small)}
+.answer-medicine-record{margin:var(--s4) 0 0}
+.answer-medicine-record dt{font-weight:650}
+.answer-medicine-record dd{margin:var(--s1) 0 0;overflow-wrap:anywhere}
+.registration-check form,.registration-check .answer-medicine-record{display:grid;gap:var(--s2)}
+.registration-check form .primary{justify-self:start}
+.registration-check .answer-medicine-record dd{margin:0 0 var(--s2)}
+.registration-check h3{margin:var(--s4) 0 0}

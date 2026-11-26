@@ -20,6 +20,20 @@
       "ingredients": [
         "simvastatin"
       ]
+    },
+    {
+      "id": "allopurinol",
+      "name": "Allopurinol",
+      "ingredients": [
+        "allopurinol"
+      ]
+    },
+    {
+      "id": "colchicine",
+      "name": "Colchicine",
+      "ingredients": [
+        "colchicine"
+      ]
     }
   ],
   "pairs": [
@@ -90,6 +104,41 @@
       "source": {
         "name": "WHO · Co-trimoxazole product information, section 4.5",
         "url": "https://extranet.who.int/prequal/sites/default/files/whopar_files/ha782part4v1.pdf"
+      }
+    },
+    {
+      "id": "ampicillin-cloxacillin-allopurinol",
+      "ingredients": [
+        [
+          "ampicillin",
+          "cloxacillin"
+        ],
+        [
+          "allopurinol"
+        ]
+      ],
+      "title": "Ampicillin and cloxacillin with allopurinol",
+      "text": "The Euroclox product leaflet reports an increased risk of skin rash when this combination is used with allopurinol. Ask the prescriber or pharmacist to review the two medicines together.",
+      "source": {
+        "name": "NAFDAC Greenbook · Euroclox-500, section 4.5",
+        "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2023/10/02/2023100254627596-886a-56ef-84c2-4303afc55ae6.pdf"
+      }
+    },
+    {
+      "id": "clarithromycin-colchicine",
+      "ingredients": [
+        [
+          "clarithromycin"
+        ],
+        [
+          "colchicine"
+        ]
+      ],
+      "title": "Clarithromycin and colchicine",
+      "text": "The product leaflet flags this combination because clarithromycin can increase exposure to colchicine. Ask the prescriber or pharmacist to review the two medicines together.",
+      "source": {
+        "name": "NAFDAC Greenbook · Clarithromycin product information, sections 4.3 and 4.5",
+        "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2024/02/16/2024021690374561-72ab-58a0-8ccd-a5870d1d886a.pdf"
       }
     }
   ]

@@ -1,14 +1,36 @@
-import {MessageCircle,ShieldCheck,ChevronDown} from 'lucide-react';
-import {genuineCheck,pharmacistSection,whatsAppLink} from '@/lib/next-steps';
+'use client';
+
+import {useState} from 'react';
+import {MessageCircle,ChevronDown} from 'lucide-react';
+import {clinicianMessage,clinicianWhatsAppLink,pharmacistSection} from '@/lib/next-steps';
 import './next-steps.css';
 
 export function PharmacistButton({href}:{href:string}){
  return <a className="primary next-steps-whatsapp" data-motion="press" href={href} target="_blank" rel="noreferrer"><MessageCircle size={22} aria-hidden="true"/>{pharmacistSection.button}</a>;
 }
 
-export default function NextSteps({medicine}:{medicine:{ingredients:readonly string[];antibiotic:boolean}}){
- return <div className="next-steps">
-  <PharmacistButton href={whatsAppLink(medicine,process.env.NEXT_PUBLIC_PHARMACIST_WHATSAPP)}/><p className="next-steps-note">{pharmacistSection.text}</p>
-  <details className="next-steps-genuine"><summary><ShieldCheck size={22} aria-hidden="true"/><span>{genuineCheck.title}</span><ChevronDown size={20} aria-hidden="true" className="next-steps-chevron"/></summary><ol className="next-steps-list">{genuineCheck.steps.map((step,index)=><li key={index}><span className="next-steps-number">{index+1}</span><span>{step.text}{'link' in step&&<><a href={step.link.url} target="_blank" rel="noreferrer">{step.link.label}</a>{step.after}</>}</span></li>)}</ol><p className="next-steps-disclaimer">{genuineCheck.disclaimer}</p></details>
- </div>;
+export default function NextSteps({medicine,clinician,prescribed,reason,flagged}:{
+ medicine:{ingredients:readonly string[];antibiotic:boolean};
+ clinician:'doctor'|'prescriber'|'pharmacist';
+ prescribed:boolean;
+ reason:string;
+ flagged:string[];
+}){
+ const [includeReason,setIncludeReason]=useState(false);
+ const [includeAnswers,setIncludeAnswers]=useState(false);
+ const message=clinicianMessage(medicine,prescribed,includeReason?reason:'',includeAnswers?flagged:[]);
+ const phone=clinician==='pharmacist'?process.env.NEXT_PUBLIC_PHARMACIST_WHATSAPP:undefined;
+
+ return <details className="answer-sources">
+  <summary>Preview a WhatsApp message<ChevronDown size={20} aria-hidden="true" className="answer-chevron"/></summary>
+  <div className="answer-expanded next-steps">
+   {reason&&<label><input type="checkbox" checked={includeReason} onChange={event=>setIncludeReason(event.target.checked)}/> Include my reason</label>}
+   {flagged.length>0&&<label><input type="checkbox" checked={includeAnswers} onChange={event=>setIncludeAnswers(event.target.checked)}/> Include my follow-up answers</label>}
+   <div className="next-steps-message" aria-label="Your message">{message}</div>
+   <a className="secondary" href={clinicianWhatsAppLink(message,phone)} target="_blank" rel="noreferrer">
+    <MessageCircle size={20} aria-hidden="true"/> Open in WhatsApp
+   </a>
+   <p className="next-steps-note">{phone?'Review the recipient and message before sending.':'You choose the recipient before sending.'}</p>
+  </div>
+ </details>;
 }

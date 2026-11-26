@@ -52,3 +52,17 @@ export function unlistedWhatsAppLink(ingredients:readonly string[],phone?:string
  const number=pharmacistNumber(phone);
  return `https://wa.me/${number??''}?text=${encodeURIComponent(unlistedWhatsAppMessage(ingredients))}`;
 }
+
+export function clinicianMessage(medicine:ConfirmedMedicine,prescribed:boolean,reason:string,flagged:readonly string[]){
+ return [
+  'Hello, could you help me check a medicine that contains '+joinIngredients(medicine.ingredients)+'?',
+  prescribed?'A doctor prescribed it for this illness.':'A doctor did not prescribe it for this illness.',
+  ...(reason?['Reason: '+reason]:[]),
+  ...(flagged.length?['Things I reported:',...flagged.map(item=>'- '+item)]:[]),
+  'What should we check about this medicine?'
+ ].join('\n');
+}
+
+export function clinicianWhatsAppLink(message:string,phone?:string){
+ return 'https://wa.me/'+(pharmacistNumber(phone)??'')+'?text='+encodeURIComponent(message);
+}

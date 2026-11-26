@@ -59,6 +59,11 @@
       "name": "NHS · Cuts and grazes",
       "url": "https://www.nhs.uk/conditions/cuts-and-grazes/",
       "version": "Online patient guidance"
+    },
+    "who_diarrhoea": {
+      "name": "WHO · Diarrhoeal disease",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+      "version": "Online fact sheet · Treatment"
     }
   },
   "checked": "2026-11-24",
@@ -166,6 +171,12 @@
       "text": "Seek medical assessment if a wound becomes increasingly painful, red or swollen, or has pus. A professional can assess the wound and decide what care it needs.",
       "source": "wound",
       "section": "When to seek urgent advice"
+    },
+    "diarrhoea_assessment": {
+      "title": "Diarrhoea needs context",
+      "text": "Diarrhoea can have several causes. WHO advises consulting a health professional, especially if it persists, there is blood in the stool, or there are signs of dehydration. A pack label cannot establish the cause.",
+      "source": "who_diarrhoea",
+      "section": "Causes and treatment"
     }
   }
 }

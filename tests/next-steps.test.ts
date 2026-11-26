@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {medicines} from '../lib/safety';
-import {genuineCheck,joinIngredients,pharmacistNumber,pharmacistSection,unlistedWhatsAppLink,unlistedWhatsAppMessage,whatsAppLink,whatsAppMessage} from '../lib/next-steps';
+import {clinicianMessage,clinicianWhatsAppLink,genuineCheck,joinIngredients,pharmacistNumber,pharmacistSection,unlistedWhatsAppLink,unlistedWhatsAppMessage,whatsAppLink,whatsAppMessage} from '../lib/next-steps';
 const record=(id:string)=>{const m=medicines.find(x=>x.id===id);assert.ok(m,id);return m;};
 const cases=[['amoxicillin','contains amoxicillin.','an antibiotic.'],['co-amoxiclav','contains amoxicillin and clavulanic acid.','an antibiotic.'],['paracetamol','contains paracetamol.','not an antibiotic.']] as const;
 const decode=(link:string)=>decodeURIComponent(link.slice(link.indexOf('?text=')+6));
@@ -54,4 +54,15 @@ test('not-in-list message names the ingredients the AI read and says the medicin
  assert.ok(unlistedWhatsAppLink(['fosfomycin']).startsWith('https://wa.me/?text='));
  assert.ok(unlistedWhatsAppLink(['fosfomycin'],'+234 803 000 0000').startsWith('https://wa.me/2348030000000?text='));
  assert.ok(!text.toLowerCase().includes('data:'));
+});
+
+test('share preview includes only the answers selected for sharing',()=>{
+ const m=record('amoxicillin');
+ const preview=clinicianMessage(m,true,'',[]);
+ assert.match(preview,/prescribed it for this illness/);
+ assert.doesNotMatch(preview,/Reason:|Things I reported/);
+ const shared=clinicianMessage(m,true,'Fictional reason',['Fictional answer']);
+ assert.match(shared,/Fictional reason/);
+ assert.match(shared,/Fictional answer/);
+ assert.equal(decode(clinicianWhatsAppLink(shared)),shared);
 });

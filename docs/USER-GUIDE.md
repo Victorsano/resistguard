@@ -14,10 +14,10 @@ On the first screen, tap **See an example**. A made-up amoxicillin label opens, 
 2. **Check your photo.** Make sure the whole ingredient list is in view, with no glare or blur, and no names or addresses. Tap **Crop and zoom** to frame the ingredient list or **Retake** if needed. The crop is prepared on your device before you agree to send the photo.
 3. **Agree and read.** Tick the box to agree to send the photo to Groq, our AI provider. ResistGuard doesn't keep it. Tap **Read the label**. It usually takes under 20 seconds.
 4. **Is this what your pack says?** Look at your pack. If it lists exactly these ingredients and nothing more, tap **Yes, that's it**. If anything differs, or you can't tell, tap **No, or I'm not sure**.
-5. **Answer a few questions.** You can type why you're taking the medicine. Choose whether it was prescribed for you and whether you take other medicines. If you do, type the names from the packs or say you're unsure of the names.
-6. **Answer follow-up questions.** Choose **Continue with Groq** to have it pick relevant questions, or continue without Groq. You can answer **Not sure** and skip optional questions. Each question links to its source.
-7. **Read your result.** Choose **Get my result from Groq** to send your follow-up answers and get a takeaway and a question to ask a pharmacist. Expand the sections below to see the catalogue details, supporting sources and your answers. If you continue without Groq, you can still see the sourced information.
-8. **Next steps.** Tap **Ask a pharmacist on WhatsApp** to open WhatsApp with your question already written. It holds no photo and no name. Open **Check the pack is genuine** to see NAFDAC's own checks.
+5. **Answer a few questions.** Type why you are taking the medicine and say whether a doctor prescribed it for this illness. Include any other medicines, vitamins, or herbal products. You can search, type a name, or scan and confirm the ingredients on another pack.
+6. **Answer follow-up questions.** Choose **Continue with Groq** to pick relevant questions, or continue without Groq. Choose **Not sure** when needed. Some Yes answers open an optional detail field.
+7. **Read your result.** **See my result** uses the answers you chose to send. Read the takeaway and next action first. Expand the medicine record, sources, or your answers for more detail.
+8. **Check registration or preview a message.** Look up the NAFDAC number inside ResistGuard. Compare the returned product record with your pack. For WhatsApp, choose which information to add and review the message before opening it.
 
 ## Type the name instead
 

@@ -7,7 +7,7 @@ import {fullPhotoCrop,prepareImage,type PhotoCrop} from '@/lib/image';
 import {scanRecovery} from '@/lib/scan-guide';
 import {scanOutcome,staysOnPhoto,capitalise,emptyCheckDetails,type CheckDetails,type Screen,type Route} from '@/lib/flow';
 import {localGuidance,matchTypedMedicine,type CheckGuidance,type GuidanceContext} from '@/lib/check-guidance';
-import {availableFollowUps,selectFollowUps,type FollowUpAnswers,type FollowUpQuestion} from '@/lib/check-follow-ups';
+import {availableFollowUps,selectFollowUps,type FollowUpAnswer,type FollowUpAnswers,type FollowUpDetails,type FollowUpQuestion} from '@/lib/check-follow-ups';
 import {unlistedWhatsAppLink} from '@/lib/next-steps';
 import {copy} from '@/lib/screen-copy';
 import CameraCapture from './CameraCapture';
@@ -19,6 +19,7 @@ import CheckQuestions from './CheckQuestions';
 import FollowUpQuestions from './FollowUpQuestions';
 import {PharmacistButton} from './NextSteps';
 import Emphasis from './Emphasis';
+import GreenbookCheck from './GreenbookCheck';
 import './medicine-check.css';
 type Scan=ScanResult&{reason?:string};
 type LabelPhoto={file:File;original:string;image:string;crop:PhotoCrop};
@@ -31,6 +32,7 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  const [guidancePending,setGuidancePending]=useState(false);
  const [followUps,setFollowUps]=useState<FollowUpQuestion[]>([]);
  const [followUpAnswers,setFollowUpAnswers]=useState<FollowUpAnswers>({});
+ const [followUpDetails,setFollowUpDetails]=useState<FollowUpDetails>({});
  const [followUpAI,setFollowUpAI]=useState(false);
  const guidanceRequest=useRef<AbortController|null>(null);
  const [photo,setPhoto]=useState<LabelPhoto|null>(null);const [editingPhoto,setEditingPhoto]=useState(false);
@@ -65,7 +67,7 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
   abort.current?.abort();abort.current=null;revision.current++;setBusy(null);
   guidanceRequest.current?.abort();guidanceRequest.current=null;setGuidancePending(false);
  }
- function clearDetails(){setDetails(emptyCheckDetails);setMedicineName('');setGuidance(null);setFollowUps([]);setFollowUpAnswers({});setFollowUpAI(false);}
+ function clearDetails(){setDetails(emptyCheckDetails);setMedicineName('');setGuidance(null);setFollowUps([]);setFollowUpAnswers({});setFollowUpDetails({});setFollowUpAI(false);}
  function clearScan(){setScan(null);setTimedOut(false);setDeclined(false);setSelected('');clearDetails();}
  function reset(){cancel();clearScan();setPhoto(null);setEditingPhoto(false);setConsent(false);setError('');go('home');}
  function back(){
@@ -84,6 +86,10 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  function chooseMedicine(id:string,from:Route){cancel();clearScan();setSelected(id);setRoute(from);go('confirm');}
  function typeName(){cancel();go('find');}
  function decline(){focusNext.current=true;setDeclined(true);clearDetails();}
+ function updateFollowUp(id:string,answer:FollowUpAnswer){
+  setFollowUpAnswers(previous=>({...previous,[id]:answer}));
+  if(answer!=='yes')setFollowUpDetails(previous=>Object.fromEntries(Object.entries(previous).filter(([key])=>key!==id)));
+ }
  async function completeCheck(input:CheckDetails,useAI:boolean,answers?:FollowUpAnswers){
   if(!candidate||input.prescribed===null)return;
   guidanceRequest.current?.abort();
@@ -99,6 +105,7 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
   if(next==='follow-up'){
    setFollowUpAI(useAI);
    setFollowUpAnswers({});
+   setFollowUpDetails({});
    setFollowUps(selectFollowUps(availableFollowUps(candidate,context),[]));
   }else setGuidance(fallback);
   setGuidancePending(useAI);
@@ -110,7 +117,7 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
   const timeout=setTimeout(()=>controller.abort(),24_000);
   try{
    const response=await fetch('/api/check-guidance',{
-    method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...context,followUp:answers}),signal:controller.signal
+    method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...context,followUp:answers,followUpDetails:answers?followUpDetails:undefined}),signal:controller.signal
    });
    if(!response.ok){
     if(guidanceRequest.current===controller&&next==='answer')setGuidance({...fallback,fallback:response.status===429?'rate_limit':'unavailable'});
@@ -163,6 +170,7 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
   {screen==='home'?<div className="medicine-check-intro"><h1><Emphasis text={t.home.title} word={t.home.titleEm}/></h1><p className="medicine-check-lead">{t.home.subline}</p>{paused?<p className="note medicine-check-paused-note" role="status"><PauseCircle size={22} aria-hidden="true"/>{t.photo.paused}</p>:<div className="medicine-check-actions"><button type="button" data-motion="press" className="primary" onClick={()=>setCamera(true)}><Camera size={22} aria-hidden="true"/>{t.home.scan}</button><button type="button" data-motion="press" className="secondary" onClick={()=>file.current?.click()}><ImageUp size={22} aria-hidden="true"/>{t.home.upload}</button></div>}</div>:<h1>{t.find.title}</h1>}
   <label className="medicine-check-search-label"><span>{screen==='home'?t.home.search:t.find.search}</span><span className="medicine-check-search"><Search size={22} aria-hidden="true"/><input type="search" enterKeyHint="search" autoComplete="off" value={query} onChange={e=>{setQuery(e.target.value);if(screen==='home'&&e.target.value.trim())setScreen('find');}}/></span></label>
   {screen==='home'?<div className="medicine-check-home-foot">{!paused&&<button type="button" data-motion="press" className="text-button medicine-check-example" onClick={()=>loadSample('amoxicillin.png')}><ScanLine size={20} aria-hidden="true"/>{t.home.example}</button>}{error&&<p className="status" role="alert">{error}</p>}{!paused&&<p className="medicine-check-trust">{t.home.trust}</p>}</div>:<FindByName query={query} onChoose={id=>chooseMedicine(id,'name')} onAll={()=>go('catalogue')}/>}
+  {screen==='home'&&<GreenbookCheck ingredients={[]} aiAvailable={readiness==='available'}/>}
  </section>}
  {screen==='catalogue'&&<section data-motion="screen" className="medicine-check-screen medicine-check-catalogue">{backButton}<Catalogue onChoose={id=>chooseMedicine(id,'catalogue')}/></section>}
  {screen==='photo'&&<section data-motion="screen" className="medicine-check-screen medicine-check-photo">{backButton}<h1>{t.photo.title}</h1>
@@ -186,6 +194,8 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
   :outcome==='not_medicine'?<><h1>{t.confirm.notMedicineTitle}</h1><p className="medicine-check-lead">{t.confirm.notMedicineBody}</p>{retakeRow}</>
   :outcome==='brand_only'?<><h1>{t.confirm.brandTitle}</h1><p className="medicine-check-lead">{t.confirm.brandBody}</p>{retakeRow}</>
   :<><h1>{t.confirm.unreadable}</h1><div className="medicine-check-tip"><strong>{scanRecovery(scan?.observation).title}</strong><p>{scanRecovery(scan?.observation).tip}</p></div>{retakeRow}</>}
+  {route==='scan'&&!declined&&(outcome==='not_listed'||outcome==='brand_only')&&
+   <GreenbookCheck ingredients={[]} suggestedNumber={scan?.observation?.registrationNumber} aiAvailable={readiness==='available'}/>}
  </section>}
  {askingQuestions&&candidate&&<section data-motion="screen" className="medicine-check-screen">
   {backButton}
@@ -196,12 +206,12 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  </section>}
  {screen==='follow-up'&&candidate&&<section data-motion="screen" className="medicine-check-screen">
   {backButton}
-  <FollowUpQuestions questions={followUps} answers={followUpAnswers} pending={guidancePending} useAI={followUpAI}
-   onChange={setFollowUpAnswers} onContinue={useAI=>void completeCheck(details,useAI,followUpAnswers)}/>
+  <FollowUpQuestions questions={followUps} answers={followUpAnswers} details={followUpDetails} pending={guidancePending} useAI={followUpAI}
+   onChange={updateFollowUp} onDetail={(id,value)=>setFollowUpDetails(previous=>({...previous,[id]:value}))} onContinue={useAI=>void completeCheck(details,useAI,followUpAnswers)}/>
  </section>}
  {screen==='answer'&&candidate&&guidance&&<div data-motion="screen" className="medicine-check-screen medicine-check-answer">
   {backButton}
-  <Answer medicine={candidate} details={details} guidance={guidance} pending={guidancePending} followUps={followUps} followUpAnswers={followUpAnswers} onAnother={reset} onRetry={()=>void completeCheck(details,true,followUpAnswers)} onMatch={(index,id)=>{
+  <Answer medicine={candidate} details={details} guidance={guidance} pending={guidancePending} followUps={followUps} followUpAnswers={followUpAnswers} followUpDetails={followUpDetails} suggestedRegistration={scan?.observation?.registrationNumber} aiAvailable={readiness==='available'} onAnother={reset} onRetry={()=>void completeCheck(details,true,followUpAnswers)} onMatch={(index,id)=>{
    const next={...details,medicines:details.medicines.map((entry,position)=>position===index?{...entry,choice:id}:entry)};
    void completeCheck(next,true,followUpAnswers);
   }}/>

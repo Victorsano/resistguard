@@ -3,10 +3,14 @@ import type {Medicine} from '@/lib/safety';
 
 export type FollowUpAnswer='yes'|'no'|'unsure';
 export type FollowUpAnswers=Record<string,FollowUpAnswer>;
+export type FollowUpDetails=Record<string,string>;
+export const followUpDetailLimit=240;
 export type FollowUpQuestion={
  id:string;
  text:string;
  mandatory:boolean;
+ detailPrompt?:string;
+ concernOnYes?:boolean;
  source:{name:string;url:string};
 };
 
@@ -25,21 +29,22 @@ export function availableFollowUps(medicine:Medicine,context:GuidanceContext):Fo
  return [
   penicillin?{
    id:'penicillin-reaction',text:'Have you ever had an allergic reaction to penicillin or a penicillin-type antibiotic?',
-   mandatory:true,source:euroclox
+   mandatory:true,detailPrompt:'What happened?',concernOnYes:true,source:euroclox
   }:{
    id:'prior-reaction',text:'Have you ever had an allergic reaction to this medicine or one of its ingredients?',
-   mandatory:true,source:who
+   mandatory:true,detailPrompt:'What happened?',concernOnYes:true,source:who
   },
   ...(ibuprofenCheck?[
-   {id:'stomach-ulcer',text:'Have you ever had a stomach ulcer?',mandatory:true,source:ibuprofen},
-   {id:'asthma',text:'Do you have asthma?',mandatory:false,source:ibuprofen}
+   {id:'stomach-ulcer',text:'Have you ever had a stomach ulcer?',mandatory:true,concernOnYes:true,source:ibuprofen},
+   {id:'asthma',text:'Do you have asthma?',mandatory:false,concernOnYes:true,source:ibuprofen},
+   {id:'kidney-or-liver',text:'Do you have a kidney or liver condition?',mandatory:false,detailPrompt:'What condition do you have?',concernOnYes:true,source:ibuprofen}
   ]:[]),
   ...(medicine.id==='paracetamol'&&(context.otherMedicines.length||context.namesIncomplete)?[
-   {id:'paracetamol-overlap',text:'Does any other medicine you take also contain paracetamol?',mandatory:true,source:paracetamol}
+   {id:'paracetamol-overlap',text:'Does any other medicine you take also contain paracetamol?',mandatory:true,detailPrompt:'What is the name on that pack?',concernOnYes:true,source:paracetamol}
   ]:[]),
-  {id:'long-term-condition',text:'Do you have a long-term health condition a pharmacist should know about?',mandatory:false,source:who},
+  {id:'long-term-condition',text:'Do you have a long-term health condition?',mandatory:false,detailPrompt:'What condition do you have?',source:who},
   ...(ibuprofenCheck?[
-   {id:'pregnancy',text:'Are you pregnant or trying to get pregnant?',mandatory:false,source:ibuprofen}
+   {id:'pregnancy',text:'Are you pregnant or trying to get pregnant?',mandatory:false,concernOnYes:true,source:ibuprofen}
   ]:[]),
   ...(!context.prescribed&&context.reason?[{
    id:'reason-assessed',text:'Has a doctor or pharmacist already checked the reason you want to take this medicine?',
@@ -60,4 +65,12 @@ export function parseFollowUpAnswers(input:unknown,available:FollowUpQuestion[])
  if(!entries.every(([id,value])=>available.some(question=>question.id===id)&&(value==='yes'||value==='no'||value==='unsure'))||
   available.some(question=>question.mandatory&&!Object.hasOwn(input,question.id)))return null;
  return Object.fromEntries(entries);
+}
+
+export function parseFollowUpDetails(input:unknown,available:FollowUpQuestion[],answers:FollowUpAnswers):FollowUpDetails|null{
+ if(!input||typeof input!=='object'||Array.isArray(input))return null;
+ const entries=Object.entries(input);
+ if(!entries.every(([id,value])=>answers[id]==='yes'&&available.some(question=>question.id===id&&question.detailPrompt)&&
+  typeof value==='string'&&value.length<=followUpDetailLimit))return null;
+ return Object.fromEntries(entries.map(([id,value])=>[id,(value as string).trim()]).filter(([,value])=>value));
 }

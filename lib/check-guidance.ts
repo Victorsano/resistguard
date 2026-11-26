@@ -18,12 +18,13 @@ export type CheckGuidance = {
   passages: Evidence[];
   interactions: Evidence[];
   needsInteractionReview: boolean;
+  needsReasonReview: boolean;
   corrections: {index: number; id: string}[];
   suggestions: MatchSuggestions;
   source: 'groq' | 'sources';
   fallback?: 'rate_limit' | 'unavailable';
   questions?: FollowUpQuestion[];
-  synthesis?: {takeaway:string; questionForPharmacist:string};
+  synthesis?: {takeaway:string; nextAction:string};
 };
 
 const knownMedicines = [
@@ -46,6 +47,15 @@ export function matchTypedMedicine(input: string): string | null {
   const products=nigeriaProducts.filter(product=>[key(product.name),key(product.number),key(product.name.split(' ')[0])].includes(name));
   const productIds=[...new Set(products.map(product=>product.medicineId))];
   return productIds.length===1?productIds[0]:null;
+}
+
+export function findOtherMedicines(input:string){
+  const query=key(input);
+  if(query.length<2)return [];
+  const productMatches=new Set(nigeriaProducts.filter(product=>
+    [key(product.name),key(product.number)].some(value=>value.includes(query))).map(product=>product.medicineId));
+  return knownMedicines.filter(medicine=>productMatches.has(medicine.id)||
+    [medicine.name,...medicine.ingredients].some(value=>key(value).includes(query))).slice(0,5);
 }
 
 function editDistance(left: string, right: string) {
@@ -83,7 +93,7 @@ export function parseGuidanceContext(body: unknown): GuidanceContext | null {
     !Array.isArray(otherMedicines)||otherMedicines.length>24)return null;
   const entries:OtherMedicine[]=[];
   for(const entry of otherMedicines){
-    if(!entry||typeof entry.name!=='string'||!entry.name.trim()||entry.name.length>100||
+    if(!entry||typeof entry.name!=='string'||!entry.name.trim()||entry.name.length>500||
       (entry.choice!==null&&(typeof entry.choice!=='string'||!guidanceMedicine(entry.choice))))return null;
     entries.push({name:entry.name.trim(),choice:entry.choice??matchTypedMedicine(entry.name)});
   }
@@ -96,7 +106,7 @@ function passage(id: PassageId): Evidence {
 }
 
 const reasonEvidence: Partial<Record<ReturnType<typeof suggestReasons>[number],PassageId>>={
-  throat:'tonsillitis_assessment', typhoid:'typhoid_assessment', urine:'uti_assessment', skin:'wound_assessment'
+  throat:'tonsillitis_assessment', typhoid:'typhoid_assessment', urine:'uti_assessment', skin:'wound_assessment',diarrhoea:'diarrhoea_assessment'
 };
 const whoSafety={name:'WHO · 5 Moments for Medication Safety',url:'https://www.who.int/publications/i/item/WHO-HIS-SDS-2019.6'};
 
@@ -124,7 +134,7 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     id:'prescription-to-discuss',title:'Check the prescription instructions',
     text:'Ask your prescriber or pharmacist to explain any instructions you are unsure about.',source:whoSafety
   });
-  return {candidates:selection,fallback:selection.slice(0,3),reasonPassages:relevant.filter(item=>item.id!=='cold-use')};
+  return {candidates:selection,fallback:selection.slice(0,3),reasonPassages:relevant,needsReasonReview:!context.prescribed&&!relevant.length};
 }
 
 export function interactionEvidence(medicine: Medicine, entries: readonly OtherMedicine[], namesIncomplete: boolean) {
@@ -148,7 +158,8 @@ export function interactionEvidence(medicine: Medicine, entries: readonly OtherM
 }
 
 export function localGuidance(medicine: Medicine, context: GuidanceContext): CheckGuidance {
-  return {passages:evidenceForCheck(medicine,context).fallback,...interactionEvidence(medicine,context.otherMedicines,context.namesIncomplete),
+  const {fallback:passages,needsReasonReview}=evidenceForCheck(medicine,context);
+  return {passages,needsReasonReview,...interactionEvidence(medicine,context.otherMedicines,context.namesIncomplete),
     corrections:[],suggestions:[],source:'sources'};
 }
 
@@ -173,7 +184,7 @@ export function validateMedicineMatches(input:unknown,options:MatchSuggestions) 
   return matches;
 }
 
-export function validateCheckSynthesis(takeaway:unknown,questionForPharmacist:unknown):NonNullable<CheckGuidance['synthesis']>{
+export function validateCheckSynthesis(takeaway:unknown,nextAction:unknown):NonNullable<CheckGuidance['synthesis']>{
   const prohibited=[
     /\b(?:\d+\s*(?:mg|ml|grams?|tablets?|capsules?|times?)|dosage|safe to (?:take|use)|safe (?:antibiotics?|options?))\b/i,
     /\b(?:you|we) (?:can|could|should|must|ought to|need to|may) (?:(?:not|never) )?(?:take|use|start|stop|switch|double|skip|avoid)\b/i,
@@ -181,10 +192,10 @@ export function validateCheckSynthesis(takeaway:unknown,questionForPharmacist:un
     /\b(?:you (?:have|do not have|don['’]t have|probably have)|you['’]re|you are) (?:[^.!?;]{0,36} )?(?:allergy|allergies|allergic)\b/i,
     /https?:|[<>\r\n]/i
   ];
-  if(typeof takeaway!=='string'||typeof questionForPharmacist!=='string')throw new Error('Invalid synthesis');
+  if(typeof takeaway!=='string'||typeof nextAction!=='string')throw new Error('Invalid synthesis');
   const summary=takeaway.trim();
-  const question=questionForPharmacist.trim();
-  if(summary.length<20||summary.length>360||question.length<12||question.length>180||
-    !question.endsWith('?')||prohibited.some(pattern=>pattern.test(summary)||pattern.test(question)))throw new Error('Invalid synthesis');
-  return {takeaway:summary,questionForPharmacist:question};
+  const action=nextAction.trim();
+  if(summary.length<20||summary.length>360||action.length<12||action.length>180||
+    !/^(?:Ask|Tell|Show|Bring|Share)\b/i.test(action)||action.includes('?')||prohibited.some(pattern=>pattern.test(summary)||pattern.test(action)))throw new Error('Invalid synthesis');
+  return {takeaway:summary,nextAction:action};
 }

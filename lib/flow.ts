@@ -26,7 +26,7 @@ export const emptyCheckDetails:CheckDetails={
 
 export function addMedicineName(entries:OtherMedicine[],input:string){
  const name=input.trim();
- if(!name||entries.some(entry=>entry.name.toLowerCase()===name.toLowerCase()))return entries;
+ if(!name||entries.length>=24||entries.some(entry=>entry.name.toLowerCase()===name.toLowerCase()))return entries;
  return [...entries,{name,choice:null}];
 }
 

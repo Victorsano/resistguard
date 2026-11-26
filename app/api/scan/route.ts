@@ -1,7 +1,7 @@
 import {groq,GroqError} from '@/lib/groq';
 import {allow,readBody,sameOrigin} from '@/lib/guard';
 import {authorizeAI,gateMessage,operationalEvent} from '@/lib/availability';
-import {parseObservation,classifyObservation,scanPrompt,unavailableScan} from '@/lib/scan';
+import {parseObservation,classifyObservation,scanPrompt,registrationScanPrompt,companionScanPrompt,parseRegistrationScan,unavailableScan} from '@/lib/scan';
 export const runtime='nodejs';
 export const maxDuration=30;
 export async function POST(request:Request) {
@@ -10,6 +10,8 @@ export async function POST(request:Request) {
  if(!allow(request.headers.get('x-forwarded-for')?.split(',')[0]??'local'))return fallback('Request limit reached. Use the manual catalogue.',429);
  let body;try{body=await readBody(request);}catch{return fallback('Use a JPEG or PNG under 2 MB.',400);}
  const image=body?.image;
+ const registration=body?.mode==='registration';
+ const prompt=registration?registrationScanPrompt:body?.mode==='companion'?companionScanPrompt:scanPrompt;
  if(typeof image!=='string'||!/^data:image\/(jpeg|png);base64,[A-Za-z0-9+/]+={0,2}$/.test(image)||image.length>2_800_000)return fallback('Use a JPEG or PNG under 2 MB.',400);
  const bytes=Buffer.from(image.split(',')[1],'base64');
  const valid=image.startsWith('data:image/png')?bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])):bytes[0]===255&&bytes[1]===216&&bytes[2]===255;
@@ -18,9 +20,9 @@ export async function POST(request:Request) {
  if(!gate.ok){operationalEvent('scan','fallback',gate.reason);return Response.json({...unavailableScan(gateMessage(gate.reason)),reason:gate.reason},{status:gate.reason==='request_limit'?429:200,headers:{'Cache-Control':'no-store',...(gate.reason==='request_limit'?{'Retry-After':'60'}:{})}});}
  try{
  const raw=await groq(process.env.GROQ_VISION_MODEL||'qwen/qwen3.8-27b',[
- {role:'system',content:scanPrompt},
- {role:'user',content:[{type:'text',text:'Observe the product and transcribe its complete active-ingredient label. Report uncertainty honestly.'},{type:'image_url',image_url:{url:image}}]}],true);
- const result=classifyObservation(parseObservation(raw));operationalEvent('scan','success','ready');
+ {role:'system',content:prompt},
+ {role:'user',content:[{type:'text',text:registration?'Read the number labelled NAFDAC or NRN.':'Observe the product and transcribe its complete active-ingredient label. Report uncertainty honestly.'},{type:'image_url',image_url:{url:image}}]}],true);
+ const result=registration?{registrationNumber:parseRegistrationScan(raw)}:classifyObservation(parseObservation(raw));operationalEvent('scan','success','ready');
  return Response.json(result,{headers:{'Cache-Control':'no-store'}});
  }catch(e){
  const reason=e instanceof GroqError?e.reason:'invalid_response';

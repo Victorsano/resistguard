@@ -1,5 +1,7 @@
-import {useRef} from 'react';
+import {useRef,useState} from 'react';
 import {addMedicineName,type CheckDetails,type CheckQuestion,type YesNo} from '@/lib/flow';
+import {findOtherMedicines} from '@/lib/check-guidance';
+import PackPhoto from './PackPhoto';
 import {copy} from '@/lib/screen-copy';
 import './check-questions.css';
 
@@ -26,7 +28,10 @@ function YesNoToggle({value,onChange}:{value:YesNo|null;onChange:(answer:YesNo)=
 
 export default function CheckQuestions({step,details,medicineName,aiAvailable,onChange,onMedicineName,onContinue}:Props){
  const nameInput=useRef<HTMLInputElement>(null);
+ const [scanPack,setScanPack]=useState(false);
+ const suggestions=findOtherMedicines(medicineName);
  const title=step==='reason'?t.reason:step==='prescription'?t.prescription:t.otherMedicines;
+ const listFull=details.medicines.length>=24;
  const canContinue=step==='reason'||(step==='prescription'?details.prescribed!==null:
   details.otherMedicines==='no'||(details.otherMedicines==='yes'&&
    (details.medicines.length>0||!!medicineName.trim()||details.unsureAboutNames)));
@@ -35,13 +40,14 @@ export default function CheckQuestions({step,details,medicineName,aiAvailable,on
   if(answer==='no'){
    onChange({...details,otherMedicines:answer,medicines:[],unsureAboutNames:false});
    onMedicineName('');
+   setScanPack(false);
   }else{
    onChange({...details,otherMedicines:answer});
   }
  }
 
- function addName(){
-  const nextDetails={...details,medicines:addMedicineName(details.medicines,medicineName)};
+ function addName(name=medicineName){
+  const nextDetails={...details,medicines:addMedicineName(details.medicines,name)};
   onChange(nextDetails);
   onMedicineName('');
   return nextDetails;
@@ -70,10 +76,19 @@ export default function CheckQuestions({step,details,medicineName,aiAvailable,on
     }}>
      <label className="check-questions-field">
       <span>{t.medicineName}</span>
-      <input ref={nameInput} type="text" maxLength={100} value={medicineName} onChange={event=>onMedicineName(event.target.value)} autoComplete="off"/>
+      <input ref={nameInput} type="text" maxLength={100} disabled={listFull} value={medicineName} onChange={event=>onMedicineName(event.target.value)} autoComplete="off"/>
      </label>
-     <button type="submit" className="secondary" data-motion="press" disabled={!medicineName.trim()}>{t.addMedicine}</button>
+     <button type="submit" className="secondary" data-motion="press" disabled={listFull||!medicineName.trim()}>{t.addMedicine}</button>
     </form>
+    {suggestions.length>0&&!scanPack&&!listFull&&<ul className="check-questions-names" aria-label="Catalogue matches">
+     {suggestions.map(medicine=><li key={medicine.id}><span>{medicine.name}</span>
+      <button type="button" className="text-button" onClick={()=>addName(medicine.name)} aria-label={'Add '+medicine.name}>Add</button></li>)}
+    </ul>}
+    {aiAvailable&&!scanPack&&!listFull&&<button type="button" className="secondary" onClick={()=>setScanPack(true)}>Scan another pack</button>}
+    {scanPack&&<PackPhoto mode="companion" onClose={()=>setScanPack(false)} onRead={ingredients=>{
+     addName(ingredients.join(' + '));setScanPack(false);
+    }}/>}
+    {listFull&&<p>Remove an entry to add another. If names are missing, tick the box below.</p>}
     {details.medicines.length>0&&<ul className="check-questions-names">
      {details.medicines.map(({name})=><li key={name}>
       <span>{name}</span>
@@ -91,8 +106,8 @@ export default function CheckQuestions({step,details,medicineName,aiAvailable,on
   </>}
   {step==='other-medicines'&&aiAvailable?<>
    <p className="check-questions-hint" id="guidance-consent">{t.guidanceConsent}</p>
-   <button type="button" className="primary check-questions-continue" data-motion="press" aria-describedby="guidance-consent" disabled={!canContinue} onClick={()=>continueCheck(true)}>{t.guidance}</button>
-   <button type="button" className="text-button" data-motion="press" disabled={!canContinue} onClick={()=>continueCheck(false)}>{t.localGuidance}</button>
-  </>:<button type="button" className="primary check-questions-continue" data-motion="press" disabled={!canContinue} onClick={()=>continueCheck(false)}>{t.continue}</button>}
+   <button type="button" className="primary check-questions-continue" data-motion="press" aria-describedby="guidance-consent" disabled={!canContinue||scanPack} onClick={()=>continueCheck(true)}>{t.guidance}</button>
+   <button type="button" className="text-button" data-motion="press" disabled={!canContinue||scanPack} onClick={()=>continueCheck(false)}>{t.localGuidance}</button>
+  </>:<button type="button" className="primary check-questions-continue" data-motion="press" disabled={!canContinue||scanPack} onClick={()=>continueCheck(false)}>{t.continue}</button>}
  </div>;
 }

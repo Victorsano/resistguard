@@ -109,7 +109,7 @@ For UI changes, open the Vercel preview URL on a real phone.
 These are product decisions, not style preferences. Raise them with the team before breaking one.
 
 - No new dependencies.
-- No new AI calls. AI may only transcribe or pick from fixed IDs; it never writes medical text the user sees.
+- The check flow uses the scan and check-guidance APIs with consent. Groq explains the available evidence and reported answers using validated source IDs. The app applies the outcome rules and keeps prescribing decisions with the clinician.
 - No storage: no `localStorage`, cookies, database or analytics.
 - Never send a photo, name or typed text anywhere new.
 - Leave `data/*.json`, `lib/scan.ts` and `lib/safety.ts` alone unless the spec asks.

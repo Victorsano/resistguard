@@ -39,7 +39,7 @@ When a change makes one of these wrong, fix the doc in the same change.
 - Check UI changes in a real browser at 375 px and desktop widths before saying they are done. Keep screenshots out of the repository.
 
 ## Hard limits
-- No new dependencies. No new AI calls. No storage (localStorage, cookies, database, analytics).
+- No new dependencies. Use the existing scan and check-guidance APIs for consented AI processing. No storage (localStorage, cookies, database, analytics).
 - Never send a photo, a name or anything the user typed anywhere new.
 - Change only the files the task names. Leave `data/*.json`, `lib/scan.ts` and `lib/safety.ts` alone unless asked.
 - Never hand-edit `public/review-packet.json` or `data/content-manifest.json`. The script writes them. If they conflict in a merge, take either side, then rerun the script.

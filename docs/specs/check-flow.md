@@ -231,14 +231,14 @@ Proposed file names; adjust to the current structure.
 - [ ] Write `reasons.json` from WHO and STG, with sources
 - [ ] Write `question-bank.json` from leaflets and STG, with sources
 - [ ] Expand NAFDAC and WHO interaction coverage beyond the initial documented pairs
-- [ ] Write `result-rules.json`
+- [x] Implement the three result states in `lib/check-result.ts`
 - [x] Build the step 2 screen with a typed reason and a Yes/No prescription choice
 - [x] Use the reason as typed to select guidance
-- [x] Build the step 3 screen with a Yes/No question and a typed list
+- [x] Build the step 3 screen with a Yes/No question, catalogue search, typing and pack scans for other medicines, vitamins and herbal products
 - [x] Suggest catalogue matches and let the user confirm or keep typed names
 - [x] Build the step 4 screen and choose relevant follow-ups with Groq, keeping mandatory checks in code
-- [x] Lead with a Groq-written takeaway and a question for a pharmacist on the step 5 result screen
-- [ ] Extend the WhatsApp note
+- [x] Lead with a Groq-written takeaway and one action for the doctor, prescriber or pharmacist
+- [x] Add an optional WhatsApp preview with separate controls for reason and follow-up answers
 - [x] Remove the emergency notice from the checker
 - [x] Explain that Get guidance from Groq sends the typed reason and medicine names
 - [ ] Tests and review packet

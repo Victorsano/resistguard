@@ -1,7 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {medicines} from '../lib/safety';
-import {availableFollowUps,parseFollowUpAnswers,selectFollowUps} from '../lib/check-follow-ups';
+import {checkResult} from '../lib/check-result';
+import {availableFollowUps,parseFollowUpAnswers,parseFollowUpDetails,selectFollowUps} from '../lib/check-follow-ups';
 import {
   interactionEvidence,localGuidance,matchTypedMedicine,parseGuidanceContext,
   spellingCandidates,validateCheckSynthesis,validateGuidanceSelection,type GuidanceContext
@@ -73,17 +74,46 @@ test('follow-up selection uses this medicine and cannot skip required allergy or
   assert.deepEqual(parseFollowUpAnswers({'prior-reaction':'no','stomach-ulcer':'unsure'},ibuprofen),{'prior-reaction':'no','stomach-ulcer':'unsure'});
 });
 
-test('the result accepts a tailored takeaway and a question while rejecting directions or unsafe output',()=>{
+test('the result accepts a tailored takeaway and an action while rejecting directions or unsafe output',()=>{
   const takeaway='You reported a past reaction to penicillin. That is important to bring up when you ask about this combination.';
-  const question='What does my past penicillin reaction mean for this medicine?';
-  assert.deepEqual(validateCheckSynthesis(takeaway,question),{takeaway,questionForPharmacist:question});
-  assert.throws(()=>validateCheckSynthesis('Take two capsules twice today.',question));
-  assert.throws(()=>validateCheckSynthesis('You should stop your prescription today.',question));
-  assert.throws(()=>validateCheckSynthesis('This looks safe to take with your medicines.',question));
-  assert.throws(()=>validateCheckSynthesis('You should not take it for a skin colour change.',question));
-  assert.throws(()=>validateCheckSynthesis('You have a penicillin allergy and should ask a pharmacist.',question));
-  assert.throws(()=>validateCheckSynthesis('You have no known penicillin allergy.',question));
+  const action='Tell them what happened after you took penicillin.';
+  assert.deepEqual(validateCheckSynthesis(takeaway,action),{takeaway,nextAction:action});
+  assert.throws(()=>validateCheckSynthesis('Take two capsules twice today.',action));
+  assert.throws(()=>validateCheckSynthesis('You should stop your prescription today.',action));
+  assert.throws(()=>validateCheckSynthesis('This looks safe to take with your medicines.',action));
+  assert.throws(()=>validateCheckSynthesis('You should not take it for a skin colour change.',action));
+  assert.throws(()=>validateCheckSynthesis('You have a penicillin allergy and should ask a pharmacist.',action));
+  assert.throws(()=>validateCheckSynthesis('You have no known penicillin allergy.',action));
   assert.throws(()=>validateCheckSynthesis(takeaway,'What safe antibiotic options exist for my skin change?'));
   assert.throws(()=>validateCheckSynthesis(takeaway,'Visit https://example.invalid?'));
-  assert.throws(()=>validateCheckSynthesis(takeaway,'Ask your pharmacist today.'));
+  assert.throws(()=>validateCheckSynthesis(takeaway,'Should I ask my pharmacist today?'));
+});
+
+test('optional details belong only to a yes answer that asks for them',()=>{
+ const questions=availableFollowUps(medicine('ampicillin-cloxacillin'),base);
+ assert.deepEqual(parseFollowUpDetails({'penicillin-reaction':'  a rash  '},questions,{'penicillin-reaction':'yes'}),{'penicillin-reaction':'a rash'});
+ assert.deepEqual(parseFollowUpDetails({'penicillin-reaction':'  '},questions,{'penicillin-reaction':'yes'}),{});
+ assert.equal(parseFollowUpDetails({'penicillin-reaction':'a rash'},questions,{'penicillin-reaction':'unsure'}),null);
+ assert.equal(parseFollowUpDetails({'penicillin-reaction':'x'.repeat(241)},questions,{'penicillin-reaction':'yes'}),null);
+});
+
+test('concerns take precedence, uncertain answers stay open, and prescribing goes to a doctor',()=>{
+ const questions=availableFollowUps(medicine('ampicillin-cloxacillin'),base);
+ const input={prescribed:true,reason:'A sore throat',questions,interactions:false,needsInteractionReview:false,needsReasonReview:false};
+ assert.deepEqual(checkResult({...input,answers:{'penicillin-reaction':'no'}}),{status:'no_concern',clinician:'prescriber'});
+ assert.equal(checkResult({...input,answers:{'penicillin-reaction':'unsure'}}).status,'more_information');
+ assert.equal(checkResult({...input,answers:{'penicillin-reaction':'no'},needsReasonReview:true}).status,'more_information');
+ assert.equal(checkResult({...input,answers:{'penicillin-reaction':'yes'},needsInteractionReview:true}).status,'concern');
+ assert.equal(checkResult({...input,prescribed:false,answers:{'penicillin-reaction':'no'}}).clinician,'doctor');
+ assert.deepEqual(checkResult({...input,prescribed:false,reason:'',answers:{'penicillin-reaction':'no'},interactions:true}),{status:'concern',clinician:'pharmacist'});
+});
+
+test('new NAFDAC interactions and WHO evidence gaps use the source catalogue',()=>{
+ const result=localGuidance(medicine('ampicillin-cloxacillin'),{
+  ...base,medicineId:'ampicillin-cloxacillin',reason:'Diarrhoea',otherMedicines:[{name:'allopurinol',choice:'allopurinol'}]
+ });
+ assert.equal(result.needsReasonReview,false);
+ assert.equal(result.interactions[0].id,'ampicillin-cloxacillin-allopurinol');
+ assert.match(result.passages[0].source.url,/who\.int/);
+ assert.equal(localGuidance(medicine('ampicillin-cloxacillin'),{...base,reason:'a new skin colour change'}).needsReasonReview,true);
 });

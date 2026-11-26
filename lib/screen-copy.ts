@@ -66,9 +66,9 @@ export const copy={
   reason:'Why are you taking this medicine?',
   reasonLabel:'Your reason (optional)',
   privacy:'You can choose whether to send your answers for guidance.',
-  prescription:'Was it prescribed for you?',
-  otherMedicines:'Are you taking any other medicines?',
-  medicineName:'Name on the pack',
+  prescription:'Did a doctor prescribe this medicine for you for this illness?',
+  otherMedicines:'Do you take other medicines, vitamins, or herbal products?',
+  medicineName:'Find or type the name on the pack',
   addMedicine:'Add medicine',
   remove:'Remove',
   removeMedicine:(name:string)=>`Remove ${name}`,
@@ -84,8 +84,7 @@ export const copy={
   title:'A few more questions',
   loading:'Choosing questions for your medicine and answers…',
   yes:'Yes',no:'No',unsure:'Not sure',optional:'Optional',
-  consent:'The answers you gave so far and any you add here will be sent to Groq to write your result.',
-  groq:'Get my result from Groq',
+  consent:'Choose See my result to send these answers and any details you add to Groq.',
   finish:'See my result'
  },
  answer:{
@@ -95,7 +94,7 @@ export const copy={
   boundary:"This tells you what's in the pack. Only a pharmacist or doctor can tell you if you need it.",
   yourAnswers:'Your answers',
   reason:'Reason for taking it',
-  prescription:'Prescribed for you',
+  prescription:'Prescribed for this illness',
   otherMedicines:'Other medicines',
   noOtherMedicines:'None',
   unsureAboutNames:'Some names may be missing.',
@@ -103,11 +102,26 @@ export const copy={
   interactionNote:'Some combinations could not be checked. Ask a pharmacist or prescriber.',
   guidance:'What to know about your check',
   guidancePending:'Groq is writing your result from your answers and the sources…',
-  guidanceUnavailable:'Personalised guidance is unavailable for this check.',
   guidanceFallback:'Groq couldn’t finish this check.',
   guidanceBusy:'Groq reached a request limit.',
-  askNext:'Ask a pharmacist',
-  catalogue:'About this medicine',
+  status:{concern:'Something to discuss',more_information:'More information needed',no_concern:'No concern found in the available sources'},
+  statusNote:{
+   concern:'Your answers or the source records flagged something to discuss.',
+   more_information:'Some details are missing or need to be checked.',
+   no_concern:'Only a clinician can tell you if this medicine is right for you.'
+  },
+  nextAction:{
+   prescriber:'Talk to the doctor who prescribed it',
+   doctor:'Talk to a doctor',
+   pharmacist:'Ask a pharmacist about your other medicines'
+  },
+  nextActionFallback:{
+   prescriber:'Tell the doctor what you reported in this check and ask what they need to review.',
+   doctor:'Tell the doctor why you are considering this medicine and share any other medicines or reactions you reported.',
+   pharmacist:'Show the pharmacist the packs for the medicines you take and ask them to check how they may interact.'
+  },
+  catalogue:'Medicine record',
+  activeIngredients:'Active ingredients',
   supporting:'Supporting sources',
   guidanceRetry:'Try Groq again',
   catalogueClassification:'Catalogue classification',
