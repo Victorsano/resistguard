@@ -5,7 +5,8 @@ import {medicines} from '@/lib/safety';
 import {unavailableScan,type ScanResult} from '@/lib/scan';
 import {prepareImage} from '@/lib/image';
 import {scanRecovery} from '@/lib/scan-guide';
-import {scanOutcome,staysOnPhoto,capitalise,emptyCheckDetails,hasDetailsToReview,type Screen,type Route} from '@/lib/flow';
+import {scanOutcome,staysOnPhoto,capitalise,emptyCheckDetails,type CheckDetails,type Screen,type Route} from '@/lib/flow';
+import {localGuidance,matchTypedMedicine,type CheckGuidance,type GuidanceContext} from '@/lib/check-guidance';
 import {unlistedWhatsAppLink} from '@/lib/next-steps';
 import {copy} from '@/lib/screen-copy';
 import CameraCapture from './CameraCapture';
@@ -13,17 +14,18 @@ import Catalogue from './Catalogue';
 import FindByName from './FindByName';
 import Answer from './Answer';
 import CheckQuestions from './CheckQuestions';
-import ReviewCheckDetails from './ReviewCheckDetails';
 import {PharmacistButton} from './NextSteps';
 import Emphasis from './Emphasis';
 import './medicine-check.css';
 type Scan=ScanResult&{reason?:string};
-const nextQuestionScreen={reason:'prescription',prescription:'other-medicines','other-medicines':'review-details'} as const;
 export default function MedicineCheck({command,aiPaused=false,example=false}:{command:{screen:'home'|'find';n:number};aiPaused?:boolean;example?:boolean}){
  const [screen,setScreen]=useState<Screen>('home');const [route,setRoute]=useState<Route>('scan');const [query,setQuery]=useState('');
  const [selected,setSelected]=useState('');const [declined,setDeclined]=useState(false);
  const [details,setDetails]=useState(emptyCheckDetails);
  const [medicineName,setMedicineName]=useState('');
+ const [guidance,setGuidance]=useState<CheckGuidance|null>(null);
+ const [guidancePending,setGuidancePending]=useState(false);
+ const guidanceRequest=useRef<AbortController|null>(null);
  const [photo,setPhoto]=useState<string|null>(null);const [consent,setConsent]=useState(false);const [busy,setBusy]=useState<'preparing'|'scan'|null>(null);const [error,setError]=useState('');const [scan,setScan]=useState<Scan|null>(null);const [timedOut,setTimedOut]=useState(false);const [camera,setCamera]=useState(false);
  const [readiness,setReadiness]=useState<'checking'|'available'|'unavailable'>(aiPaused?'unavailable':'checking');
  const file=useRef<HTMLInputElement>(null);const native=useRef<HTMLInputElement>(null);const abort=useRef<AbortController|null>(null);const revision=useRef(0);const root=useRef<HTMLDivElement>(null);const focusNext=useRef(false);
@@ -39,7 +41,7 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
      .finally(()=>clearTimeout(timeout));
    return ()=>{current=false;clearTimeout(timeout);controller.abort();};
  },[]);
- useEffect(()=>()=>{abort.current?.abort();revision.current++;},[]);
+ useEffect(()=>()=>{abort.current?.abort();guidanceRequest.current?.abort();revision.current++;},[]);
  // /check?example=1 from the landing page starts the same sample as the "See an example" button.
  useEffect(()=>{if(example)loadSample('amoxicillin.png');},[example]);
  // Each screen starts at the top, and keyboard and screen-reader focus moves to its heading.
@@ -51,15 +53,17 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
   if(next==='home'||next==='find'){setQuery('');clearDetails();}
   setScreen(next);
  }
- function cancel(){abort.current?.abort();abort.current=null;revision.current++;setBusy(null);}
- function clearDetails(){setDetails(emptyCheckDetails);setMedicineName('');}
+ function cancel(){
+  abort.current?.abort();abort.current=null;revision.current++;setBusy(null);
+  guidanceRequest.current?.abort();guidanceRequest.current=null;setGuidancePending(false);
+ }
+ function clearDetails(){setDetails(emptyCheckDetails);setMedicineName('');setGuidance(null);}
  function clearScan(){setScan(null);setTimedOut(false);setDeclined(false);setSelected('');clearDetails();}
  function reset(){cancel();clearScan();setPhoto(null);setConsent(false);setError('');go('home');}
  function back(){
   cancel();
   switch(screen){
-   case 'answer': go(hasDetailsToReview(details)?'review-details':'other-medicines'); break;
-   case 'review-details': go('other-medicines'); break;
+   case 'answer': go('other-medicines'); break;
    case 'other-medicines': go('prescription'); break;
    case 'prescription': go('reason'); break;
    case 'reason': go('confirm'); break;
@@ -71,6 +75,45 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  function chooseMedicine(id:string,from:Route){cancel();clearScan();setSelected(id);setRoute(from);go('confirm');}
  function typeName(){cancel();go('find');}
  function decline(){focusNext.current=true;setDeclined(true);clearDetails();}
+ async function completeCheck(input:CheckDetails,useAI:boolean){
+  if(!candidate||input.prescribed===null)return;
+  guidanceRequest.current?.abort();
+  guidanceRequest.current=null;
+  const resolved={...input,medicines:input.medicines.map(entry=>({...entry,choice:entry.choice??matchTypedMedicine(entry.name)}))};
+  const context:GuidanceContext={
+   medicineId:candidate.id,reason:resolved.reason,prescribed:resolved.prescribed==='yes',
+   otherMedicines:resolved.medicines,namesIncomplete:resolved.unsureAboutNames
+  };
+  setDetails(resolved);
+  setGuidance(localGuidance(candidate,context));
+  setGuidancePending(useAI);
+  if(screen!=='answer')go('answer');
+  if(!useAI)return;
+
+  const controller=new AbortController();
+  guidanceRequest.current=controller;
+  const timeout=setTimeout(()=>controller.abort(),24_000);
+  try{
+   const response=await fetch('/api/check-guidance',{
+    method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(context),signal:controller.signal
+   });
+   if(!response.ok)return;
+   const result:CheckGuidance=await response.json();
+   if(guidanceRequest.current!==controller)return;
+   setGuidance(result);
+   setDetails({...resolved,medicines:resolved.medicines.map((entry,index)=>({
+    ...entry,choice:result.corrections.find(match=>match.index===index)?.id??entry.choice
+   }))});
+  }catch{
+   // The source-based response stays available when the provider or network fails.
+  }finally{
+   clearTimeout(timeout);
+   if(guidanceRequest.current===controller){
+    guidanceRequest.current=null;
+    setGuidancePending(false);
+   }
+  }
+ }
  async function choosePhoto(value:File|undefined){if(!value)return;cancel();clearScan();setRoute('scan');const token=revision.current;setBusy('preparing');setError('');setConsent(false);setPhoto(null);go('photo');
  try{const image=await prepareImage(value);if(token===revision.current)setPhoto(image);}catch(e){if(token===revision.current)setError(e instanceof Error?e.message:'Could not prepare the image.');}finally{if(token===revision.current)setBusy(null);if(file.current)file.current.value='';if(native.current)native.current.value='';}}
  function loadSample(name:string){fetch(`/test-labels/${encodeURIComponent(name)}`).then(r=>{if(!r.ok)throw new Error();return r.blob();}).then(blob=>void choosePhoto(new File([blob],name,{type:'image/png'}))).catch(()=>setError('Could not load the sample. Upload a photo instead.'));}
@@ -111,16 +154,18 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  </section>}
  {askingQuestions&&candidate&&<section data-motion="screen" className="medicine-check-screen">
   {backButton}
-  <CheckQuestions step={screen} details={details} medicineName={medicineName} onChange={setDetails} onMedicineName={setMedicineName} onContinue={nextDetails=>{
-   const next=nextQuestionScreen[screen];
-   go(next==='review-details'&&!hasDetailsToReview(nextDetails)?'answer':next);
+  <CheckQuestions step={screen} details={details} medicineName={medicineName} aiAvailable={readiness==='available'} onChange={setDetails} onMedicineName={setMedicineName} onContinue={(next,useAI)=>{
+   if(screen==='other-medicines')void completeCheck(next,useAI);
+   else go(screen==='reason'?'prescription':'other-medicines');
   }}/>
  </section>}
- {screen==='review-details'&&candidate&&<section data-motion="screen" className="medicine-check-screen">
+ {screen==='answer'&&candidate&&guidance&&<div data-motion="screen" className="medicine-check-screen medicine-check-answer">
   {backButton}
-  <ReviewCheckDetails details={details} onChange={setDetails} onConfirm={()=>go('answer')}/>
- </section>}
- {screen==='answer'&&candidate&&<div data-motion="screen" className="medicine-check-screen medicine-check-answer">{backButton}<Answer medicine={candidate} details={details} onAnother={reset}/></div>}
+  <Answer medicine={candidate} details={details} guidance={guidance} pending={guidancePending} onAnother={reset} onMatch={(index,id)=>{
+   const next={...details,medicines:details.medicines.map((entry,position)=>position===index?{...entry,choice:id}:entry)};
+   void completeCheck(next,true);
+  }}/>
+ </div>}
  {camera&&<CameraCapture onClose={closeCamera} onCapture={choosePhoto} onNative={()=>native.current?.click()}/>}
  </div>;
 }

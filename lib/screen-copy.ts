@@ -2,18 +2,6 @@
 // Medical body text stays in lib/safety.ts and data/.
 import {medicines} from '@/lib/safety';
 const lowerFirst=(name:string)=>name.charAt(0).toLowerCase()+name.slice(1);
-export const reasonLabels={
- cold:'Cold, flu or runny nose',
- throat:'Sore throat',
- cough:'Cough',
- fever:'Fever',
- typhoid:'Suspected typhoid',
- diarrhoea:'Diarrhoea',
- urine:'Pain when passing urine',
- skin:'Wound or boil',
- dental:'Tooth pain',
- pain:'Other pain'
-} as const;
 export const copy={
  back:'Back',
  home:{
@@ -67,7 +55,7 @@ export const copy={
  questions:{
   reason:'Why are you taking this medicine?',
   reasonLabel:'Your reason (optional)',
-  privacy:'Your answers stay in this browser.',
+  privacy:'You can choose whether to send your answers for guidance.',
   prescription:'Was it prescribed for you?',
   otherMedicines:'Are you taking any other medicines?',
   medicineName:'Name on the pack',
@@ -77,21 +65,10 @@ export const copy={
   unsureAboutNames:'I’m not sure of all the names',
   yes:'Yes',
   no:'No',
-  continue:'Continue'
- },
- reviewDetails:{
-  title:'Confirm what you entered',
-  typed:'You typed',
-  reason:'Choose a reason',
-  medicine:(name:string)=>`Choose a match for ${name}`,
-  placeholder:'Choose an option',
-  suggested:'Suggested reasons',
-  otherReasons:'Other reasons',
-  keepReason:'Keep my words',
-  keepMedicine:'Keep as typed',
-  noMatch:'No catalogue match for this name.',
-  checkIngredients:'Compare these ingredients with the pack before confirming.',
-  confirm:'Confirm and continue'
+  continue:'Continue',
+  guidanceConsent:'Get guidance sends your answers and medicine names to Groq.',
+  guidance:'Get guidance',
+  localGuidance:'Continue without Groq'
  },
  answer:{
   antibiotic:'This is an antibiotic',
@@ -105,13 +82,18 @@ export const copy={
   noOtherMedicines:'None',
   unsureAboutNames:'Some names may be missing.',
   asTyped:'As typed',
-  interactionNote:'Ask a pharmacist or prescriber about possible interactions.',
-  before:'Before you take it',
+  interactionNote:'Some combinations could not be checked. Ask a pharmacist or prescriber.',
+  guidance:'Your guidance',
+  guidancePending:'Checking sources for your answers…',
+  sourceGuidance:'Source-based guidance',
+  aiGuidance:'Sources selected for your answers by Groq',
+  matchedFrom:(name:string)=>`Matched from ${name}`,
+  checkMatch:'Compare these ingredients with the pack before choosing a match.',
+  useMatch:(name:string)=>`Use ${name}`,
   next:'Next steps',
   another:'Check another medicine',
   sources:'Where this information comes from',
-  checked:(date:string)=>`Sources checked on ${date}`,
-  cards:{cold:'I have a cold, flu or cough',leftovers:'These are left over from before',sharing:'Someone gave these to me',prescribed:'A doctor prescribed this for me',missedEffects:'I missed a dose or feel side effects',general:'What can this check tell me?'}
+  checked:(date:string)=>`Sources checked on ${date}`
  },
  find:{
   title:'Find by name',

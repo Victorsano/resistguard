@@ -22,14 +22,15 @@
 .answer-details ul{padding-inline-start:var(--s5);list-style:disc}
 .answer-as-typed{margin-inline-start:var(--s2);color:var(--ink-2);font-size:var(--text-small)}
 .answer-details>p{margin:var(--s3) 0 0;color:var(--ink-2)}
-.answer-cards{display:grid;gap:10px}
-.answer-card{overflow:hidden;border:1px solid var(--line-strong);border-radius:var(--radius-card);background:var(--card)}
-.answer-card>button{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);width:100%;min-height:60px;padding:var(--s3) 18px;border:0;background:none;text-align:left;font-size:var(--text-body);font-weight:600;line-height:1.35;color:var(--ink)}
+.answer-guidance{display:grid;gap:var(--s3)}
+.answer-guidance-item{padding:var(--s4);border:1px solid var(--line-strong);border-radius:var(--radius-card);background:var(--card)}
+.answer-guidance-item h3{margin:0 0 var(--s2);font-size:var(--text-body);font-weight:650}
+.answer-guidance-item p{margin:0 0 var(--s2);line-height:var(--leading-body)}
+.answer-guidance-item a,.answer-guidance-source{font-size:var(--text-small)}
+.answer-guidance-source{margin:0;color:var(--ink-2)}
+.answer-match{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s3)}
 .answer-chevron{flex-shrink:0;color:var(--signal)}
-.answer-card>button[aria-expanded=true] .answer-chevron,.answer-sources[open] .answer-chevron{transform:rotate(180deg)}
-.answer-card-body{padding:4px 18px 18px;border-top:1px solid var(--line)}
-.answer-card-body h3{margin:var(--s3) 0 4px;font-size:var(--text-body);font-weight:650;line-height:1.35}
-.answer-card-body p{font-size:var(--text-body);line-height:1.55}
+.answer-sources[open] .answer-chevron{transform:rotate(180deg)}
 .answer-another{width:100%;margin-top:var(--s6)}
 .answer-sources{margin-top:var(--s4);border:1px solid var(--line);border-radius:var(--radius-card);background:var(--card)}
 .answer-sources summary{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:56px;padding:0 18px;list-style:none;cursor:pointer;font-size:var(--text-body);font-weight:600}

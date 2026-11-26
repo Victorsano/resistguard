@@ -25,6 +25,8 @@
 .check-questions-names li span{min-width:0;overflow-wrap:anywhere}
 .check-questions-unsure{display:flex;align-items:center;gap:var(--s3);min-height:var(--control);cursor:pointer}
 .check-questions-continue{width:100%;margin:var(--s5) 0}
+.check-questions [id=guidance-consent]{margin-top:var(--s5)}
+.check-questions [id=guidance-consent]+.check-questions-continue{margin:var(--s2) 0}
 @media(max-width:420px){
  .check-questions-add{grid-template-columns:minmax(0,1fr)}
 }

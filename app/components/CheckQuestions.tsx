@@ -7,9 +7,10 @@ type Props={
  step:CheckQuestion;
  details:CheckDetails;
  medicineName:string;
+ aiAvailable:boolean;
  onChange:(details:CheckDetails)=>void;
  onMedicineName:(name:string)=>void;
- onContinue:(details:CheckDetails)=>void;
+ onContinue:(details:CheckDetails,useAI:boolean)=>void;
 };
 
 const t=copy.questions;
@@ -23,7 +24,7 @@ function YesNoToggle({value,onChange}:{value:YesNo|null;onChange:(answer:YesNo)=
  </fieldset>;
 }
 
-export default function CheckQuestions({step,details,medicineName,onChange,onMedicineName,onContinue}:Props){
+export default function CheckQuestions({step,details,medicineName,aiAvailable,onChange,onMedicineName,onContinue}:Props){
  const nameInput=useRef<HTMLInputElement>(null);
  const title=step==='reason'?t.reason:step==='prescription'?t.prescription:t.otherMedicines;
  const canContinue=step==='reason'||(step==='prescription'?details.prescribed!==null:
@@ -45,13 +46,16 @@ export default function CheckQuestions({step,details,medicineName,onChange,onMed
   onMedicineName('');
   return nextDetails;
  }
+ function continueCheck(useAI:boolean){
+  onContinue(step==='other-medicines'&&details.otherMedicines==='yes'?addName():details,useAI);
+ }
 
  return <div className="check-questions">
   <h1 id="check-question-title">{title}</h1>
   {step==='reason'&&<>
    <label className="check-questions-field">
     <span>{t.reasonLabel}</span>
-    <textarea rows={3} value={details.reason} onChange={event=>onChange({...details,reason:event.target.value,reasonChoice:null})} aria-describedby="check-questions-privacy" autoComplete="off"/>
+    <textarea rows={3} maxLength={500} value={details.reason} onChange={event=>onChange({...details,reason:event.target.value})} aria-describedby="check-questions-privacy" autoComplete="off"/>
    </label>
    <p className="check-questions-hint" id="check-questions-privacy">{t.privacy}</p>
   </>}
@@ -66,7 +70,7 @@ export default function CheckQuestions({step,details,medicineName,onChange,onMed
     }}>
      <label className="check-questions-field">
       <span>{t.medicineName}</span>
-      <input ref={nameInput} type="text" value={medicineName} onChange={event=>onMedicineName(event.target.value)} autoComplete="off"/>
+      <input ref={nameInput} type="text" maxLength={100} value={medicineName} onChange={event=>onMedicineName(event.target.value)} autoComplete="off"/>
      </label>
      <button type="submit" className="secondary" data-motion="press" disabled={!medicineName.trim()}>{t.addMedicine}</button>
     </form>
@@ -85,8 +89,10 @@ export default function CheckQuestions({step,details,medicineName,onChange,onMed
     </label>
    </div>}
   </>}
-  <button type="button" className="primary check-questions-continue" data-motion="press" disabled={!canContinue} onClick={()=>{
-   onContinue(step==='other-medicines'&&details.otherMedicines==='yes'?addName():details);
-  }}>{t.continue}</button>
+  {step==='other-medicines'&&aiAvailable?<>
+   <p className="check-questions-hint" id="guidance-consent">{t.guidanceConsent}</p>
+   <button type="button" className="primary check-questions-continue" data-motion="press" aria-describedby="guidance-consent" disabled={!canContinue} onClick={()=>continueCheck(true)}>{t.guidance}</button>
+   <button type="button" className="text-button" data-motion="press" disabled={!canContinue} onClick={()=>continueCheck(false)}>{t.localGuidance}</button>
+  </>:<button type="button" className="primary check-questions-continue" data-motion="press" disabled={!canContinue} onClick={()=>continueCheck(false)}>{t.continue}</button>}
  </div>;
 }

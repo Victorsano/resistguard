@@ -1,20 +1,15 @@
 // The check flow: plain functions only, so node:test can import them.
-import {medicines,nigeriaCatalogueDetails,nigeriaSources,sources as guidanceSources,assess,matchIngredient,matchIngredients,type Medicine,type Scenario} from '@/lib/safety';
+import {medicines,nigeriaCatalogueDetails,nigeriaSources,sources as guidanceSources,assess,type Medicine,type Scenario} from '@/lib/safety';
 import type {ScanResult} from '@/lib/scan';
-import {reasonLabels} from '@/lib/screen-copy';
 import evidence from '@/data/use-evidence.json';
 
 export type CheckQuestion='reason'|'prescription'|'other-medicines';
-export type Screen='home'|'find'|'catalogue'|'photo'|'confirm'|CheckQuestion|'review-details'|'answer';
+export type Screen='home'|'find'|'catalogue'|'photo'|'confirm'|CheckQuestion|'answer';
 export type Route='scan'|'name'|'catalogue';
 export type YesNo='yes'|'no';
-export type ReasonId=keyof typeof reasonLabels;
-export const keepTyped='as-typed';
-export type ReasonChoice=ReasonId|typeof keepTyped;
 export type OtherMedicine={name:string;choice:string|null};
 export type CheckDetails={
  reason:string;
- reasonChoice:ReasonChoice|null;
  prescribed:YesNo|null;
  otherMedicines:YesNo|null;
  medicines:OtherMedicine[];
@@ -23,7 +18,6 @@ export type CheckDetails={
 
 export const emptyCheckDetails:CheckDetails={
  reason:'',
- reasonChoice:null,
  prescribed:null,
  otherMedicines:null,
  medicines:[],
@@ -36,15 +30,7 @@ export function addMedicineName(entries:OtherMedicine[],input:string){
  return [...entries,{name,choice:null}];
 }
 
-export function hasDetailsToReview(details:CheckDetails){
- return Boolean(details.reason.trim()||details.medicines.length);
-}
-
-export function detailsAreConfirmed(details:CheckDetails){
- return (!details.reason.trim()||details.reasonChoice!==null)&&details.medicines.every(entry=>entry.choice!==null);
-}
-
-const reasonPhrases:Record<ReasonId,readonly string[]>={
+const reasonPhrases={
  cold:['cold','flu','runny nose'],
  throat:['sore throat','throat pain','tonsillitis'],
  cough:['cough','coughing'],
@@ -55,7 +41,8 @@ const reasonPhrases:Record<ReasonId,readonly string[]>={
  skin:['wound','boil','infected cut'],
  dental:['tooth pain','toothache','tooth ache','dental pain'],
  pain:['headache','backache','back pain','body aches','joint pain','other pain']
-};
+} as const;
+type ReasonId=keyof typeof reasonPhrases;
 
 export function suggestReasons(input:string):ReasonId[]{
  // Keep negated descriptions for the user to classify. These are text matches, never diagnoses.
@@ -75,26 +62,6 @@ export function findMedicines(query:string){
  });
 }
 
-export function suggestMedicines(input:string):Medicine[]{
- const name=input.trim().toLowerCase();
- if(!name)return [];
- const exact=medicines.filter(m=>m.name.toLowerCase()===name);
- if(exact.length)return exact;
- const ingredients=name.split(/\s*\+\s*|\s+and\s+/);
- if(ingredients.length>1){
-  const combination=matchIngredients(ingredients);
-  return combination?[combination]:[];
- }
- const ingredient=matchIngredient(name);
- if(ingredient)return [ingredient];
- if(name.length<3)return [];
- return findMedicines(name).filter(medicine=>{
-  const {products}=nigeriaCatalogueDetails(medicine.id);
-  const labels=[medicine.name,...products.flatMap(product=>[product.name,product.number])];
-  return labels.some(label=>label.toLowerCase().startsWith(name));
- });
-}
-
 export type ScanOutcome='match'|'unreadable'|'brand_only'|'not_listed'|'not_medicine'|'timeout'|'paused'|'failed';
 // Server reasons that mean photo reading is switched off or out of budget, not a bad photo.
 const pausedReasons=['pilot_closed','review_pending','disabled','not_configured','controls_missing','controls_unavailable','request_limit','spending_limit','rate_limit','authentication','model_unavailable'];
@@ -110,14 +77,6 @@ export function scanOutcome(scan:ScanResult&{reason?:string},timedOut=false):Sca
 }
 // Outcomes that stay on the photo screen instead of moving to "Is this what your pack says?".
 export function staysOnPhoto(outcome:ScanOutcome){return outcome==='timeout'||outcome==='paused'||outcome==='failed';}
-
-export type CardId='cold'|'leftovers'|'sharing'|'prescribed'|'missedEffects'|'general';
-const cardScenarios:Record<CardId,Scenario[]>={cold:['cold'],leftovers:['leftovers'],sharing:['sharing'],prescribed:['prescribed'],missedEffects:['missed','effects'],general:['general']};
-// Antibiotics get every situation. Other medicines keep only the scenarios the old result screen allowed.
-export function answerCards(medicine:Pick<Medicine,'id'|'antibiotic'>){
- const ids:CardId[]=medicine.antibiotic?['cold','leftovers','sharing','prescribed','missedEffects']:['cold','missedEffects','general'];
- return ids.map(id=>({id,rules:cardScenarios[id].map(scenario=>{const rule=assess(medicine.id,scenario)!.rule;return {title:rule.title,text:rule.text};})}));
-}
 
 export function capitalise(name:string){return name.charAt(0).toUpperCase()+name.slice(1);}
 

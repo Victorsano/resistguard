@@ -1,0 +1,96 @@
+{
+  "companions": [
+    {
+      "id": "warfarin",
+      "name": "Warfarin",
+      "ingredients": [
+        "warfarin"
+      ]
+    },
+    {
+      "id": "lithium",
+      "name": "Lithium",
+      "ingredients": [
+        "lithium"
+      ]
+    },
+    {
+      "id": "simvastatin",
+      "name": "Simvastatin",
+      "ingredients": [
+        "simvastatin"
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "id": "metronidazole-warfarin",
+      "ingredients": [
+        [
+          "metronidazole"
+        ],
+        [
+          "warfarin"
+        ]
+      ],
+      "title": "Metronidazole and warfarin",
+      "text": "Metronidazole can increase the effect of warfarin and raise the risk of bleeding. Ask your prescriber or pharmacist to review these medicines together.",
+      "source": {
+        "name": "NAFDAC Greenbook · Metronidazole product information, section 4.5",
+        "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2025/12/16/20251216c9bc4bbc-62d7-5c68-9702-2bd6d83e6314.pdf"
+      }
+    },
+    {
+      "id": "metronidazole-lithium",
+      "ingredients": [
+        [
+          "metronidazole"
+        ],
+        [
+          "lithium"
+        ]
+      ],
+      "title": "Metronidazole and lithium",
+      "text": "Metronidazole can slow the removal of lithium from the body. Ask your prescriber or pharmacist to review these medicines together.",
+      "source": {
+        "name": "NAFDAC Greenbook · Metronidazole product information, section 4.5",
+        "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2025/12/16/20251216c9bc4bbc-62d7-5c68-9702-2bd6d83e6314.pdf"
+      }
+    },
+    {
+      "id": "clarithromycin-simvastatin",
+      "ingredients": [
+        [
+          "clarithromycin"
+        ],
+        [
+          "simvastatin"
+        ]
+      ],
+      "title": "Clarithromycin and simvastatin",
+      "text": "The product information warns that using these together can cause serious muscle injury. Ask your prescriber or pharmacist to review the combination promptly.",
+      "source": {
+        "name": "NAFDAC Greenbook · Clarithromycin product information, section 4.5",
+        "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2024/02/16/2024021690374561-72ab-58a0-8ccd-a5870d1d886a.pdf"
+      }
+    },
+    {
+      "id": "co-trimoxazole-warfarin",
+      "ingredients": [
+        [
+          "sulfamethoxazole",
+          "trimethoprim"
+        ],
+        [
+          "warfarin"
+        ]
+      ],
+      "title": "Co-trimoxazole and warfarin",
+      "text": "Co-trimoxazole can increase the effect of warfarin. Ask your prescriber or pharmacist to review these medicines together.",
+      "source": {
+        "name": "WHO · Co-trimoxazole product information, section 4.5",
+        "url": "https://extranet.who.int/prequal/sites/default/files/whopar_files/ha782part4v1.pdf"
+      }
+    }
+  ]
+}
