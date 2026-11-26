@@ -25,6 +25,21 @@ ResistGuard informs. It never decides for the user. Pharmacists and judges will 
 - Reuse web addresses already in the code. Greenbook: `https://greenbook.nafdac.gov.ng/`
 - Open outside links with `target="_blank" rel="noreferrer"`, like the rest of the app.
 - Copy text from the spec word for word, unless I approve a change.
+- Put the words in the right file: checker text in `lib/screen-copy.ts`, landing text in `lib/landing-copy.ts`, a feature's own reviewed text in `lib/<feature>.ts`. Never inline user-facing text in JSX.
+
+## Voice
+ResistGuard sounds like a calm, knowledgeable pharmacist friend: warm, direct, never preachy. Write for Mrs Bisi (62, weak eyesight), Ngozi (reads English slowly) and Tunde (in a hurry).
+
+1. Answer the person's question, not the system's. "Should you take this?", not "Medicine classification".
+2. Say what to do, then why. "Ask a pharmacist first. Antibiotics don't treat colds."
+3. Use "you". Use "we" only for limits: "We can't tell if you need this medicine."
+4. Short words, short sentences: 12 words or fewer on screens. No "catalogue record", "candidate" or "active ingredient" without a plain gloss.
+5. Sentence case everywhere. No ALL CAPS labels, no "01 /" numbering.
+6. Never blame. "Leftovers aren't a treatment plan", not "People misuse leftovers".
+7. Say each limit once, where it matters. The boundary line appears once, on the Answer screen.
+8. Every button starts with a verb and says what happens: "Scan your medicine", not "Start".
+9. Pair every key label with an icon, for people who read slowly.
+10. Use typographic apostrophes (’) in landing display text.
 
 ## Before you finish
 Read every new user-facing sentence against the "Never" list. Quote any sentence that comes close, and say why it is still fine or how you changed it.

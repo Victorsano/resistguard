@@ -2,7 +2,17 @@
 
 # ResistGuard: rules for Claude Code
 
-Read PROJECT_MAP.md before you change the scan flow, the catalogue or any medical text. Never describe a NOT BUILT feature as working.
+Read PROJECT_MAP.md before you change the scan flow, the catalogue or any medical text. Never describe a NOT BUILT feature as working. Code marked HIDDEN in PROJECT_MAP.md builds but is not reachable; do not revive it unless asked.
+
+## Docs map
+- `PROJECT_MAP.md`: product, users, screens, AI, privacy, NOT BUILT, code map
+- `CONTRIBUTING.md`: how to build a feature, review packet, pull request checklist
+- `docs/ARCHITECTURE.md`: folders, request flow, API routes, data, patterns
+- `DESIGN.md`, `ART_DIRECTION.md`: design system
+- `docs/OPERATIONS.md`: env vars, limits, deploy, scripts, review and pilot
+- `docs/FEATURE_SPEC_TEMPLATE.md`: spec format for `/add-feature`
+- `VERIFICATION.md`: what is tested and what is not; add a dated entry when you verify a release
+When a change makes one of these wrong, fix the doc in the same change.
 
 ## Commands
 - `npm test`: node:test through tsx (`tests/*.test.ts`)
@@ -25,7 +35,7 @@ Read PROJECT_MAP.md before you change the scan flow, the catalogue or any medica
 - Radius 4px for controls, 12px for cards. Controls at least 52px tall. Body text 18px; nothing below 14px.
 - New CSS: one file per component, every class prefixed with the component name, values only from tokens.
 - Keep the `data-motion` hooks listed in `DESIGN.md`. The hero entrance is the only motion.
-- Check UI changes in a real browser at 375 px and desktop widths before saying they are done.
+- Check UI changes in a real browser at 375 px and desktop widths before saying they are done. Keep screenshots out of the repository.
 
 ## Hard limits
 - No new dependencies. No new AI calls. No storage (localStorage, cookies, database, analytics).

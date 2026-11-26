@@ -1,4 +1,4 @@
-// Every label, heading, button and state on the check flow. Redesign v3 wording is noted where it replaced REVAMP_SPEC.md.
+// Every label, heading, button and state on the check flow. Redesign v3 wording is noted where it replaced the revamp spec (REVAMP_SPEC.md, now in Git history).
 // Medical body text stays in lib/safety.ts and data/.
 import {medicines} from '@/lib/safety';
 const lowerFirst=(name:string)=>name.charAt(0).toLowerCase()+name.slice(1);

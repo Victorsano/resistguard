@@ -1,13 +1,19 @@
 node_modules/
 .next/
-.env*
-!.env.example
 *.tsbuildinfo
 .vercel/
 
-.vercel
+# Secrets: only the empty example is committed
 .env*
+!.env.example
 
+# Private evidence and downloaded test material
 work/
 private/
 
+# Local tool output: screenshots, browser logs, design audits, repo dumps
+screenshots/
+.playwright-mcp/
+.playwright-cli/
+.impeccable/
+repomix-output.xml

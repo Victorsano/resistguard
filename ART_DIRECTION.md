@@ -16,14 +16,14 @@ Doubt, then clarity, then reassurance. The hero names the doubt in big, plain ty
 
 Each colour has one meaning. Signal means "do this next". Amber (`#fff0d4` / `#b25e00` / `#4d2600`) labels "Antibiotic" on list chips, and slate (`#e8eef5` / `#4f6b8a` / `#1d3350`) labels "Not an antibiotic". The answer itself is positive feedback: a green card with a check, because reaching an answer is the moment the product succeeds. Green appears nowhere else. The palette has no red, lavender or old cobalt. There are no shadows or gradients, except the single hero glow.
 
-Radius is 4px on every control (buttons, inputs, chips) and 12px on paper cards. Focus is a 2px ring offset by 4px: `#6E80FF` on night, `#3D5AFE` on paper. It is the same shape everywhere.
+Radius is 4px on every control (buttons, inputs, chips) and 12px on paper cards. Focus is a 2px ring offset by 3px: `#6E80FF` on night, `#3D5AFE` on paper. It is the same shape everywhere.
 
 ## 4. Typography
 **Bricolage Grotesque** (variable: weight 200–800, width 75–100%, optical size 12–96) carries everything. `font-optical-sizing: auto` gives display sizes the tighter 96 cut. Personality comes from the width and weight axes, not from extra typefaces:
 - **Headline line 1:** bright and heavy. Weight 520–800, width 75–100%, leading .86–.95, tracking −0.02 to −0.042em. It is the only element allowed to be loud.
 - **Headline line 2:** the same family but quieter. Weight 250–380, at `.72` or `.56` white.
 - **Eyebrow:** 16px, weight 500, sentence case. **Lead:** 18–21px at 1.5 leading, weight 400. **Buttons:** 18–19px, weight 600.
-- **Wordmark:** "ResistGuard" at 24px, weight 720, width 86%. "Demo" follows in 14px, weight 500, at `.56` white. No box, no monogram.
+- **Wordmark:** "ResistGuard" at 22px (20px on phones), weight 720, width 86%. "Demo" follows in 14px, weight 500, at `.56` white. No box, no monogram.
 
 **Fraunces italic** (weight 400, `opsz 144`, `SOFT 100`, `WONK 1`) in signal is used for exactly one `<em>` per heading and nowhere else. Its x-height matches Bricolage at the same size, so it needs no resizing. It gets about 0.03em of right padding so the italic doesn't collide with the punctuation that follows. No caps, no system fonts, no Inter or Geist. Use typographic apostrophes (’) in display type.
 
@@ -48,13 +48,5 @@ A full-bleed `<video autoplay muted loop playsinline>` sits behind the words wit
 - **Tesla:** Keep one chromatic colour and reserve it for the action you want next. Show one message per screen. Use barely-rounded 4px buttons and no shadows. Left behind: the white showroom, carousels, the floating chat bar, and 14px body text, which is too small for Mrs Bisi.
 - **Runway:** The media is the design and the interface steps back. Use a truly dark ground. Get depth from light, not from `box-shadow`. Set film-title leading near 1.0 with negative tracking. Left behind: tracked uppercase labels, one-typeface purity (we need the Fraunces word), 11–13px micro type, image grids, and pure `#000`.
 
-## The three lab directions (Phase 1 only)
-| | A: "Don’t swallow a *guess*." | B: "Is it an antibiotic?" | C: "Wrong pill today." |
-|---|---|---|---|
-| Idea | Editorial cover line | The question, a pause, the answer | Consequence as a film title card |
-| Copy column | Columns 6–12, anchored low | Columns 8–12, question at top, answer at bottom | Shrink-wrapped to the right edge, centred vertically |
-| Line 1 | Weight 640, width 90%, 165px, forced break | Weight 520, width 100%, 127px, open | Weight 800, width 75%, 188px, one line |
-| Line 2 | 44px standfirst at `.72` | 75px weight 320, carries *before* | Same size as line 1, weight 250, at `.56`, carries *cure* |
-| Actions | Inline button and link under the lead | 456px bar, link below | Lead left, actions pushed right in one row |
-
-The sizes above are at 1920 × 1080.
+## The chosen hero: "Don’t swallow a *guess*."
+Three hero directions were tried in the design lab. Direction A, an editorial cover line, shipped. The copy column runs from column 6 to the right edge, anchored low. Line 1 is weight 640, width 90%, with a forced break after "swallow". Line 2 is a 44px standfirst at `.72` white. The button and link sit inline under the lead. The copy lives in `lib/landing-copy.ts`. The other two directions (B, "Is it an antibiotic?", and C, "Wrong pill today.") were dropped.

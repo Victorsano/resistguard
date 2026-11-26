@@ -91,3 +91,14 @@ Stable `data-motion` hooks for later work:
 ## Copy
 
 Landing copy is in `lib/landing-copy.ts`; all tool copy is in `lib/screen-copy.ts`. Medical text stays in `lib/safety.ts` and `data/` and is never edited for presentation. Follow the voice rules in `.claude/skills/health-copy-rules`.
+
+## Building a new component
+
+1. Create `app/components/<Name>.tsx` and `app/components/<name>.css`; import the CSS from the component.
+2. Prefix every class with the component name (`next-steps-list`). Never style another component's classes.
+3. Start from the shared classes in `app/globals.css` (`primary`, `secondary`, `text-button`, `note`, `caution`, `content-view`, `source-links`) and add only what is missing.
+4. Take every value from `app/tokens.css`. If a value is missing, add a token there and document it in this file; never hard-code it.
+5. Give the screen root `data-motion="screen"` and every button `data-motion="press"`.
+6. Check at 375px and desktop width: nothing scrolls sideways, every control is at least 52px tall, focus rings show on keyboard tab.
+
+`NextSteps.tsx` with `next-steps.css` and `Answer.tsx` with `answer.css` are the reference components.

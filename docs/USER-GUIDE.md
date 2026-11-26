@@ -1,38 +1,35 @@
-# Your first ResistGuard label check
+# Your first ResistGuard check
 
-ResistGuard helps you read the active ingredients on a medicine package and prepare questions for a pharmacist. You can try it without an account. [Open ResistGuard](https://resistguard-rosy.vercel.app/)
+ResistGuard tells you what is in a medicine pack and whether it is an antibiotic. You don't need an account. [Open ResistGuard](https://resistguard-rosy.vercel.app/check)
 
-The first-visit tour points out where to start, how to review a photo and what to check in a scan result. Choose **Read a label** to follow it or **Skip tour** to dismiss it. The browser remembers when you skip or finish.
+ResistGuard can't tell you if you need a medicine, or if a pack is genuine. Ask a pharmacist or doctor.
 
-Choose **First time? Try a practice check** to compare two ingredient lists and practise deciding whether to confirm. This exercise needs no photo or AI request.
+## Try the example first
 
-## Try it with a practice label
+On the first screen, tap **See an example**. A made-up amoxicillin label opens, so you can practise without your own pack.
 
-Open **Learn & try**, pick a fictional package and choose **Try this label**. The photo opens for review. To use your own package, open **Medicine check** and choose **Upload photo** or **Open camera**. Photograph the panel that lists the active ingredients.
+## Check your own medicine
 
-1. **Check the photo.** Make sure the whole list is visible, the print is sharp and there are no names, prescriptions or personal details in the frame. Retake the picture if needed.
-2. **Read the label.** Tick the three photo checks. If you agree to send the prepared photo to Groq for analysis, tick the consent box and choose **Read label**. To keep your photo on your device, skip the scan and use **Catalogue** instead.
-3. **Compare every ingredient.** Look back at the printed panel. Choose **Yes, the complete list matches** only if every active ingredient matches and none are missing or extra. If one name differs or you cannot read it, choose **No / I’m unsure**.
-4. **Read the explanation.** After confirming, choose **Explain this simply**. Explore the source links and questions you can take to a pharmacist. A match identifies a catalogue entry. A pharmacist can advise whether a medicine is suitable for you.
+1. **Take the photo.** Tap **Scan your medicine** to use your camera, or **Upload a photo**. Photograph the ingredient list, usually on the side or back of the pack ("Composition" or "Each capsule contains"). The brand name alone is not enough.
+2. **Check your photo.** Make sure the whole ingredient list is in view, with no glare or blur, and no names or addresses. Tap **Retake** if needed.
+3. **Agree and read.** Tick the box to agree to send the photo to Groq, our AI provider. ResistGuard doesn't keep it. Tap **Read the label**. It usually takes under 20 seconds.
+4. **Is this what your pack says?** Look at your pack. If it lists exactly these ingredients and nothing more, tap **Yes, that's it**. If anything differs, or you can't tell, tap **No, or I'm not sure**.
+5. **Read the answer.** You'll see whether it is an antibiotic. Under **Before you take it**, tap the situation that fits you, for example "These are left over from before".
+6. **Next steps.** Tap **Ask a pharmacist on WhatsApp** to open WhatsApp with your question already written. It holds no photo and no name. Open **Check the pack is genuine** to see NAFDAC's own checks.
 
-## Ask ResistGuard
+## Type the name instead
 
-Tap **Ask ResistGuard** at the bottom right for questions about label photos, NAFDAC numbers and responsible antibiotic use. After you confirm a complete ingredient list, **Explain this simply** opens the assistant with the medicine and topic you selected. Look for the source links and questions to take to a pharmacist. The conversation clears when the assistant closes.
+Don't want to send a photo? Type a medicine name, a brand such as Emzoclox, or a NAFDAC number in the search box. Nothing you type leaves your phone. Tap **See all 28 medicines** to browse the full list.
 
-## Before taking an antibiotic
+## If something goes wrong
 
-Choose **Antibiotic use** from the navigation or **Before taking an antibiotic** on the home page. Try the eczema, boil, medicine-interaction or ulcer-history example. For an antibiotic example, choose how the person would obtain or use the medicine. Select the topics they could discuss with a pharmacist, then choose **See what to consider**. Each education passage links to its original source. The optional AI button organises the evidence without sending your answer choices. The interactive AMR lesson below explains why responsible use matters.
+- **Camera blocked?** Use **Upload a photo**.
+- **"We couldn't read the label clearly"?** Follow the tip on screen. Usually: turn the pack away from the light and photograph the ingredient list again.
+- **"We need the ingredient list, not just the brand"?** Turn the pack over and look for "Each capsule contains" or "Composition".
+- **"We don't have this medicine yet"?** That doesn't mean it isn't an antibiotic. Ask a pharmacist before you take it.
+- **"That took too long"?** Tap **Try again**, or **Type the name instead**.
+- **"Photo reading is paused"?** Type the medicine name instead.
 
-## Look up Nigerian products
+## Emergency
 
-Open **Catalogue** and search for an ingredient, a listed example such as **Emzoclox**, or its NAFDAC number. Expand **Formulations and product references** to see the exact source. The adult and children’s list filters show entries with checked formulation examples. Confirm every ingredient from your own package before using **Check this label**. Ask a pharmacist about suitability and instructions.
-
-## If you get stuck
-
-- **Camera blocked?** Use **Upload photo** to pick an existing picture.
-- **Glare or blurry text?** Turn the box away from the light and photograph the ingredient panel again. A brand name is optional if the entire active-ingredient section is readable.
-- **AI unavailable or prefer manual lookup?** Open **Catalogue** and look up the printed ingredient name. For a combination, check the entire list.
-- **Wrong suggestion?** Choose **No / I’m unsure**. Your photo stays available for review.
-- **Combination detected outside the catalogue?** Compare the names the scanner read with the full package label. The app leaves the medicine unselected when it cannot find an exact entry. Take the package or leaflet to a pharmacist if you are unsure.
-
-For the purpose of each tab, see the [product overview](PRODUCT-OVERVIEW.md).
+Trouble breathing, a swollen face or throat, or fainting? Get emergency help now. Don't use this app.

@@ -1,58 +1,56 @@
-# Verification — public educational AI enabled, 15 November 2026
+# Verification record
 
-Live: https://resistguard-rosy.vercel.app
-Deployment dpl_J7DYoz6fYSMbmrQdaQx9vhgXUseU reached READY.
+What has been tested, how, and what has not. Add a dated entry at the top of "Log" whenever you verify a release. Record failures as plainly as passes. Never record a review, participant or result that did not happen.
 
-The user explicitly requested working public Groq access. Production pilot/review gates are now an optional policy controlled by ENFORCE_PILOT_GATES=1. They are off by default. Pharmacist review remains pending and the supervised participant pilot is not started; AI availability is not approval or clinical validation.
+## Current state (26 November 2026, commit `d3c7189`)
 
-## Verified in this update
+| Area | Status |
+|---|---|
+| Automated tests | 53 pass (`npm test`) |
+| Typecheck and production build | Pass |
+| Live AI on the 10 fictional labels | All gave their expected outcome (earlier release; rerun after any change to `lib/scan.ts`) |
+| Published manufacturer label images | 3 DailyMed images matched; one timed out on the first try |
+| Real photos | One moisturiser correctly rejected; one triple-antibiotic Drug Facts panel read completely and reported as not in the list |
+| Real phone photos of real packs (Android, iPhone) | **Not done** |
+| Pharmacist review | **Not done.** Every record is `pending_pharmacist`. |
+| Supervised pilot | **Not started.** No volunteers contacted. |
+| Shared production rate limits (Redis) | **Not connected.** Tested once on a temporary database. |
+| Accuracy rates | **Not measured.** Samples are far too small. |
+| Whether users understand "recognised" is not "safe for me" | **Not tested** |
+| Behaviour under many simultaneous users | **Not tested** |
 
-- All 27 automated tests passed. New checks cover public AI without pilot gates, explicit strict shared-control requirements and the per-instance daily/monthly fallback budgets.
-- Local and Vercel production builds passed, including TypeScript.
-- Public /api/readiness returned HTTP 200 and ai=available while clinicalReview=pending and pilot=not_started.
-- Public vision endpoint recognised the fictional amoxicillin label correctly (HTTP 200, candidate, amoxicillin). Report: ../scan-public-enabled.json.
-- Public GPT-OSS explanation returned AI-selected approved passages and pharmacist questions (HTTP 200; three paragraphs and three questions in the direct API check).
-- Existing consent, complete ingredient confirmation, fixed rules and provider-failure fallback remain in place. The Groq key remains server-only.
+Known weak spot: reflective blister foil. A real Emzoclox pack was misread as amoxicillin + clavulanic acid. The classifier now discards that reading, but only for the 5 Greenbook products. Other foil packs are not protected.
 
-## Controls and limitations
+## Evidence files
 
-The permanent Redis service is still unconfigured. Requests currently use per-instance minute/day/month controls, which reset on restart and are not shared global spending caps. Configuring Redis enables atomic shared controls; its failures close AI. REQUIRE_DURABLE_LIMITS=1 makes the dependency mandatory. DISABLE_AI=1 remains the kill switch. Optional ENFORCE_PILOT_GATES=1 restores the stricter date/switch/review policy.
+`docs/evidence/` holds machine-readable reports from earlier runs: `scan-regression.json`, `real-label-regression.json`, `scan-public-enabled.json`, `redis-verification.json`. They contain classifications and fixture IDs only, never images or secrets.
 
-Actual pharmacist sign-off, physical-phone testing, volunteers, production shared infrastructure and provider-account monetary limits remain pending. No approval or participant result was fabricated. Prior preparation checks and the small manufacturer-label regression are recorded in docs/VERIFICATION-2026-11-15-pre-public-ai.md.
+## Log
 
-Two short product/goal charts are in docs/PRODUCT-OVERVIEW.md. Goals in the charts are intended outcomes, not measured effects already established by the app.
+### 26 November 2026: documentation cleanup before team merge
+- `npm test`: 53 pass. `npm run typecheck` and `npm run build`: pass.
+- Docs rewritten for the five-screen `/check` flow and Night & Paper design. No application code changed.
 
-Final public Edge browser check: upload -> all photo checks and consent -> Groq scan -> ingredient confirmation -> AI-selected explanation and pharmacist questions passed. The first browser scan timed out and showed the intended manual fallback; an explicit second attempt succeeded. No automatic retries were introduced. Screenshot: ../resistguard-public-ai-working.png. This is a software fixture test, not physical-device or clinical validation.
+### 26 November 2026: Redesign v3 (`d3c7189`)
+- One design system (Night & Paper) across the landing page and checker. Tokens in `app/tokens.css`.
+- Hero media rules covered by `tests/hero-media.test.ts`.
 
-## Field-guide visual redesign — 15 November 2026
+### 25–26 November 2026: Revamp parts 1–4
+- Tab bar removed. Five-screen check flow (Home, Check your photo, Is this what your pack says?, Answer, Find by name). Footer pages for How it works, pharmacists and testers, Sources.
+- `tests/flow.test.ts` covers outcomes, answer cards, name search and forbidden words in screen copy.
+- Pilot page label contrast raised to 4.5:1.
 
-- Published deployment dpl_5R7hd6c7wKDAPBtuRBYviiht5KRn, READY. Public homepage returned 200 with the new specimen illustration and headline. AI readiness remains available.
-- Replaced soft green gradients, serif marketing headlines, floating capsule/shield hero and rounded card system with bold sans-serif typography, ink/paper/cobalt/orange colours, package-label rules, R/G monogram and a printed-label specimen explicitly marked as illustration.
-- Shared visual treatment applied to medicine check, catalogue, learning, synthetic dashboard, pilot and camera modal. Functional safeguards and server/provider code unchanged.
-- All 27 automated tests passed. Local and hosted production builds passed, including TypeScript. Review packet regenerated for current UI wording; professional review is still pending.
-- Edge browser checked all five views at 320, 390, 768, 1024 and 1440 widths with no horizontal page overflow. Mobile navigation has its own horizontal scrolling area.
-- Browser checks passed: new CTA scroll/focus, upload/consent gate, complete combination confirmation, catalogue search, non-antibiotic classification and quiz feedback. Only Edge's lazy-image informational message observed in that run.
-- Desktop and mobile screenshots visually inspected: ../resistguard-field-guide-desktop.png and ../resistguard-field-guide-mobile.png. Design conventions recorded in docs/DESIGN.md.
-# Verification — antibiotic-use education, 24 November 2026
+### 25 November 2026: NAFDAC genuine-pack check and WhatsApp pharmacist button
+- `tests/next-steps.test.ts`: messages name the confirmed ingredients and antibiotic status, links hold no photo data or product name, no hard-coded short code.
 
-- 31 automated tests passed and the Next.js production build completed.
-- Edge browser checks at 390px and 1280px exercised the eczema, boil, sildenafil/nitrate and diclofenac/ulcer educational examples, optional evidence organisation with AI disabled, the conversation checklist and the interactive resistance lesson. No personal answers were included in the AI request.
-- The source-linked passages remain visible during provider failure. The AI response must contain precisely the retrieved passage IDs. Unknown, duplicate and missing IDs are rejected.
-- The generated review packet includes the new evidence and interface content. Pharmacist review remains pending. Participant studies are needed to establish impact on antibiotic use or resistance.
+### 24 November 2026: Nigerian catalogue and education cases
+- Catalogue grew to 28 records with formulation examples and 5 Greenbook product references.
+- Phone-width browser check of registration-number search, children's list filter and full-list confirmation.
+- Emzoclox regression: conflicting reading suppressed even when the model claims the list is complete. Brand-only photo and correct ampicillin + cloxacillin reading also covered.
 
-## Brand-independent ingredient-panel regression, 24 November 2026
+### 15 November 2026: public educational AI enabled
+- Public `/api/readiness` returned `ai=available` with `clinicalReview=pending` and `pilot=not_started`.
+- Public vision endpoint recognised the fictional amoxicillin label. Report: `docs/evidence/scan-public-enabled.json`.
+- First browser scan timed out and showed the manual fallback; a second attempt succeeded. No automatic retry was added.
 
-- The supplied triple-antibiotic Drug Facts photo returned a clear observation with all three ingredients, no product name and a complete list through the real local vision endpoint. The result was an unsupported combination, with no selected catalogue ID.
-- The regression test separately checks that an incomplete observation with the same ingredients remains unconfirmed and that a complete supported record can still match without a brand.
-- The user-supplied image remains outside the repository. The regression fixture records only the observed ingredient names and classification.
-
-## Nigerian catalogue expansion, 24 November 2026
-
-- All 35 automated tests and the production build passed. The review packet covers 28 generic records, the formulation examples, the five linked Greenbook products and the educational passages.
-- A phone-width browser check verified lookup by registration number, the recorded Greenbook status, the children’s list filter, confirmation of a full ingredient list, and retrieval of NCDC and condition-specific evidence.
-- Cefixime and the complete triple-antibiotic ingredient set now have catalogue entries. Incomplete combinations still leave the medicine unselected.
-
-## Reflective blister scan mismatch
-
-- The Emzoclox regression reproduces the screenshot’s observation with the wrong amoxicillin and clavulanic acid pair. The classifier suppresses the conflicting reading and leaves the catalogue selection empty, including when the model claims the list was complete.
-- The regression also covers a brand-only photo, a complete but incomplete-length ingredient reading, and a correct ampicillin plus cloxacillin reading. A product reference can block a candidate. It cannot create one.
+Older entries are in Git history (`git log -- VERIFICATION.md docs/`).

@@ -1,96 +1,64 @@
-# ResistGuard — supervised beta preparation
+# ResistGuard
 
-**New to ResistGuard?** Use your phone or computer to check a medicine label. No account or installation required. [Open the demo](https://resistguard-rosy.vercel.app/) · [Read the quick user guide](docs/USER-GUIDE.md)
+Know what's in the pack before you take it. ResistGuard reads the ingredient list on a medicine pack from a photo (or a typed name, brand or NAFDAC number), asks you to confirm it, then tells you whether it is an antibiotic and what to do before you take it.
 
-See what each of the six pages is for and how they fit together. [Product overview](docs/PRODUCT-OVERVIEW.md)
+- **Live demo:** https://resistguard-rosy.vercel.app (checker at `/check`)
+- **Status:** working demo. No pharmacist has reviewed the content and no real users have been tested. Every record shows "Not yet reviewed by a pharmacist".
+- **Stack:** Next.js 16, React 19, TypeScript, plain CSS tokens, Groq for label reading. No database, no accounts, no analytics.
 
-Next.js + TypeScript educational app. No authentication, stored uploads, health history, tracking SDK or clinical validation. The catalogue has 28 source-checked generic records awaiting pharmacist review. [See how the technology and Nigerian sources fit together](docs/DATA-AND-ARCHITECTURE.md).
+## Quick start
 
-## Current release state
-
-The Antibiotic use section offers a source-linked educational questionnaire, fictional examples and an interactive AMR lesson. It works without scanning or AI. Optional AI only organises retrieved passages, with no personal answers sent. The structured evidence and content-review process are described in [the implementation plan](docs/USE-CHECK-PLAN.md).
-
-Public educational AI is enabled when the server key is configured. The supervised pilot has not started and pharmacist review remains pending. Clinical review status is independent of AI availability. Static catalogue, learning, fictional test labels, source links, synthetic dashboard, review packet and local pilot observation tools remain usable during provider failures. Physical-phone trials and professional review have not been performed.
-
-The app now provides guided ingredient-panel photography, three photo-review checks, separate external-analysis consent, specific unreadable-label recovery, retake/replacement and rejection of a wrong suggestion. Every candidate still requires the full ingredient list to be confirmed. Recognition does not verify authenticity, strength, expiry or suitability.
-
-## Run locally
-
-Requires Node.js 22 or newer. From this directory:
+Requires Node.js 22 or newer.
 
 ```powershell
 npm ci
 ```
 
-For a NEW extraction only, copy `.env.example` to `.env.local` and enter your Groq key there. Preserve an existing configured file. Do not put secrets in chat or NEXT_PUBLIC variables.
+```powershell
+Copy-Item .env.example .env.local
+```
+
+Put your own Groq key in `.env.local` (`GROQ_API_KEY=`). Without a key the app still runs: photo reading shows as paused and name search works. Keep an existing `.env.local` if you already have one.
 
 ```powershell
 npm run dev
 ```
 
-Open http://127.0.0.1:3000. Local development can exercise AI with a configured key; production-only pilot/review gates apply only when ENFORCE_PILOT_GATES=1. Set DISABLE_AI=1 locally to test deterministic fallback without provider access. Model defaults remain qwen/qwen3.8-27b for vision and openai/gpt-oss-120b for selecting approved educational passages. No generated treatment plan or dosage.
+Open http://127.0.0.1:3000 (not `localhost`). The checker is at http://127.0.0.1:3000/check.
 
-## Verify and build
+## Commands
 
-```powershell
-node scripts/review-packet.mjs
-npm test
-npm run typecheck
-npm run build
-npm start
-```
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server on 127.0.0.1:3000 |
+| `npm test` | All tests (`node:test` through `tsx`) |
+| `npm run typecheck` | TypeScript check |
+| `npm run build` | Production build. Fails if the review packet is stale. |
+| `node scripts/review-packet.mjs` | Regenerate the review packet. Run it after changing any file in its `files` list, or `npm test` and `npm run build` fail. |
 
-The review generator writes a fingerprinted public packet and a content manifest. The Next configuration refuses to build stale reviewed content. Regenerating a packet changes the fingerprint and invalidates an old production review approval. Canonical line endings make the fingerprint portable.
-
-HTTP fallback suite: start a server with DISABLE_AI=1 on port 3001, set SMOKE_URL=http://127.0.0.1:3001, then run `node scripts/smoke.mjs`. Do not run it against an enabled provider. Live fictional-label tests: `node scripts/scan-regression.mjs`; requests are paced for token quotas.
-
-Published manufacturer-label tests: `node scripts/fetch-real-labels.mjs` downloads three DailyMed label artwork files privately under work; inspect them, then run `node scripts/real-scan-regression.mjs` against a local enabled server. They are artwork, not physical-camera photos. The report records wrong candidates, uncertainty and unavailability separately. Source image redistribution is not assumed; work files are excluded from publication and archives.
-
-## Professional review and pilot
-
-Open Pilot & review. Download the complete review packet and pilot protocol. A qualified pharmacist must check the exact content and sources, document corrections, and complete all checklist items. Independently verify registration and retain signed evidence privately. No automatic publication of reviewer identities.
+Run all four checks before you push:
 
 ```powershell
-node scripts/validate-review.mjs private/completed-review.json
+node scripts/review-packet.mjs; npm test; npm run typecheck; npm run build
 ```
 
-This validates the file and current fingerprint, not professional identity. Corrections belong in source, followed by a newly generated packet and review. Records remain pending in this preparation release; a later release must update its review evidence and labels honestly.
+## Documentation
 
-The optional facilitator form records device/browser/lighting, expected record, actual candidate or uncertainty/failure, and comprehension. It derives incorrect-candidate counts instead of hiding them among successes. Observation consent and export consent are separate. No free text, names, images or health details are accepted. Rows stay only in browser memory, disappear when leaving the view or refreshing, and can be downloaded with consent. Exports are facilitator reports, not independently verified results. See public/pilot-protocol.md and docs/LAUNCH.md.
+Read in this order if you are new:
 
-## Durable usage controls
+| Doc | Read it for |
+|---|---|
+| [`PROJECT_MAP.md`](PROJECT_MAP.md) | What the product is, who it is for, every screen, what is real, hidden or not built |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to add a feature: branches, code patterns, the review packet, the pull request checklist |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Folder layout, request flow, API routes, data files and the patterns to copy |
+| [`DESIGN.md`](DESIGN.md) | Night & Paper design system: tokens, type, components, layout, motion |
+| [`ART_DIRECTION.md`](ART_DIRECTION.md) | The reasoning behind the design |
+| [`docs/OPERATIONS.md`](docs/OPERATIONS.md) | Environment variables, limits, deploy, scripts, pharmacist review, pilot |
+| [`docs/FEATURE_SPEC_TEMPLATE.md`](docs/FEATURE_SPEC_TEMPLATE.md) | Template for writing a new feature spec |
+| [`docs/USER-GUIDE.md`](docs/USER-GUIDE.md) | Plain guide for someone using the app |
+| [`VERIFICATION.md`](VERIFICATION.md) | What has been tested, and what has not |
+| [`CLAUDE.md`](CLAUDE.md), [`AGENTS.md`](AGENTS.md) | Rules for AI coding assistants (also useful for people) |
 
-Shared cross-instance limits require owned Upstash-compatible Redis REST credentials and a random RATE_LIMIT_SECRET of at least 32 characters. With no shared service configured, public AI uses per-instance minute/day/month request limits; these reset on restarts and are not global spending caps. Set REQUIRE_DURABLE_LIMITS=1 to require the shared service and close AI if it is missing. The REST adapter uses one atomic Lua reservation across per-client/minute, global/minute, global/day and global/month buckets. Raw IPs are never stored in Redis: daily HMAC values are used; client/minute keys expire after 120 seconds. Day and month counters contain only totals and expire after 2 and 35 days. Failed/aborted provider requests still consume reservations conservatively.
+## Safety boundaries
 
-Default application ceilings: 6/client/minute, 30/global/minute, 100/day and 1000/month. They are request caps, not dollar spending limits. When Redis is configured, restarts share counters; Redis failure closes AI and preserves manual guidance. Local in-memory throttling also bounds requests. Shared counters were tested on an isolated temporary database; that database is NOT production infrastructure and must not be used for the pilot.
-
-Production configuration:
-
-- UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN (or KV_REST_API_URL and KV_REST_API_TOKEN)
-- RATE_LIMIT_SECRET (random, server-only)
-- AI_CLIENT_MINUTE_LIMIT, AI_GLOBAL_MINUTE_LIMIT, AI_DAILY_REQUEST_LIMIT, AI_MONTHLY_REQUEST_LIMIT
-- ENFORCE_PILOT_GATES=0 for public educational AI; set 1 only for the optional controlled pilot policy
-- PILOT_AI_ENABLED=0 until opening a controlled pilot (only used when ENFORCE_PILOT_GATES=1)
-- PILOT_NOT_BEFORE=2026-11-22T00:00:00Z
-- REVIEWED_CONTENT_SHA256 only after genuine review of that exact version
-- GROQ_API_KEY, already stored as a sensitive server variable on the existing project
-
-Do not expose these credentials in browser code, Git, archives or reports. Only operational state is public through /api/readiness; no secret values or quota balances are returned. The readiness endpoint reports configuration, not a live Redis ping; an actual reservation can still fail closed.
-
-## Spending and monitoring
-
-Paid organization owners can configure a monthly Groq spending limit under Settings -> Billing -> Limits. Free accounts do not offer that feature; do not upgrade or add billing automatically. Provider spend tracking can lag 10–15 minutes. Application request caps do not replace provider controls. No provider-account spending setting was changed in this build. Official instructions: https://console.groq.com/docs/spend-limits
-
-Server logs contain only allowlisted route, outcome and operational codes. No raw errors, prompts, images, medicine IDs, IPs or participant records are intentionally logged by application code. Use Vercel runtime logs to investigate provider timeouts, invalid responses, quota rejections and shared-control failures. Hosting/provider metadata policies apply separately. This is logging, not an actively staffed alerting service.
-
-## Deploy to Vercel
-
-The existing linked project is resistguard in victors-projects-6471ee68:
-
-```powershell
-vercel --prod --yes --scope victors-projects-6471ee68
-```
-
-For your own project, choose Next.js, `npm ci`, `npm run build`, framework-default output and Node.js 22+. Add secrets directly in Production environment settings and redeploy. Do not use static export; API routes are required. Public AI works by default with the configured server key. Optional ENFORCE_PILOT_GATES=1 requires the opening date, explicit switch and exact reviewed content fingerprint. Optional REQUIRE_DURABLE_LIMITS=1 requires shared quota credentials. DISABLE_AI=1 is an immediate kill switch after redeployment.
-
-Source archives exclude local environment files, .git, .vercel, dependencies, build output, work fixtures and private evidence. See VERIFICATION.md for actual results and limitations.
+ResistGuard informs; it never decides. It does not diagnose, prescribe, give doses, or say a medicine is safe, genuine or right for you. AI only copies ingredient names; plain code matches them and the user confirms. Photos are never stored. See `PROJECT_MAP.md` sections 6 and 8.

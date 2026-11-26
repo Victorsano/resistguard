@@ -2,7 +2,7 @@
 name: add-feature
 description: Build a feature into ResistGuard from a written spec, as a small change that matches the existing code. Use when starting work on a spec file.
 disable-model-invocation: true
-argument-hint: "[spec path, e.g. claude/FEATURES_TO_BUILD.md]"
+argument-hint: "[spec path, e.g. docs/specs/my-feature.md]"
 allowed-tools: Bash(git status *) Bash(git branch *)
 ---
 
@@ -19,8 +19,8 @@ Spec: $ARGUMENTS
 ## 2. Read before you write
 1. Read the whole spec.
 2. Read every file the spec says to change, in full.
-3. Read one nearby component for style, for example `app/components/AskResistGuard.tsx`.
-4. If the feature sits on the result screen, read the `result?` block in `app/components/MedicineCheck.tsx` and the `Medicine` type in `lib/safety.ts`.
+3. Read `CONTRIBUTING.md` and one nearby component for style, for example `app/components/NextSteps.tsx` with `lib/next-steps.ts` and `next-steps.css`.
+4. If the feature sits on the Answer screen, read `app/components/Answer.tsx` and the `Medicine` type in `lib/safety.ts`. If it changes the flow, read `app/components/MedicineCheck.tsx` and `lib/flow.ts`.
 
 ## 3. Plan, then wait
 Reply with a plan of 10 lines or fewer:
@@ -38,4 +38,4 @@ Wait for my OK before you edit anything.
 5. Add every new file that holds user-facing text to the `files` list in `scripts/review-packet.mjs`. Add one checklist id per feature (for example `'next-steps:nafdac-handoff'`), so a pharmacist reviews it.
 
 ## 5. Finish
-Run the `verify` skill. If you changed any component or CSS file, run the `ui-check` skill too. Then list the files you changed, what each change does, and anything in the spec you did not do.
+Run the `verify` skill. If you changed any component or CSS file, run the `ui-check` skill too. If the change adds, hides or removes a screen, record or feature, update `PROJECT_MAP.md`. Then list the files you changed, what each change does, and anything in the spec you did not do.
