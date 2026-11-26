@@ -230,19 +230,19 @@ Proposed file names; adjust to the current structure.
 - [ ] Get the source documents: WHO AWaRe book, Nigeria STG 3rd edition, leaflets for all 28 medicines
 - [ ] Write `reasons.json` from WHO and STG, with sources
 - [ ] Write `question-bank.json` from leaflets and STG, with sources
-- [ ] Write `interactions.json` from leaflets
+- [ ] Expand NAFDAC and WHO interaction coverage beyond the initial documented pairs
 - [ ] Write `result-rules.json`
 - [x] Build the step 2 screen with a typed reason and a Yes/No prescription choice
-- [x] Suggest reason matches locally and let the user confirm or keep their own words
+- [x] Use the reason as typed to select guidance
 - [x] Build the step 3 screen with a Yes/No question and a typed list
 - [x] Suggest catalogue matches and let the user confirm or keep typed names
 - [ ] Build the step 4 screen and pick-questions route with guardrails G2, G4 and G8
 - [ ] Build the step 5 result screen
 - [ ] Extend the WhatsApp note
-- [ ] Remove the emergency notice and fix its test
-- [ ] Update the consent text: the typed reason goes to Groq
+- [x] Remove the emergency notice from the checker
+- [x] Explain that Get guidance from Groq sends the typed reason and medicine names
 - [ ] Tests and review packet
-- [ ] Update `CURRENT_STATE.md`
+- [ ] Update `PROJECT_MAP.md` when the remaining steps are implemented
 
 ## 12. Open questions
 

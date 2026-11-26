@@ -23,7 +23,8 @@ test('scan outcomes pick the right screen-3 message',()=>{
  assert.equal(scanOutcome(scan({observation:obs({legibility:'partial'})})),'unreadable');
  assert.equal(scanOutcome(scan({})),'unreadable');
  assert.equal(scanOutcome({...unavailableScan(),reason:'not_configured'}),'paused');
- assert.equal(scanOutcome({...unavailableScan(),reason:'request_limit'}),'paused');
+ assert.equal(scanOutcome({...unavailableScan(),reason:'request_limit'}),'failed');
+ assert.equal(scanOutcome({...unavailableScan(),reason:'rate_limit'}),'failed');
  assert.equal(scanOutcome({...unavailableScan(),reason:'timeout'}),'timeout');
  assert.equal(scanOutcome(unavailableScan(),true),'timeout');
  assert.equal(scanOutcome({...unavailableScan(),reason:'connection'}),'failed');

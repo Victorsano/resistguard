@@ -28,7 +28,11 @@ test('guidance follows the typed reason, prescription and confirmed medicine',()
   assert.ok(forThroat.passages.some(item=>item.id==='need'));
   assert.ok(prescribed.passages.some(item=>item.id==='prescription'));
   const other=localGuidance(medicine('paracetamol'),{...base,medicineId:'paracetamol',reason:'sore throat'});
-  assert.deepEqual(other.passages.map(item=>item.id),['label-caution']);
+  assert.deepEqual(other.passages.map(item=>item.id),['label-caution','reason-to-discuss']);
+  const prescribedWithOther=localGuidance(medicine('paracetamol'),{
+    ...base,medicineId:'paracetamol',prescribed:true,otherMedicines:[{name:'warfarin',choice:'warfarin'}]
+  });
+  assert.deepEqual(prescribedWithOther.passages.map(item=>item.id),['label-caution','other-medicines','prescription-to-discuss']);
 });
 
 test('eligible interaction notes are sourced and unknown pairs remain uncertain',()=>{

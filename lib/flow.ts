@@ -64,7 +64,7 @@ export function findMedicines(query:string){
 
 export type ScanOutcome='match'|'unreadable'|'brand_only'|'not_listed'|'not_medicine'|'timeout'|'paused'|'failed';
 // Server reasons that mean photo reading is switched off or out of budget, not a bad photo.
-const pausedReasons=['pilot_closed','review_pending','disabled','not_configured','controls_missing','controls_unavailable','request_limit','spending_limit','rate_limit','authentication','model_unavailable'];
+const pausedReasons=['pilot_closed','review_pending','disabled','not_configured','controls_missing','controls_unavailable','spending_limit','authentication','model_unavailable'];
 export function scanOutcome(scan:ScanResult&{reason?:string},timedOut=false):ScanOutcome{
  if(timedOut||scan.reason==='timeout')return 'timeout';
  if(scan.status==='unavailable')return scan.reason&&pausedReasons.includes(scan.reason)?'paused':'failed';

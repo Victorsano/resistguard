@@ -20,6 +20,7 @@ export type CheckGuidance = {
   corrections: {index: number; id: string}[];
   suggestions: MatchSuggestions;
   source: 'groq' | 'sources';
+  fallback?: 'rate_limit' | 'unavailable';
 };
 
 const knownMedicines = [
@@ -94,6 +95,7 @@ function passage(id: PassageId): Evidence {
 const reasonEvidence: Partial<Record<ReturnType<typeof suggestReasons>[number],PassageId>>={
   throat:'tonsillitis_assessment', typhoid:'typhoid_assessment', urine:'uti_assessment', skin:'wound_assessment'
 };
+const whoSafety={name:'WHO · 5 Moments for Medication Safety',url:'https://www.who.int/publications/i/item/WHO-HIS-SDS-2019.6'};
 
 export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
   const productSource={name:medicine.sourceLabel,url:medicine.source};
@@ -105,8 +107,20 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
   const selection=[
     ...relevant,
     {id:'label-caution',title:'What to check on the label',text:medicine.caution,source:productSource},
+    ...(context.otherMedicines.length||context.namesIncomplete?[{
+      id:'other-medicines',title:'Ask about your other medicines',
+      text:'Show your medicine list to a pharmacist. Ask what could change if you add this medicine.',source:whoSafety
+    }]:[]),
     ...(medicine.antibiotic?[passage(context.prescribed?'prescription':'need'),passage('amr'),passage('nigeria_amr')]:[])
   ];
+  if(!medicine.antibiotic&&context.reason)selection.push({
+    id:'reason-to-discuss',title:'Discuss why you want to take it',
+    text:'Tell a pharmacist why you want to take this medicine. Ask what it is meant to help with.',source:whoSafety
+  });
+  if(!medicine.antibiotic&&context.prescribed)selection.push({
+    id:'prescription-to-discuss',title:'Check the prescription instructions',
+    text:'Ask your prescriber or pharmacist to explain any instructions you are unsure about.',source:whoSafety
+  });
   return {candidates:selection,fallback:selection.slice(0,3),reasonPassages:relevant.filter(item=>item.id!=='cold-use')};
 }
 

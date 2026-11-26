@@ -1,6 +1,6 @@
 import {authorizeAI} from '@/lib/availability';
 import {allow,readBody,sameOrigin} from '@/lib/guard';
-import {groq} from '@/lib/groq';
+import {groq,GroqError} from '@/lib/groq';
 import {medicines} from '@/lib/safety';
 import {
   evidenceForCheck,guidanceMedicine,interactionEvidence,localGuidance,parseGuidanceContext,
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   const medicine=medicines.find(record=>record.id===context.medicineId)!;
   const fallback=localGuidance(medicine,context);
   const gate=await authorizeAI(request);
-  if(!gate.ok)return Response.json(fallback,{headers});
+  if(!gate.ok)return Response.json({...fallback,fallback:gate.reason==='request_limit'?'rate_limit':'unavailable'},{headers});
 
   const {candidates:evidence,reasonPassages}=evidenceForCheck(medicine,context);
   const possible=context.otherMedicines.flatMap((entry,index)=>{
@@ -65,7 +65,8 @@ export async function POST(request: Request) {
       corrections,suggestions,source:'groq'
     };
     return Response.json(result,{headers});
-  }catch{
-    return Response.json(fallback,{headers});
+  }catch(error){
+    const reason=error instanceof GroqError&&error.reason==='rate_limit'?'rate_limit':'unavailable';
+    return Response.json({...fallback,fallback:reason},{headers});
   }
 }

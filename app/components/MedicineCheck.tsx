@@ -1,15 +1,16 @@
 'use client';
 import {useCallback,useEffect,useRef,useState} from 'react';
-import {Camera,ImageUp,ScanLine,Check,ArrowLeft,ArrowRight,Search,LoaderCircle,Clock,PauseCircle,Keyboard,RotateCcw} from 'lucide-react';
+import {Camera,Crop,ImageUp,ScanLine,Check,ArrowLeft,ArrowRight,Search,LoaderCircle,Clock,PauseCircle,Keyboard,RotateCcw} from 'lucide-react';
 import {medicines} from '@/lib/safety';
 import {unavailableScan,type ScanResult} from '@/lib/scan';
-import {prepareImage} from '@/lib/image';
+import {fullPhotoCrop,prepareImage,type PhotoCrop} from '@/lib/image';
 import {scanRecovery} from '@/lib/scan-guide';
 import {scanOutcome,staysOnPhoto,capitalise,emptyCheckDetails,type CheckDetails,type Screen,type Route} from '@/lib/flow';
 import {localGuidance,matchTypedMedicine,type CheckGuidance,type GuidanceContext} from '@/lib/check-guidance';
 import {unlistedWhatsAppLink} from '@/lib/next-steps';
 import {copy} from '@/lib/screen-copy';
 import CameraCapture from './CameraCapture';
+import PhotoEditor from './PhotoEditor';
 import Catalogue from './Catalogue';
 import FindByName from './FindByName';
 import Answer from './Answer';
@@ -18,6 +19,7 @@ import {PharmacistButton} from './NextSteps';
 import Emphasis from './Emphasis';
 import './medicine-check.css';
 type Scan=ScanResult&{reason?:string};
+type LabelPhoto={file:File;original:string;image:string;crop:PhotoCrop};
 export default function MedicineCheck({command,aiPaused=false,example=false}:{command:{screen:'home'|'find';n:number};aiPaused?:boolean;example?:boolean}){
  const [screen,setScreen]=useState<Screen>('home');const [route,setRoute]=useState<Route>('scan');const [query,setQuery]=useState('');
  const [selected,setSelected]=useState('');const [declined,setDeclined]=useState(false);
@@ -26,7 +28,8 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  const [guidance,setGuidance]=useState<CheckGuidance|null>(null);
  const [guidancePending,setGuidancePending]=useState(false);
  const guidanceRequest=useRef<AbortController|null>(null);
- const [photo,setPhoto]=useState<string|null>(null);const [consent,setConsent]=useState(false);const [busy,setBusy]=useState<'preparing'|'scan'|null>(null);const [error,setError]=useState('');const [scan,setScan]=useState<Scan|null>(null);const [timedOut,setTimedOut]=useState(false);const [camera,setCamera]=useState(false);
+ const [photo,setPhoto]=useState<LabelPhoto|null>(null);const [editingPhoto,setEditingPhoto]=useState(false);
+ const [consent,setConsent]=useState(false);const [busy,setBusy]=useState<'preparing'|'scan'|null>(null);const [error,setError]=useState('');const [scan,setScan]=useState<Scan|null>(null);const [timedOut,setTimedOut]=useState(false);const [camera,setCamera]=useState(false);
  const [readiness,setReadiness]=useState<'checking'|'available'|'unavailable'>(aiPaused?'unavailable':'checking');
  const file=useRef<HTMLInputElement>(null);const native=useRef<HTMLInputElement>(null);const abort=useRef<AbortController|null>(null);const revision=useRef(0);const root=useRef<HTMLDivElement>(null);const focusNext=useRef(false);
  const candidate=medicines.find(m=>m.id===selected);const outcome=scan?scanOutcome(scan,timedOut):null;const t=copy;const paused=readiness==='unavailable';
@@ -59,7 +62,7 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  }
  function clearDetails(){setDetails(emptyCheckDetails);setMedicineName('');setGuidance(null);}
  function clearScan(){setScan(null);setTimedOut(false);setDeclined(false);setSelected('');clearDetails();}
- function reset(){cancel();clearScan();setPhoto(null);setConsent(false);setError('');go('home');}
+ function reset(){cancel();clearScan();setPhoto(null);setEditingPhoto(false);setConsent(false);setError('');go('home');}
  function back(){
   cancel();
   switch(screen){
@@ -85,7 +88,8 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
    otherMedicines:resolved.medicines,namesIncomplete:resolved.unsureAboutNames
   };
   setDetails(resolved);
-  setGuidance(localGuidance(candidate,context));
+  const fallback=localGuidance(candidate,context);
+  setGuidance(fallback);
   setGuidancePending(useAI);
   if(screen!=='answer')go('answer');
   if(!useAI)return;
@@ -97,7 +101,10 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
    const response=await fetch('/api/check-guidance',{
     method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(context),signal:controller.signal
    });
-   if(!response.ok)return;
+   if(!response.ok){
+    if(guidanceRequest.current===controller)setGuidance({...fallback,fallback:response.status===429?'rate_limit':'unavailable'});
+    return;
+   }
    const result:CheckGuidance=await response.json();
    if(guidanceRequest.current!==controller)return;
    setGuidance(result);
@@ -105,7 +112,7 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
     ...entry,choice:result.corrections.find(match=>match.index===index)?.id??entry.choice
    }))});
   }catch{
-   // The source-based response stays available when the provider or network fails.
+   if(guidanceRequest.current===controller)setGuidance({...fallback,fallback:'unavailable'});
   }finally{
    clearTimeout(timeout);
    if(guidanceRequest.current===controller){
@@ -114,11 +121,25 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
    }
   }
  }
- async function choosePhoto(value:File|undefined){if(!value)return;cancel();clearScan();setRoute('scan');const token=revision.current;setBusy('preparing');setError('');setConsent(false);setPhoto(null);go('photo');
- try{const image=await prepareImage(value);if(token===revision.current)setPhoto(image);}catch(e){if(token===revision.current)setError(e instanceof Error?e.message:'Could not prepare the image.');}finally{if(token===revision.current)setBusy(null);if(file.current)file.current.value='';if(native.current)native.current.value='';}}
+ async function choosePhoto(value:File|undefined){if(!value)return;cancel();clearScan();setRoute('scan');const token=revision.current;setBusy('preparing');setError('');setConsent(false);setEditingPhoto(false);setPhoto(null);go('photo');
+ try{const image=await prepareImage(value);if(token===revision.current)setPhoto({file:value,original:image,image,crop:fullPhotoCrop});}catch(e){if(token===revision.current)setError(e instanceof Error?e.message:'Could not prepare the image.');}finally{if(token===revision.current)setBusy(null);if(file.current)file.current.value='';if(native.current)native.current.value='';}}
+ async function applyPhotoCrop(crop:PhotoCrop){
+  setEditingPhoto(false);
+  if(!photo||(Object.keys(crop) as (keyof PhotoCrop)[]).every(key=>crop[key]===photo.crop[key]))return;
+  cancel();clearScan();setConsent(false);setError('');setBusy('preparing');
+  const token=revision.current;
+  try{
+   const image=crop.width===1&&crop.height===1?photo.original:await prepareImage(photo.file,crop);
+   if(token===revision.current)setPhoto({...photo,image,crop});
+  }catch(error){
+   if(token===revision.current)setError(error instanceof Error?error.message:'Could not prepare the image.');
+  }finally{
+   if(token===revision.current)setBusy(null);
+  }
+ }
  function loadSample(name:string){fetch(`/test-labels/${encodeURIComponent(name)}`).then(r=>{if(!r.ok)throw new Error();return r.blob();}).then(blob=>void choosePhoto(new File([blob],name,{type:'image/png'}))).catch(()=>setError('Could not load the sample. Upload a photo instead.'));}
- async function readLabel(){if(!photo||!consent||readiness!=='available')return;cancel();const token=revision.current;const controller=new AbortController();abort.current=controller;let expired=false;const timeout=setTimeout(()=>{expired=true;controller.abort();},25_000);setBusy('scan');setError('');clearScan();setRoute('scan');
- try{const response=await fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:photo}),signal:controller.signal});const data:Scan=await response.json();if(token!==revision.current)return;if(!data.status||!data.title)throw new Error();setScan(data);if(data.id&&medicines.some(m=>m.id===data.id))setSelected(data.id);if(!staysOnPhoto(scanOutcome(data)))go('confirm');}
+ async function readLabel(){if(!photo||!consent||busy||editingPhoto||readiness!=='available')return;cancel();const token=revision.current;const controller=new AbortController();abort.current=controller;let expired=false;const timeout=setTimeout(()=>{expired=true;controller.abort();},25_000);setBusy('scan');setError('');clearScan();setRoute('scan');
+ try{const response=await fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:photo.image}),signal:controller.signal});const data:Scan=await response.json();if(token!==revision.current)return;if(!data.status||!data.title)throw new Error();setScan(data);if(data.id&&medicines.some(m=>m.id===data.id))setSelected(data.id);if(!staysOnPhoto(scanOutcome(data)))go('confirm');}
  catch{if(token===revision.current){setTimedOut(expired);setScan(unavailableScan('The scan could not finish. Check your connection or try again.'));}}finally{clearTimeout(timeout);if(token===revision.current)setBusy(null);}}
  const backButton=<button type="button" data-motion="press" className="text-button medicine-check-back" onClick={back}><ArrowLeft size={20} aria-hidden="true"/>{t.back}</button>;
  const chips=(names:readonly string[])=><ul className="medicine-check-chips" aria-label="Ingredients">{names.map(n=><li key={n}>{capitalise(n)}</li>)}</ul>;
@@ -133,7 +154,9 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  </section>}
  {screen==='catalogue'&&<section data-motion="screen" className="medicine-check-screen medicine-check-catalogue">{backButton}<Catalogue onChoose={id=>chooseMedicine(id,'catalogue')}/></section>}
  {screen==='photo'&&<section data-motion="screen" className="medicine-check-screen medicine-check-photo">{backButton}<h1>{t.photo.title}</h1>
-  <div className="medicine-check-preview">{photo?<img src={photo} alt="Your medicine label photo"/>:<p role="status">{busy==='preparing'?t.photo.preparing:error}</p>}</div>
+  <div className="medicine-check-preview">{photo?<img src={photo.image} alt="Your medicine label photo"/>:<p role="status">{busy==='preparing'?t.photo.preparing:error}</p>}</div>
+  {photo&&<button type="button" className="secondary medicine-check-edit-photo" data-motion="press" disabled={!!busy} onClick={()=>setEditingPhoto(true)}><Crop size={20} aria-hidden="true"/>{t.photo.changeCrop}</button>}
+  {photo&&busy==='preparing'&&<p className="medicine-check-help" role="status">{t.photo.preparing}</p>}
   <div className="medicine-check-actions medicine-check-pair"><button type="button" data-motion="press" className="secondary" disabled={busy==='scan'} onClick={()=>setCamera(true)}><Camera size={20} aria-hidden="true"/>{t.photo.retake}</button><button type="button" data-motion="press" className="secondary" disabled={busy==='scan'} onClick={()=>file.current?.click()}><ImageUp size={20} aria-hidden="true"/>{t.photo.another}</button></div>
   {photo&&error&&<p className="status" role="alert">{error}</p>}
   <ul className="medicine-check-tips">{t.photo.tips.map(tip=><li key={tip}><Check size={20} aria-hidden="true"/>{tip}</li>)}</ul>
@@ -161,11 +184,12 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  </section>}
  {screen==='answer'&&candidate&&guidance&&<div data-motion="screen" className="medicine-check-screen medicine-check-answer">
   {backButton}
-  <Answer medicine={candidate} details={details} guidance={guidance} pending={guidancePending} onAnother={reset} onMatch={(index,id)=>{
+  <Answer medicine={candidate} details={details} guidance={guidance} pending={guidancePending} onAnother={reset} onRetry={()=>void completeCheck(details,true)} onMatch={(index,id)=>{
    const next={...details,medicines:details.medicines.map((entry,position)=>position===index?{...entry,choice:id}:entry)};
    void completeCheck(next,true);
   }}/>
  </div>}
+ {screen==='photo'&&editingPhoto&&photo&&<PhotoEditor image={photo.original} initialCrop={photo.crop} onApply={applyPhotoCrop} onClose={()=>setEditingPhoto(false)}/>}
  {camera&&<CameraCapture onClose={closeCamera} onCapture={choosePhoto} onNative={()=>native.current?.click()}/>}
  </div>;
 }
