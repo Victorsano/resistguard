@@ -54,6 +54,7 @@ Read in this order if you are new:
 | [`DESIGN.md`](DESIGN.md) | Night & Paper design system: tokens, type, components, layout, motion |
 | [`ART_DIRECTION.md`](ART_DIRECTION.md) | The reasoning behind the design |
 | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) | Environment variables, limits, deploy, scripts, pharmacist review, pilot |
+| [`docs/specs/check-flow.md`](docs/specs/check-flow.md) | **Next build:** the agreed new check flow (reason, other medicines, questions, result) |
 | [`docs/FEATURE_SPEC_TEMPLATE.md`](docs/FEATURE_SPEC_TEMPLATE.md) | Template for writing a new feature spec |
 | [`docs/USER-GUIDE.md`](docs/USER-GUIDE.md) | Plain guide for someone using the app |
 | [`VERIFICATION.md`](VERIFICATION.md) | What has been tested, and what has not |

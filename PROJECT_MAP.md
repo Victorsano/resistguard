@@ -222,7 +222,7 @@ Do not describe any of these as working:
 - Brand-name matching in the scan (deliberately excluded).
 - Authenticity, counterfeit, expiry or live registration checks. The app points to NAFDAC's own checks and says it cannot tell if a medicine is genuine.
 - A typed-question assistant or chatbot.
-- Asking why the user is taking the medicine, or any question bank about the user (for example WWHAM).
+- Asking why the user is taking the medicine, other medicines, a question bank about the user, or concern / no-concern results. Agreed and specced in `docs/specs/check-flow.md`, not started.
 - Strength or dose reading, dose calculation, treatment plans.
 - Symptom checker or diagnosis.
 - Interaction checker.

@@ -11,6 +11,7 @@ Read PROJECT_MAP.md before you change the scan flow, the catalogue or any medica
 - `DESIGN.md`, `ART_DIRECTION.md`: design system
 - `docs/OPERATIONS.md`: env vars, limits, deploy, scripts, review and pilot
 - `docs/FEATURE_SPEC_TEMPLATE.md`: spec format for `/add-feature`
+- `docs/specs/`: feature specs; `docs/specs/check-flow.md` is the agreed next build (read its section 0 first)
 - `VERIFICATION.md`: what is tested and what is not; add a dated entry when you verify a release
 When a change makes one of these wrong, fix the doc in the same change.
 
