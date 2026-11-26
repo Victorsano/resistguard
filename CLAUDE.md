@@ -20,7 +20,7 @@ Read PROJECT_MAP.md before you change the scan flow, the catalogue or any medica
 ## Design system (read before any UI change)
 - Read `DESIGN.md` (Night & Paper) and `ART_DIRECTION.md`. Every colour, font, space and motion value lives in `app/tokens.css`; never hard-code one in a component.
 - Landing page at `/` is night (`app/page.tsx`, `app/landing.css`, copy in `lib/landing-copy.ts`). The checker is at `/check` (`app/check/page.tsx` -> `app/components/CheckApp.tsx`), paper under a night top bar.
-- One brand colour, signal `#3D5AFE`, means "do this next". Amber = antibiotic caution, slate = not an antibiotic. No red and no green anywhere.
+- One brand colour, signal `#3D5AFE`, means "do this next". Green (`--success-*`) is only for the answer card, meaning "your check is done". Amber and slate label list chips. No red anywhere.
 - Bricolage Grotesque for everything; Fraunces italic only for one `<em>` per heading via `Emphasis.tsx`.
 - Radius 4px for controls, 12px for cards. Controls at least 52px tall. Body text 18px; nothing below 14px.
 - New CSS: one file per component, every class prefixed with the component name, values only from tokens.

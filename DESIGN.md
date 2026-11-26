@@ -2,7 +2,7 @@
 
 One product, one design language. The landing page (`/`) is night. The medicine checker (`/check`) is paper under a night top bar. Both are surfaces of the same product. The direction and its reasoning live in `ART_DIRECTION.md`; this file is the working reference. Every value below is defined once in `app/tokens.css`, and nothing else may define a colour, font or motion value.
 
-## Colour: one brand colour, two meaning colours
+## Colour: one brand colour, one success colour, two label colours
 
 | Token | Value | Use |
 |---|---|---|
@@ -17,11 +17,12 @@ One product, one design language. The landing page (`/`) is night. The medicine 
 | `--signal-press` | `#2F49E0` | Hover and press of signal fills |
 | `--signal-300` | `#6E80FF` | Small signal text and the focus ring on night |
 | `--signal-50` / `--signal-ink` | `#E9ECFF` / `#2A3BB8` | Information notes on paper (paused photo reading, "AI read this", timeouts) |
+| `--success-50` / `-line` / `-ink` / `-ink-2` | `#E7F6EC` `#1F7A45` `#0E3B22` `#2D5A3F` | The answer card only: "your check is done" (heading 11.3:1, sub-line 7.1:1) |
 | `--amber-*` | `#FFF0D4` `#B25E00` `#4D2600` | The "Antibiotic" label on list chips (find by name, catalogue) |
 | `--slate-*` | `#E8EEF5` `#4F6B8A` `#1D3350` | The "Not an antibiotic" label on list chips |
 
 Rules:
-- No green anywhere: "not an antibiotic" must never read as "safe to take".
+- Green (`--success-*`) appears only on the answer card and means "your check is done", the same for both outcomes. It never colours a medicine, a chip or a button, and the same screen always shows "Not yet reviewed by a pharmacist" and the pharmacist boundary line, so green is not read as "safe to take".
 - No gradients or shadows, except the one hero glow.
 - Signal never marks decoration; if something is blue, it can be tapped or it is the one emphasised word.
 
@@ -53,7 +54,7 @@ Rules:
 - Space scale: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128px. Page gutter is `clamp(20px, 4.2vw, 80px)`.
 - Controls are at least 52px tall; the default is 56px, and primary actions on Home are 64px.
 - Focus is a 2px ring offset 3px: signal on paper, signal-300 on night (`.on-night`).
-- The verdict is the success moment: a night card with a signal-300 check and the answer in large white type, the same for both outcomes. The words carry the meaning. No warning colours, alert icons or side stripes.
+- The verdict is the success moment: a green card (`--success-50` ground, 2px `--success-line` border) with a check and the answer in large dark-green type, the same for both outcomes. The words carry the meaning. No alert icons or side stripes.
 
 ## Components
 

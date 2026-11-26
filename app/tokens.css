@@ -23,7 +23,10 @@
  --signal-ink:#2A3BB8;     /* text on signal-50 */
  --on-signal:#FFFFFF;      /* label on a signal fill, 5.1:1 */
 
- /* Meaning colours, unchanged from the reviewed answer screen */
+ /* Success: the answer card only. It means "your check is done", the same for both outcomes. */
+ --success-50:#E7F6EC;--success-line:#1F7A45;--success-ink:#0E3B22;--success-ink-2:#2D5A3F;
+
+ /* Meaning colours for list-chip labels */
  --amber-50:#FFF0D4;--amber-line:#B25E00;--amber-ink:#4D2600;   /* the "Antibiotic" label on list chips */
  --slate-50:#E8EEF5;--slate-line:#4F6B8A;--slate-ink:#1D3350;   /* the "Not an antibiotic" label on list chips */
 

@@ -14,7 +14,7 @@ Doubt, then clarity, then reassurance. The hero names the doubt in big, plain ty
 | Signal `#3D5AFE` | Fill of the one primary button (white label, 5.1:1). Large emphasis word only (3.8:1, so 24px and up). Small signal text uses `#6E80FF` | Primary button, links (4.6:1). Notes on `signal-50 #E9ECFF` with `#2A3BB8` text |
 | Lines | `rgba(255,255,255,.12)` | `rgba(11,13,16,.12)` |
 
-Each colour has one meaning. Signal means "do this next". Amber (`#fff0d4` / `#b25e00` / `#4d2600`) labels "Antibiotic" on list chips, and slate (`#e8eef5` / `#4f6b8a` / `#1d3350`) labels "Not an antibiotic". The answer itself is positive feedback: a night card with a blue check, because reaching an answer is the moment the product succeeds. The palette has no red, green, lavender or old cobalt. There are no shadows or gradients, except the single hero glow.
+Each colour has one meaning. Signal means "do this next". Amber (`#fff0d4` / `#b25e00` / `#4d2600`) labels "Antibiotic" on list chips, and slate (`#e8eef5` / `#4f6b8a` / `#1d3350`) labels "Not an antibiotic". The answer itself is positive feedback: a green card with a check, because reaching an answer is the moment the product succeeds. Green appears nowhere else. The palette has no red, lavender or old cobalt. There are no shadows or gradients, except the single hero glow.
 
 Radius is 4px on every control (buttons, inputs, chips) and 12px on paper cards. Focus is a 2px ring offset by 4px: `#6E80FF` on night, `#3D5AFE` on paper. It is the same shape everywhere.
 
