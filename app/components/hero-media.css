@@ -1,0 +1,13 @@
+/* Hero media: night ground, a faint pool of signal light where the objects will stand, and the video or poster when they exist.
+   The future video is composed on flat #0B0D10 with the objects in the left third (x 4-32%, y 25-75%). */
+.hero-media{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:var(--night)}
+.hero-media-glow{position:absolute;left:calc(17% - 14vw);top:calc(53% - 14vw);width:28vw;aspect-ratio:1;border-radius:50%;background:color-mix(in srgb,var(--signal) 20%,transparent);filter:blur(7.5vw)}
+.hero-media-floor{position:absolute;left:calc(17% - 12vw);top:calc(70% - 1vw);width:24vw;height:2vw;border-radius:50%;background:color-mix(in srgb,var(--signal-300) 9%,transparent);filter:blur(1.4vw)}
+.hero-media-asset{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left center}
+/* --hero-side: left mirrors the media so the objects sit on the right. */
+@container style(--hero-side: left){.hero-media{scale:-1 1}}
+@media (max-width:760px){
+ .hero-media-glow{left:2vw;top:8%;width:62vw;filter:blur(15vw)}
+ .hero-media-floor{left:8vw;top:36%;width:52vw;height:4.4vw;filter:blur(3.5vw)}
+ .hero-media-asset{inset:0 0 auto;height:52%;object-position:left center}
+}

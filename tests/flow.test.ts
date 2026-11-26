@@ -51,7 +51,8 @@ test('sources page lists every link once',()=>{
 });
 test('flow copy matches the spec and never implies a medicine is safe',async()=>{
  const {copy}=await import('../lib/screen-copy');
- assert.equal(copy.home.title,'Check your medicine before you take it');
+ assert.equal(copy.home.title,'What are you about to take?');
+ assert.equal(copy.home.titleEm,'take');
  assert.equal(copy.home.scan,'Scan your medicine');
  assert.equal(copy.confirm.title,'Is this what your pack says?');
  assert.equal(copy.confirm.chosen('Amoxicillin'),'You chose amoxicillin');

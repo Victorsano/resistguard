@@ -1,4 +1,4 @@
-// Every label, heading, button and state on the check flow, word for word from REVAMP_SPEC.md.
+// Every label, heading, button and state on the check flow. Redesign v3 wording is noted where it replaced REVAMP_SPEC.md.
 // Medical body text stays in lib/safety.ts and data/.
 import {medicines} from '@/lib/safety';
 const lowerFirst=(name:string)=>name.charAt(0).toLowerCase()+name.slice(1);
@@ -6,13 +6,15 @@ export const copy={
  back:'Back',
  emergency:'Trouble breathing, a swollen face or throat, or fainting? Get emergency help now.',
  home:{
-  title:'Check your medicine before you take it',
-  subline:"Scan the label. In seconds, see if it's an antibiotic and what to ask your pharmacist.",
+  // Redesign v3: approved Tool Home heading and lead. The one emphasised word is titleEm.
+  title:'What are you about to take?',
+  titleEm:'take',
+  subline:"Snap the label or type the name. We'll tell you if it's an antibiotic.",
   scan:'Scan your medicine',
   upload:'Upload a photo',
-  search:'Or type a name, like amoxicillin or Emzoclox',
+  search:'Type a name, like amoxicillin or Emzoclox',
   example:'See an example',
-  trust:'AI reads the label. You confirm it. Free, no account.'
+  trust:"You confirm what AI reads. It's free, and you don't need an account."
  },
  photo:{
   title:'Check your photo',
@@ -73,5 +75,7 @@ export const copy={
   note:'Nothing you type leaves your phone.'
  },
  footer:{how:'How it works',pilot:'For pharmacists and testers',sources:'Sources'},
+ camera:{close:'Close'},
+ pilot:{eyebrow:'Prepare, review, then invite',formEyebrow:'Optional facilitator tool · Local memory only',title:'A careful pilot.',line2:'Evidence before claims.',line2Em:'claims'},
  sources:{title:'Sources',intro:'Every public source ResistGuard links to.',medicines:'Medicine information',guidance:'Antibiotic guidance'}
 } as const;

@@ -1,16 +1,16 @@
-.next-steps{display:grid;gap:10px}
-.next-steps-whatsapp{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;text-decoration:none}
-.next-steps-note{margin:0;font-size:16px;line-height:1.5;color:#3a4250}
-.next-steps-genuine{border:1px solid #59616d;border-radius:3px;background:#fffdf7}
-.next-steps-genuine summary{display:flex;align-items:center;gap:10px;min-height:56px;cursor:pointer;list-style:none;padding:0 16px;font-size:18px;font-weight:600;color:#18202d}
-.next-steps-genuine summary svg{flex-shrink:0;color:#254cce}
+/* Next steps: the WhatsApp question is the signal action; the NAFDAC checks sit in a quiet card. */
+.next-steps{display:grid;gap:var(--s3)}
+.next-steps-whatsapp{width:100%;min-height:60px;padding:0 16px;font-stretch:95%;white-space:nowrap}
+@media (max-width:359px){.next-steps-whatsapp{white-space:normal}}
+.next-steps-note{font-size:var(--text-small);line-height:1.5;color:var(--ink-2)}
+.next-steps-genuine{border:1px solid var(--line-strong);border-radius:var(--radius-card);background:var(--card)}
+.next-steps-genuine summary{display:flex;align-items:center;gap:var(--s3);min-height:60px;padding:0 18px;list-style:none;cursor:pointer;font-size:var(--text-body);font-weight:600;line-height:1.35}
 .next-steps-genuine summary::-webkit-details-marker{display:none}
+.next-steps-genuine summary svg{flex-shrink:0;color:var(--ink-2)}
+.next-steps-genuine summary .next-steps-chevron{color:var(--signal)}
 .next-steps-genuine summary span{flex:1}
-.next-steps-chevron{transition:transform .15s}
 .next-steps-genuine[open] .next-steps-chevron{transform:rotate(180deg)}
-.next-steps-list{list-style:none;padding:12px 16px 0;margin:0;display:grid;gap:12px;border-top:1px solid #e0e2dc}
-.next-steps-list li{display:grid;grid-template-columns:28px 1fr;gap:0 6px;font-size:18px;line-height:1.55;color:#18202d}
-.next-steps-number{font:700 16px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#254cce}
-.next-steps-list a{color:#254cce;text-decoration:underline;text-underline-offset:3px}
-.next-steps-disclaimer{padding:0 16px 14px;margin:12px 0 0;font-size:16px;line-height:1.5;font-weight:600;color:#18202d}
-@media (prefers-reduced-motion:reduce){.next-steps-chevron{transition:none}}
+.next-steps-list{display:grid;gap:var(--s3);margin:0;padding:var(--s4) 18px 0;border-top:1px solid var(--line);list-style:none}
+.next-steps-list li{display:grid;grid-template-columns:24px 1fr;gap:0 var(--s2);font-size:var(--text-body);line-height:1.55}
+.next-steps-number{font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.next-steps-disclaimer{margin:var(--s4) 0 0;padding:0 18px 18px;font-size:var(--text-small);font-weight:600;line-height:1.5}

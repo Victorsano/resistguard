@@ -1,0 +1,57 @@
+/* Night & Paper. The only colour, type, space and motion definitions in ResistGuard.
+   Read DESIGN.md before adding a token. One brand colour: signal, meaning "do this next". */
+:root{
+ /* Surfaces and text */
+ --night:#0B0D10;          /* landing ground, tool text, tool top bar, video ground */
+ --paper:#F5F3EF;          /* tool ground */
+ --card:#FFFFFF;           /* cards on paper */
+ --ink:var(--night);       /* primary text on paper */
+ --ink-2:#4A4F59;          /* secondary text on paper, 7.6:1 */
+ --on-night:#FFFFFF;
+ --on-night-2:rgba(255,255,255,.72);
+ --on-night-3:rgba(255,255,255,.56);
+ --line:rgba(11,13,16,.12);       /* hairlines on paper */
+ --line-strong:rgba(11,13,16,.28);/* control borders on paper (inputs, cards that can be tapped) */
+ --line-night:rgba(255,255,255,.12);
+ --line-night-strong:rgba(255,255,255,.32);
+
+ /* Signal: do this next */
+ --signal:#3D5AFE;         /* actions and links on paper; large emphasis words on night */
+ --signal-press:#2F49E0;   /* hover and pressed state of signal fills */
+ --signal-300:#6E80FF;     /* small signal text and focus ring on night */
+ --signal-50:#E9ECFF;      /* informational note ground on paper */
+ --signal-ink:#2A3BB8;     /* text on signal-50 */
+ --on-signal:#FFFFFF;      /* label on a signal fill, 5.1:1 */
+ --on-emergency:#FFFFFF;   /* text on the emergency strip, 6.5:1 */
+
+ /* Meaning colours, unchanged from the reviewed answer screen */
+ --amber-50:#FFF0D4;--amber-line:#B25E00;--amber-icon:#8A4500;--amber-ink:#4D2600;   /* antibiotic caution */
+ --slate-50:#E8EEF5;--slate-line:#4F6B8A;--slate-icon:#34506F;--slate-ink:#1D3350;   /* not an antibiotic */
+ --emergency:#B3261E;      /* emergency strip only */
+
+ /* Type: Bricolage Grotesque for everything, Fraunces italic for one word per heading */
+ --font-sans:var(--font-bricolage),'Bricolage Grotesque Fallback',sans-serif;
+ --font-emph:var(--font-fraunces),'Fraunces Fallback',serif;
+ --text-small:16px;        /* nothing below 14px; 16px is the floor for sentences */
+ --text-body:18px;
+ --text-lead:20px;
+ --leading-body:1.55;
+
+ /* Space, radius, layout */
+ --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--s8:64px;--s9:96px;--s10:128px;
+ --radius-control:4px;    /* buttons, inputs, chips */
+ --radius-card:12px;      /* cards and verdicts on paper */
+ --gutter:clamp(20px,4.2vw,80px);
+ --bar:64px;              /* tool top bar */
+ --control:56px;          /* minimum control height; never below 52px */
+
+ /* Motion: one hero entrance, nothing else moves */
+ --ease-out:cubic-bezier(.2,.7,.2,1);
+ --enter-distance:14px;
+ --enter-duration:440ms;
+ --enter-step:65ms;        /* five steps: 0, 65, 130, 195, 260ms; finishes by ~700ms */
+}
+
+@media (prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}

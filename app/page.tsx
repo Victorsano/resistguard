@@ -1,32 +1,45 @@
-'use client';
-import {useState} from 'react';
-import {ArrowLeft,ScanLine,BookOpen,ChartNoAxesCombined,Info} from 'lucide-react';
-import dashboard from '@/data/dashboard.json';
-import {copy} from '@/lib/screen-copy';
-import UseCheck from './components/UseCheck';
-import MedicineCheck from './components/MedicineCheck';
-import Learning from './components/Learning';
-import Pilot from './components/Pilot';
-import HowItWorks from './components/HowItWorks';
-import Sources from './components/Sources';
-import './page.css';
-// 'use', 'learn' and 'dashboard' are hidden: no control opens them, but the code stays.
-type View='flow'|'how'|'pilot'|'sources'|'use'|'learn'|'dashboard';
-export default function Home(){
- const [view,setView]=useState<View>('flow');
- const [command,setCommand]=useState<{screen:'home'|'find';n:number}>({screen:'home',n:0});
- function open(next:View){setView(next);window.scrollTo({top:0});requestAnimationFrame(()=>{const heading=document.querySelector<HTMLElement>('[data-view] h1');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}});}
- function toFlow(screen:'home'|'find'){setView('flow');setCommand(c=>({screen,n:c.n+1}));}
- return <>
+import {existsSync} from 'node:fs';
+import {join} from 'node:path';
+import {ArrowRight,ScanLine,MessageCircle,ShieldCheck,LockKeyhole,BadgeInfo,ArrowUpRight} from 'lucide-react';
+import {landing as t} from '@/lib/landing-copy';
+import {availableHeroMedia} from '@/lib/hero-media';
+import HeroMedia from './components/HeroMedia';
+import Wordmark from './components/Wordmark';
+import Emphasis from './components/Emphasis';
+import './landing.css';
+const featureIcons={label:ScanLine,pharmacist:MessageCircle,pack:ShieldCheck,privacy:LockKeyhole};
+// Only media files that really exist in public/ reach the page.
+const media=availableHeroMedia(path=>existsSync(join(process.cwd(),'public',path)));
+function Actions({hero}:{hero:boolean}){
+ return <div className="landing-actions" data-motion={hero?'hero-cta':undefined}><a className="landing-button" href="/check" data-motion="press"><span>{t.cta}</span><ArrowRight size={22} strokeWidth={2.25} aria-hidden="true"/></a><a className="landing-link" href="/check?example=1" data-motion="press">{t.example}</a></div>;
+}
+export default function Landing(){
+ return <div className="landing on-night">
  <a className="skip-link" href="#main-content">Skip to content</a>
- <header>
-  <a className="brand" href="/" aria-label="ResistGuard home"><span className="brand-icon" aria-hidden="true">R/G</span>Resist<span>Guard</span><span className="demo">DEMO</span></a>
- </header>
+ <header className="landing-bar"><Wordmark/></header>
  <main id="main-content">
-  <div hidden={view!=='flow'}><MedicineCheck command={command}/></div>
-  {view!=='flow'&&<div data-view><button type="button" className="text-button page-back" onClick={()=>toFlow('home')}><ArrowLeft size={20} aria-hidden="true"/>{copy.back}</button>
-  {view==='how'?<HowItWorks onCatalogue={()=>toFlow('find')}/>:view==='pilot'?<Pilot/>:view==='sources'?<Sources/>:view==='use'?<UseCheck/>:view==='learn'?<Learning onSample={()=>toFlow('home')}/>:<section className="content-view"><div className="eyebrow">DEMO INSIGHTS</div><h1>Example dashboard</h1><p>{dashboard.label}. These fixed numbers never include your scans or interactions.</p><div className="stats">{[['240','Synthetic sessions'],['186','Catalogue matches'],['154','Learning checks']].map(([n,l],i)=><article key={l}><span className="stat-icon">{i===0?<ChartNoAxesCombined size={20}/>:i===1?<ScanLine size={20}/>:<BookOpen size={20}/>}</span><span>{l}</span><strong>{n}</strong><small>Illustrative only · synthetic data</small></article>)}</div><div className="dashboard-grid"><article><div className="eyebrow">A WEEK IN THE DEMO</div><h2>Synthetic learning activity</h2><div className="bars" role="img" aria-label="Synthetic daily sessions: Mon 28, Tue 35, Wed 30, Thu 42, Fri 31, Sat 39, Sun 35">{dashboard.weekly.map((n,i)=><div key={i}><span>{n}</span><div style={{height:n*3}}/><small>{['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]}</small></div>)}</div></article><article><div className="eyebrow">ILLUSTRATIVE TOPICS</div><h2>What people might ask</h2>{dashboard.scenarios.map(s=><div className="topic" key={s.name}><div><span>{s.name}</span><b>{s.value}</b></div><div className="track"><span style={{width:`${s.value/240*100}%`}}/></div></div>)}</article></div><div className="small-note"><Info size={20}/><p>No tracking, analytics service, database or saved session history is implemented. This dashboard demonstrates a possible educational reporting view; it is not AMR surveillance or evidence of clinical impact.</p></div></section>}</div>}
-  <footer className="page-footer"><nav aria-label="More information">{([['how',copy.footer.how],['pilot',copy.footer.pilot],['sources',copy.footer.sources]] as const).map(([id,label])=><button key={id} type="button" className="text-button page-footer-link" aria-current={view===id?'page':undefined} onClick={()=>open(id)}>{label}</button>)}</nav></footer>
+  <section className="hero" aria-labelledby="hero-title">
+   <HeroMedia {...media}/>
+   <div className="hero-copy">
+    <p className="hero-eyebrow" data-motion="hero-eyebrow">{t.eyebrow}</p>
+    <h1 id="hero-title" className="hero-title"><span className="hero-line-1" data-motion="hero-line-1">{t.line1.before}<br/> {t.line1.after} <em>{t.line1.em}</em>{t.line1.end}</span><span className="hero-line-2" data-motion="hero-line-2">{t.line2}</span></h1>
+    <p className="hero-lead" data-motion="hero-lead">{t.lead}</p>
+    <Actions hero/>
+   </div>
+  </section>
+  <section className="landing-section landing-stakes" data-motion="reveal" aria-label="Why it matters">
+   <p className="landing-stakes-line">{t.stakes}</p>
+   <figure className="landing-stat"><p className="landing-stat-figure">{t.stat.figure}</p><figcaption><p>{t.stat.text}</p><a href={t.stat.source.url} target="_blank" rel="noreferrer">{t.stat.source.label}<ArrowUpRight size={18} aria-hidden="true"/></a></figcaption></figure>
+  </section>
+  <section className="landing-section landing-how" data-motion="reveal" aria-labelledby="how-title">
+   <h2 id="how-title" className="landing-side-title">{t.howTitle}</h2>
+   <ul className="landing-features">{t.features.map(f=>{const Icon=featureIcons[f.id];return <li key={f.id}><Icon size={26} strokeWidth={1.75} aria-hidden="true"/><h3>{f.title}</h3><p>{f.text}</p></li>;})}</ul>
+  </section>
+  <section className="landing-section landing-close" data-motion="reveal" aria-labelledby="close-title">
+   <h2 id="close-title" className="landing-close-title"><Emphasis text={t.closing.text} word={t.closing.em}/></h2>
+   <Actions hero={false}/>
+  </section>
  </main>
- </>;
+ <footer className="landing-footer"><Wordmark/><p className="landing-honesty"><BadgeInfo size={20} aria-hidden="true"/>{t.honesty}</p></footer>
+ </div>;
 }

@@ -1,24 +1,8 @@
-.catalogue-references {
-  border-top: 1px solid var(--line);
-  margin: 1rem 0;
-  padding-top: .8rem;
-  overflow-wrap: anywhere;
-}
-.catalogue-references summary {
-  cursor: pointer;
-  color: #244ac8;
-  font-weight: 700;
-}
-.catalogue-references div {
-  display: grid;
-  gap: .35rem;
-  margin: .75rem 0;
-}
-.catalogue-references a {
-  color: #244ac8;
-  font-size: .85rem;
-  text-decoration: underline;
-}
-.catalogue-source-register {
-  margin: 2rem 0;
-}
+/* Catalogue references: the formulation and Greenbook details inside each card. */
+.catalogue-references{width:100%;margin:var(--s2) 0;padding-top:var(--s3);border-top:1px solid var(--line);overflow-wrap:anywhere}
+.catalogue-references summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:var(--text-small);font-weight:600;color:var(--signal)}
+.catalogue-references div{display:grid;gap:4px;margin:var(--s3) 0}
+.catalogue-references p,.catalogue-references strong{font-size:var(--text-small);line-height:1.5}
+.catalogue-references a{font-size:var(--text-small)}
+.catalogue-references small{font-size:15px;color:var(--ink-2)}
+.catalogue-source-register{margin:var(--s6) 0;padding:var(--s4) var(--s5);border:1px solid var(--line);border-radius:var(--radius-card);background:var(--card)}

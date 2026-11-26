@@ -1,0 +1,13 @@
+/* The checker shell: night top bar, paper screens, emergency strip and footer in normal flow. */
+.tool-bar{display:flex;align-items:center;min-height:var(--bar);padding:0 var(--gutter);background:var(--night);color:var(--on-night)}
+.tool{padding:0 20px}
+.tool-view{max-width:760px;margin:0 auto}
+.tool-view:has(.pilot-view){max-width:1040px}
+.page-back{text-decoration:none;margin-top:var(--s3)}
+.page-back:hover{text-decoration:underline}
+.tool-emergency{display:flex;gap:var(--s3);align-items:flex-start;max-width:640px;margin:var(--s8) auto 0;padding:var(--s4) 18px;border-radius:var(--radius-control);background:var(--emergency);color:var(--on-emergency);font-size:var(--text-body);font-weight:600;line-height:1.45}
+.tool-emergency svg{flex-shrink:0;margin-top:1px}
+.page-footer{display:grid;justify-items:center;gap:var(--s2);max-width:640px;margin:0 auto;padding:var(--s6) 0 var(--s7);text-align:center}
+.page-footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:0 var(--s5)}
+.page-footer-link{font-size:var(--text-small);font-weight:500;color:var(--ink-2);text-decoration-color:var(--line-strong)}
+.page-footer-link[aria-current=page]{color:var(--ink);text-decoration-color:var(--ink)}

@@ -49,7 +49,7 @@ export default function Catalogue({onChoose}:{onChoose:(id:string)=>void}){
         {products.length>0&&<p>Greenbook references describe listed products. Check current registration directly in the register and confirm the ingredients on your package.</p>}
       </details>}
       <div className="catalogue-card-footer">
-        <button className="secondary" onClick={()=>onChoose(m.id)}>Check this medicine <ArrowRight size={15}/></button>
+        <button data-motion="press" className="secondary" onClick={()=>onChoose(m.id)}>Check this medicine <ArrowRight size={15}/></button>
         <a href={m.source} target="_blank" rel="noreferrer">{m.sourceLabel}{'sourceSection' in m?` · ${m.sourceSection}`:''} <ArrowUpRight size={14}/></a>
       </div>
     </article>)}</div>

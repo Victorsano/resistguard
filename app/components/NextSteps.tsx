@@ -3,7 +3,7 @@ import {genuineCheck,pharmacistSection,whatsAppLink} from '@/lib/next-steps';
 import './next-steps.css';
 
 export function PharmacistButton({href}:{href:string}){
- return <a className="primary next-steps-whatsapp" href={href} target="_blank" rel="noreferrer"><MessageCircle size={22} aria-hidden="true"/>{pharmacistSection.button}</a>;
+ return <a className="primary next-steps-whatsapp" data-motion="press" href={href} target="_blank" rel="noreferrer"><MessageCircle size={22} aria-hidden="true"/>{pharmacistSection.button}</a>;
 }
 
 export default function NextSteps({medicine}:{medicine:{ingredients:readonly string[];antibiotic:boolean}}){
