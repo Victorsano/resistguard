@@ -7,6 +7,7 @@ import {fullPhotoCrop,prepareImage,type PhotoCrop} from '@/lib/image';
 import {scanRecovery} from '@/lib/scan-guide';
 import {scanOutcome,staysOnPhoto,capitalise,emptyCheckDetails,type CheckDetails,type Screen,type Route} from '@/lib/flow';
 import {localGuidance,matchTypedMedicine,type CheckGuidance,type GuidanceContext} from '@/lib/check-guidance';
+import {availableFollowUps,selectFollowUps,type FollowUpAnswers,type FollowUpQuestion} from '@/lib/check-follow-ups';
 import {unlistedWhatsAppLink} from '@/lib/next-steps';
 import {copy} from '@/lib/screen-copy';
 import CameraCapture from './CameraCapture';
@@ -15,6 +16,7 @@ import Catalogue from './Catalogue';
 import FindByName from './FindByName';
 import Answer from './Answer';
 import CheckQuestions from './CheckQuestions';
+import FollowUpQuestions from './FollowUpQuestions';
 import {PharmacistButton} from './NextSteps';
 import Emphasis from './Emphasis';
 import './medicine-check.css';
@@ -27,6 +29,9 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  const [medicineName,setMedicineName]=useState('');
  const [guidance,setGuidance]=useState<CheckGuidance|null>(null);
  const [guidancePending,setGuidancePending]=useState(false);
+ const [followUps,setFollowUps]=useState<FollowUpQuestion[]>([]);
+ const [followUpAnswers,setFollowUpAnswers]=useState<FollowUpAnswers>({});
+ const [followUpAI,setFollowUpAI]=useState(false);
  const guidanceRequest=useRef<AbortController|null>(null);
  const [photo,setPhoto]=useState<LabelPhoto|null>(null);const [editingPhoto,setEditingPhoto]=useState(false);
  const [consent,setConsent]=useState(false);const [busy,setBusy]=useState<'preparing'|'scan'|null>(null);const [error,setError]=useState('');const [scan,setScan]=useState<Scan|null>(null);const [timedOut,setTimedOut]=useState(false);const [camera,setCamera]=useState(false);
@@ -60,13 +65,14 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
   abort.current?.abort();abort.current=null;revision.current++;setBusy(null);
   guidanceRequest.current?.abort();guidanceRequest.current=null;setGuidancePending(false);
  }
- function clearDetails(){setDetails(emptyCheckDetails);setMedicineName('');setGuidance(null);}
+ function clearDetails(){setDetails(emptyCheckDetails);setMedicineName('');setGuidance(null);setFollowUps([]);setFollowUpAnswers({});setFollowUpAI(false);}
  function clearScan(){setScan(null);setTimedOut(false);setDeclined(false);setSelected('');clearDetails();}
  function reset(){cancel();clearScan();setPhoto(null);setEditingPhoto(false);setConsent(false);setError('');go('home');}
  function back(){
   cancel();
   switch(screen){
-   case 'answer': go('other-medicines'); break;
+   case 'answer': go('follow-up'); break;
+   case 'follow-up': go('other-medicines'); break;
    case 'other-medicines': go('prescription'); break;
    case 'prescription': go('reason'); break;
    case 'reason': go('confirm'); break;
@@ -78,7 +84,7 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
  function chooseMedicine(id:string,from:Route){cancel();clearScan();setSelected(id);setRoute(from);go('confirm');}
  function typeName(){cancel();go('find');}
  function decline(){focusNext.current=true;setDeclined(true);clearDetails();}
- async function completeCheck(input:CheckDetails,useAI:boolean){
+ async function completeCheck(input:CheckDetails,useAI:boolean,answers?:FollowUpAnswers){
   if(!candidate||input.prescribed===null)return;
   guidanceRequest.current?.abort();
   guidanceRequest.current=null;
@@ -89,9 +95,14 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
   };
   setDetails(resolved);
   const fallback=localGuidance(candidate,context);
-  setGuidance(fallback);
+  const next=answers===undefined?'follow-up':'answer';
+  if(next==='follow-up'){
+   setFollowUpAI(useAI);
+   setFollowUpAnswers({});
+   setFollowUps(selectFollowUps(availableFollowUps(candidate,context),[]));
+  }else setGuidance(fallback);
   setGuidancePending(useAI);
-  if(screen!=='answer')go('answer');
+  if(screen!==next)go(next);
   if(!useAI)return;
 
   const controller=new AbortController();
@@ -99,20 +110,21 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
   const timeout=setTimeout(()=>controller.abort(),24_000);
   try{
    const response=await fetch('/api/check-guidance',{
-    method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(context),signal:controller.signal
+    method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...context,followUp:answers}),signal:controller.signal
    });
    if(!response.ok){
-    if(guidanceRequest.current===controller)setGuidance({...fallback,fallback:response.status===429?'rate_limit':'unavailable'});
+    if(guidanceRequest.current===controller&&next==='answer')setGuidance({...fallback,fallback:response.status===429?'rate_limit':'unavailable'});
     return;
    }
    const result:CheckGuidance=await response.json();
    if(guidanceRequest.current!==controller)return;
-   setGuidance(result);
+   if(next==='follow-up')setFollowUps(result.questions??selectFollowUps(availableFollowUps(candidate,context),[]));
+   else setGuidance(result);
    setDetails({...resolved,medicines:resolved.medicines.map((entry,index)=>({
     ...entry,choice:result.corrections.find(match=>match.index===index)?.id??entry.choice
    }))});
   }catch{
-   if(guidanceRequest.current===controller)setGuidance({...fallback,fallback:'unavailable'});
+   if(guidanceRequest.current===controller&&next==='answer')setGuidance({...fallback,fallback:'unavailable'});
   }finally{
    clearTimeout(timeout);
    if(guidanceRequest.current===controller){
@@ -182,11 +194,16 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
    else go(screen==='reason'?'prescription':'other-medicines');
   }}/>
  </section>}
+ {screen==='follow-up'&&candidate&&<section data-motion="screen" className="medicine-check-screen">
+  {backButton}
+  <FollowUpQuestions questions={followUps} answers={followUpAnswers} pending={guidancePending} useAI={followUpAI}
+   onChange={setFollowUpAnswers} onContinue={useAI=>void completeCheck(details,useAI,followUpAnswers)}/>
+ </section>}
  {screen==='answer'&&candidate&&guidance&&<div data-motion="screen" className="medicine-check-screen medicine-check-answer">
   {backButton}
-  <Answer medicine={candidate} details={details} guidance={guidance} pending={guidancePending} onAnother={reset} onRetry={()=>void completeCheck(details,true)} onMatch={(index,id)=>{
+  <Answer medicine={candidate} details={details} guidance={guidance} pending={guidancePending} followUps={followUps} followUpAnswers={followUpAnswers} onAnother={reset} onRetry={()=>void completeCheck(details,true,followUpAnswers)} onMatch={(index,id)=>{
    const next={...details,medicines:details.medicines.map((entry,position)=>position===index?{...entry,choice:id}:entry)};
-   void completeCheck(next,true);
+   void completeCheck(next,true,followUpAnswers);
   }}/>
  </div>}
  {screen==='photo'&&editingPhoto&&photo&&<PhotoEditor image={photo.original} initialCrop={photo.crop} onApply={applyPhotoCrop} onClose={()=>setEditingPhoto(false)}/>}

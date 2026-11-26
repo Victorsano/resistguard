@@ -2,6 +2,7 @@ import {matchIngredient,matchIngredients,medicines,nigeriaProducts,scenarios,sou
 import {suggestReasons,type OtherMedicine} from '@/lib/flow';
 import {getPassage,type PassageId} from '@/lib/use-check';
 import interactions from '@/data/check-interactions.json';
+import type {FollowUpQuestion} from '@/lib/check-follow-ups';
 
 export type GuidanceContext = {
   medicineId: string;
@@ -21,6 +22,8 @@ export type CheckGuidance = {
   suggestions: MatchSuggestions;
   source: 'groq' | 'sources';
   fallback?: 'rate_limit' | 'unavailable';
+  questions?: FollowUpQuestion[];
+  synthesis?: {takeaway:string; questionForPharmacist:string};
 };
 
 const knownMedicines = [
@@ -155,12 +158,27 @@ export function validateGuidanceSelection(raw: string, passageIds: readonly stri
     !Array.isArray(response.passageIds)||response.passageIds.length<1||response.passageIds.length>3||
     new Set(response.passageIds).size!==response.passageIds.length||
     !response.passageIds.every((id:unknown)=>typeof id==='string'&&passageIds.includes(id))||
-    !Array.isArray(response.matches)||response.matches.length>options.length)throw new Error('Invalid guidance selection');
+    !Array.isArray(response.matches))throw new Error('Invalid guidance selection');
+  return {passageIds:response.passageIds as string[],matches:validateMedicineMatches(response.matches,options)};
+}
+
+export function validateMedicineMatches(input:unknown,options:MatchSuggestions) {
+  if(!Array.isArray(input)||input.length>options.length)throw new Error('Invalid medicine matches');
   const matches=new Map<number,string>();
-  for(const match of response.matches){
+  for(const match of input){
     if(!match||Object.keys(match).sort().join(',')!=='id,index'||!Number.isInteger(match.index)||
       matches.has(match.index)||!options.find(option=>option.index===match.index)?.ids.includes(match.id))throw new Error('Invalid medicine match');
     matches.set(match.index,match.id);
   }
-  return {passageIds:response.passageIds as string[],matches};
+  return matches;
+}
+
+export function validateCheckSynthesis(takeaway:unknown,questionForPharmacist:unknown):NonNullable<CheckGuidance['synthesis']>{
+  const prohibited=/\b(?:\d+\s*(?:mg|ml|grams?|tablets?|capsules?|times?)|dosage|safe to (?:take|use)|(?:you|we) (?:can|should|must) (?:take|start|stop|switch|double|skip))\b|(?:^|[.!?] )\s*(?:take|start|stop|switch|double|skip)\b|https?:|[<>\r\n]/i;
+  if(typeof takeaway!=='string'||typeof questionForPharmacist!=='string')throw new Error('Invalid synthesis');
+  const summary=takeaway.trim();
+  const question=questionForPharmacist.trim();
+  if(summary.length<20||summary.length>360||question.length<12||question.length>180||
+    !question.endsWith('?')||prohibited.test(summary)||prohibited.test(question))throw new Error('Invalid synthesis');
+  return {takeaway:summary,questionForPharmacist:question};
 }

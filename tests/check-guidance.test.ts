@@ -1,9 +1,10 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {medicines} from '../lib/safety';
+import {availableFollowUps,parseFollowUpAnswers,selectFollowUps} from '../lib/check-follow-ups';
 import {
   interactionEvidence,localGuidance,matchTypedMedicine,parseGuidanceContext,
-  spellingCandidates,validateGuidanceSelection,type GuidanceContext
+  spellingCandidates,validateCheckSynthesis,validateGuidanceSelection,type GuidanceContext
 } from '../lib/check-guidance';
 
 const medicine=(id:string)=>medicines.find(item=>item.id===id)!;
@@ -57,4 +58,28 @@ test('guidance rejects unsupported medicine IDs and any output outside the suppl
   assert.throws(()=>validateGuidanceSelection('{"passageIds":["fabricated"],"matches":[]}', ['label'],options));
   assert.throws(()=>validateGuidanceSelection('{"passageIds":["label"],"matches":[{"index":0,"id":"amoxicillin"}]}',['label'],options));
   assert.throws(()=>validateGuidanceSelection('{"passageIds":["label"],"matches":[],"advice":"made up"}',['label'],options));
+});
+
+test('follow-up selection uses this medicine and cannot skip required allergy or ulcer checks',()=>{
+  const penicillin=availableFollowUps(medicine('ampicillin-cloxacillin'),{...base,reason:'a new skin change'});
+  assert.deepEqual(selectFollowUps(penicillin,['reason-assessed']).map(question=>question.id),['penicillin-reaction','reason-assessed']);
+  assert.match(penicillin[0].source.url,/\.nafdac\.gov\.ng\//);
+  assert.throws(()=>selectFollowUps(penicillin,['stomach-ulcer']));
+  const ibuprofen=availableFollowUps(medicine('ibuprofen'),{...base,prescribed:true});
+  assert.deepEqual(selectFollowUps(ibuprofen,['asthma']).map(question=>question.id),['prior-reaction','stomach-ulcer','asthma']);
+  assert.equal(parseFollowUpAnswers({'prior-reaction':'no'},ibuprofen),null);
+  assert.equal(parseFollowUpAnswers({'prior-reaction':'no','stomach-ulcer':'no',invented:'yes'},ibuprofen),null);
+  assert.equal(parseFollowUpAnswers({'prior-reaction':'no','stomach-ulcer':'unknown'},ibuprofen),null);
+  assert.deepEqual(parseFollowUpAnswers({'prior-reaction':'no','stomach-ulcer':'unsure'},ibuprofen),{'prior-reaction':'no','stomach-ulcer':'unsure'});
+});
+
+test('the result accepts a tailored takeaway and a question while rejecting directions or unsafe output',()=>{
+  const takeaway='You reported a past reaction to penicillin. That is important to bring up when you ask about this combination.';
+  const question='What does my past penicillin reaction mean for this medicine?';
+  assert.deepEqual(validateCheckSynthesis(takeaway,question),{takeaway,questionForPharmacist:question});
+  assert.throws(()=>validateCheckSynthesis('Take two capsules twice today.',question));
+  assert.throws(()=>validateCheckSynthesis('You should stop your prescription today.',question));
+  assert.throws(()=>validateCheckSynthesis('This looks safe to take with your medicines.',question));
+  assert.throws(()=>validateCheckSynthesis(takeaway,'Visit https://example.invalid?'));
+  assert.throws(()=>validateCheckSynthesis(takeaway,'Ask your pharmacist today.'));
 });

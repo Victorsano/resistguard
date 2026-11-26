@@ -4,7 +4,7 @@ import type {ScanResult} from '@/lib/scan';
 import evidence from '@/data/use-evidence.json';
 
 export type CheckQuestion='reason'|'prescription'|'other-medicines';
-export type Screen='home'|'find'|'catalogue'|'photo'|'confirm'|CheckQuestion|'answer';
+export type Screen='home'|'find'|'catalogue'|'photo'|'confirm'|CheckQuestion|'follow-up'|'answer';
 export type Route='scan'|'name'|'catalogue';
 export type YesNo='yes'|'no';
 export type OtherMedicine={name:string;choice:string|null};

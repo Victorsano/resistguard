@@ -15,8 +15,8 @@ On the first screen, tap **See an example**. A made-up amoxicillin label opens, 
 3. **Agree and read.** Tick the box to agree to send the photo to Groq, our AI provider. ResistGuard doesn't keep it. Tap **Read the label**. It usually takes under 20 seconds.
 4. **Is this what your pack says?** Look at your pack. If it lists exactly these ingredients and nothing more, tap **Yes, that's it**. If anything differs, or you can't tell, tap **No, or I'm not sure**.
 5. **Answer a few questions.** You can type why you're taking the medicine. Choose whether it was prescribed for you and whether you take other medicines. If you do, type the names from the packs or say you're unsure of the names.
-6. **Get guidance.** Choose **Get guidance from Groq** to send your answers and medicine names to Groq, or continue with source-based guidance. Known names are matched directly. If Groq suggests a correction and the match is uncertain, compare the ingredients with the pack before choosing it.
-7. **Read the answer.** The catalogue tells you whether the medicine is an antibiotic. **Medicine guidance** shows what to ask a pharmacist, with source links and a label showing whether Groq selected the sources. A pharmacist or prescriber can review combinations the app couldn't check.
+6. **Answer follow-up questions.** Choose **Continue with Groq** to have it pick relevant questions, or continue without Groq. You can answer **Not sure** and skip optional questions. Each question links to its source.
+7. **Read your result.** Choose **Get my result from Groq** to send your follow-up answers and get a takeaway and a question to ask a pharmacist. Expand the sections below to see the catalogue details, supporting sources and your answers. If you continue without Groq, you can still see the sourced information.
 8. **Next steps.** Tap **Ask a pharmacist on WhatsApp** to open WhatsApp with your question already written. It holds no photo and no name. Open **Check the pack is genuine** to see NAFDAC's own checks.
 
 ## Type the name instead

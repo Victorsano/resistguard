@@ -157,22 +157,22 @@ Fixed rules that turn answers into a result. The AI never decides the result.
 
 Order: any concern rule wins, then "more information needed", then "no concern found".
 
-## 6. AI guardrails: AI helps, it doesn't act as a doctor
+## 6. AI guardrails
 
 This section is what we show judges and any medical reviewer.
 
 | # | Guardrail | How the code enforces it |
 |---|---|---|
-| G1 | **AI has exactly three jobs:** read the label, match the reason to a reason ID, pick question IDs. | Three API routes, one per job. No general "ask the AI" route. |
-| G2 | **AI returns IDs only, never text shown to the patient.** | The model must return JSON such as `{"questionIds": ["G4", "P1"]}`. Parse it, check every ID exists in the allowed list, and reject anything else. Copy the `validateEvidenceOrder()` pattern in `lib/use-check.ts`. |
-| G3 | **The user confirms every AI step.** | Steps 1, 2 and 3 each end with a confirm screen. Nothing moves forward without a tap. |
+| G1 | **AI reads the label and supports the check.** | Check guidance uses the confirmed medicine and typed reason to select follow-ups and draft a short takeaway and a question for a pharmacist. |
+| G2 | **The response is structured and source-grounded.** | Validate optional question IDs and evidence IDs against the supplied lists. Constrain generated text to a takeaway and one question for a pharmacist. Reject invalid shapes, links, dosing and explicit medication directions. |
+| G3 | **The user confirms the label and chooses when to use Groq.** | Users confirm the full ingredient list, then opt in separately to select follow-ups and write a result. |
 | G4 | **Mandatory questions can't be dropped.** | After the AI picks, the code adds every `mandatory` question that applies. The AI may add or reorder, never remove. |
-| G5 | **Fixed rules decide the result.** | `result-rules.json` is evaluated in code. The AI's output never reaches this step. |
-| G6 | **All medical text comes from data files, word for word.** | Same rule as today in `lib/safety.ts`. Every note and question has a `source`. |
+| G5 | **Documented facts are evaluated in code.** | Catalogue classification and documented interactions come from the catalogue and interaction records. Groq drafts a takeaway from those facts and the user's answers. |
+| G6 | **Clinical checks and source claims have references.** | Follow-up wording is tied to documents. The generated takeaway is limited to the supplied evidence and reported facts. A pharmacist still needs to review the flow. |
 | G7 | **Every question shows its source.** | A "Where this comes from" link under each question and on the result. |
-| G8 | **It works without AI.** | If the AI is off, slow or returns bad JSON, step 2 falls back to picking from the reason list, and step 4 asks the mandatory questions in a fixed order. |
+| G8 | **It works without AI.** | The checker asks required questions locally and shows the catalogue and sourced notes. Personalised synthesis is available when Groq returns a valid result. |
 | G9 | **It never contradicts the doctor.** | Wording rules in section 7. A test fails on banned phrases. |
-| G10 | **It sends the AI as little as possible.** | Step 4 sends codes only (for example `medicine: amoxicillin, reason: R1, answers: {G4: no}`), never names or free text. Step 2 sends only the typed reason. The consent text must say this. |
+| G10 | **The user sees what is sent.** | The first request carries the reason and medicine details. A separate button opts into sending the follow-up answers for the result. The request omits the photo and account identity. |
 | G11 | **Label stays honest.** | "Not yet reviewed by a pharmacist" on every result until someone reviews it. |
 
 **Model choice:** use Groq now, with JSON output and the checks above. Meditron (EPFL's open medical model) is a roadmap item. It must be self-hosted, and its makers advise more testing before medical use. Keep the API route model-agnostic so it can be swapped later.
@@ -236,8 +236,8 @@ Proposed file names; adjust to the current structure.
 - [x] Use the reason as typed to select guidance
 - [x] Build the step 3 screen with a Yes/No question and a typed list
 - [x] Suggest catalogue matches and let the user confirm or keep typed names
-- [ ] Build the step 4 screen and pick-questions route with guardrails G2, G4 and G8
-- [ ] Build the step 5 result screen
+- [x] Build the step 4 screen and choose relevant follow-ups with Groq, keeping mandatory checks in code
+- [x] Lead with a Groq-written takeaway and a question for a pharmacist on the step 5 result screen
 - [ ] Extend the WhatsApp note
 - [x] Remove the emergency notice from the checker
 - [x] Explain that Get guidance from Groq sends the typed reason and medicine names

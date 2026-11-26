@@ -1,15 +1,20 @@
-/* The answer is the success moment: a green card with a check, the same for both outcomes ("your check is done").
-   The words say which outcome. No alert icons or side stripes. */
 .answer{display:block}
-.answer-verdict{display:flex;gap:14px;align-items:flex-start;margin-top:var(--s3);padding:18px 20px;border:2px solid var(--success-line);border-radius:var(--radius-card);background:var(--success-50)}
-.answer .answer-verdict h1{margin:0;font-size:clamp(28px,3vw,34px);font-weight:700;font-stretch:86%;line-height:1.1;letter-spacing:-.02em;text-wrap:wrap;color:var(--success-ink)}
-.answer-verdict-icon{display:flex;flex-shrink:0;margin-top:1px;color:var(--success-line)}
-.answer-name{margin:6px 0 0;font-size:var(--text-body);font-weight:500;line-height:1.4;color:var(--success-ink-2)}
-.answer-classification-source{margin:var(--s1) 0 0;font-size:var(--text-small);color:var(--success-ink-2)}
+.answer-context{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s2) var(--s4);margin:var(--s3) 0;font-weight:650}
+.answer-context span:last-child{font-size:var(--text-small);color:var(--ink-2)}
+.answer-lead{padding:clamp(18px,5vw,30px);border:1px solid var(--signal);border-radius:var(--radius-card);background:var(--signal-50);overflow-wrap:anywhere}
+.answer-lead h1{margin:0 0 var(--s3);font-size:clamp(28px,5vw,38px);line-height:1.14;letter-spacing:-.025em;text-wrap:balance}
+.answer-lead p{margin:0;line-height:1.5}
+.answer-takeaway{font-size:clamp(19px,3vw,23px)}
+.answer-action{margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid var(--line-strong)}
+.answer-action h2{margin:0 0 var(--s1);font-size:var(--text-small);font-weight:700}
+.answer-action p{font-weight:600}
+.answer-coverage,.answer>.next-steps{margin:var(--s4) 0}
+.answer-expanded{padding:0 18px 18px}
+.answer-expanded .source-links{padding-inline:0}
+.answer-classification-source{margin:var(--s1) 0 0;font-size:var(--text-small);color:var(--ink-2)}
 .answer-review{display:inline-flex;align-items:center;gap:var(--s2);margin:var(--s4) 0 0;padding:6px 12px;border:1px solid var(--line-strong);border-radius:var(--radius-control);background:var(--card);font-size:var(--text-small);font-weight:600;line-height:1.4;color:var(--ink)}
 .answer-review svg{flex-shrink:0}
 .answer-summary{margin:var(--s4) 0 0;font-size:var(--text-body);line-height:1.6}
-.answer-caution{margin-top:var(--s4)}
 .answer-boundary{margin:var(--s5) 0 0;padding-left:14px;border-left:3px solid var(--ink);font-size:var(--text-body);font-weight:600;line-height:1.5}
 .answer-heading{margin:var(--s7) 0 var(--s4);font-size:26px;font-weight:650;font-stretch:92%;line-height:1.15;letter-spacing:-.02em}
 .answer-details{
@@ -24,13 +29,10 @@
 .answer-as-typed{margin-inline-start:var(--s2);color:var(--ink-2);font-size:var(--text-small)}
 .answer-details>p{margin:var(--s3) 0 0;color:var(--ink-2)}
 .answer-guidance{display:grid;gap:var(--s3)}
-.answer-guidance-section .answer-heading{margin-bottom:var(--s2)}
-.answer-guidance-purpose{margin:0 0 var(--s4);color:var(--ink-2)}
 .answer-guidance-item{padding:var(--s4);border:1px solid var(--line-strong);border-radius:var(--radius-card);background:var(--card)}
 .answer-guidance-item h3{margin:0 0 var(--s2);font-size:var(--text-body);font-weight:650}
 .answer-guidance-item p{margin:0 0 var(--s2);line-height:var(--leading-body)}
-.answer-guidance-item a,.answer-guidance-source{font-size:var(--text-small)}
-.answer-guidance-source{margin:0;font-weight:600;color:var(--ink-2)}
+.answer-guidance-item a{font-size:var(--text-small)}
 .answer-guidance-retry{justify-self:start}
 .answer-match{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s3)}
 .answer-chevron{flex-shrink:0;color:var(--signal)}
@@ -40,3 +42,5 @@
 .answer-sources summary{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:56px;padding:0 18px;list-style:none;cursor:pointer;font-size:var(--text-body);font-weight:600}
 .answer-sources summary::-webkit-details-marker{display:none}
 .answer-sources .source-links{padding:4px 18px 18px}
+.answer-sources.answer-details{padding:0}
+.answer-sources.answer-details dl{margin:0;padding:0 18px var(--s2)}

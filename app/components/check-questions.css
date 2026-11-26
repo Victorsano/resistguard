@@ -30,3 +30,9 @@
 @media(max-width:420px){
  .check-questions-add{grid-template-columns:minmax(0,1fr)}
 }
+.follow-up-field{min-inline-size:0;margin:0 0 var(--s4);padding:0;border:0}
+.follow-up-field legend{margin-bottom:var(--s2);font-weight:650}
+.follow-up-field .check-questions-toggle{grid-template-columns:repeat(3,minmax(0,1fr));margin:0}
+.follow-up-source{display:inline-block;margin-top:var(--s2);font-size:var(--text-small)}
+.follow-up-field legend small{margin-inline-start:var(--s1);font-weight:400;color:var(--ink-2)}
+.follow-up-field .check-questions-choice{padding-inline:var(--s1)}
