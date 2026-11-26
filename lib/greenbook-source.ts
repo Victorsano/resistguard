@@ -42,16 +42,44 @@ export function parseGreenbookDetails(html:string,expected:string,url:string):Gr
  return {number,name,status,url,ingredients:plain(heading?.[2]),strength:plain(heading?.[3]),manufacturer:field('Manufacturer Name')};
 }
 
+async function requestGreenbook(url:string,accept:string,signal:AbortSignal,ajax=false){
+ const headers:Record<string,string>={Accept:accept,'Cache-Control':'no-cache'};
+ if(ajax)headers['X-Requested-With']='XMLHttpRequest';
+ let target=new URL(url,origin);
+ for(let redirects=0;redirects<=2;redirects++){
+  if(target.origin!==origin||target.username||target.password)throw new Error('registry_redirect');
+  const response=await fetch(target.href,{headers,redirect:'manual',signal});
+  if(![301,302,303,307,308].includes(response.status))return response;
+  const location=response.headers.get('location');
+  if(!location)throw new Error('registry_redirect');
+  await response.body?.cancel();
+  target=new URL(location,target);
+ }
+ throw new Error('registry_redirect');
+}
+
+function registryFailure(error:unknown){
+ if(!(error instanceof Error))return 'unknown_error';
+ const message=error.message;
+ if(error.name==='TimeoutError'||error.name==='AbortError')return 'timeout';
+ if(message==='registry_redirect')return message;
+ if(/certificate|ssl|tls/i.test(message))return 'tls';
+ if(/dns|resolv/i.test(message))return 'dns';
+ if(/egress|allowlist|disallow|restricted|prohibited|not allowed|blocked/i.test(message))return 'egress';
+ if(/unsupported|not implemented|unrecognized|invalid option/i.test(message))return 'request_options';
+ return error.name;
+}
+
 async function details(url:string,number:string,signal:AbortSignal){
  try{
-  const response=await fetch(url,{redirect:'error',cache:'no-store',signal});
+  const response=await requestGreenbook(url,'text/html',signal);
   if(!response.ok){
    console.warn('Greenbook record request returned HTTP '+response.status);
    return null;
   }
   return parseGreenbookDetails(await response.text(),number,url);
  }catch(error){
-  console.warn('Greenbook record request failed:',error instanceof Error?error.name:'unknown error');
+  console.warn('Greenbook record request failed:',registryFailure(error));
   return null;
  }
 }
@@ -64,9 +92,7 @@ async function liveGreenbookLookup(number:string):Promise<GreenbookLookup>{
   if(record)return {status:'found',record};
  }
  try{
-  const response=await fetch(greenbookSearch(number),{
-   headers:{'X-Requested-With':'XMLHttpRequest',Accept:'application/json'},redirect:'error',cache:'no-store',signal
-  });
+  const response=await requestGreenbook(greenbookSearch(number).href,'application/json',signal,true);
   if(!response.ok){
    console.warn('Greenbook search returned HTTP '+response.status);
    return {status:'unavailable'};
@@ -87,7 +113,7 @@ async function liveGreenbookLookup(number:string):Promise<GreenbookLookup>{
    name,number,status,url,ingredients:plain(row.ingredient?.ingredient_name),strength:plain(row.strength),manufacturer:''
   }};
  }catch(error){
-  console.warn('Greenbook search failed:',error instanceof Error?error.name:'unknown error');
+  console.warn('Greenbook search failed:',registryFailure(error));
   return {status:'unavailable'};
  }
 }
