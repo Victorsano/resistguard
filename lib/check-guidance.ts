@@ -174,11 +174,17 @@ export function validateMedicineMatches(input:unknown,options:MatchSuggestions) 
 }
 
 export function validateCheckSynthesis(takeaway:unknown,questionForPharmacist:unknown):NonNullable<CheckGuidance['synthesis']>{
-  const prohibited=/\b(?:\d+\s*(?:mg|ml|grams?|tablets?|capsules?|times?)|dosage|safe to (?:take|use)|(?:you|we) (?:can|should|must) (?:take|start|stop|switch|double|skip))\b|(?:^|[.!?] )\s*(?:take|start|stop|switch|double|skip)\b|https?:|[<>\r\n]/i;
+  const prohibited=[
+    /\b(?:\d+\s*(?:mg|ml|grams?|tablets?|capsules?|times?)|dosage|safe to (?:take|use)|safe (?:antibiotics?|options?))\b/i,
+    /\b(?:you|we) (?:can|could|should|must|ought to|need to|may) (?:(?:not|never) )?(?:take|use|start|stop|switch|double|skip|avoid)\b/i,
+    /(?:^|[.!?] )\s*(?:do not |don['’]t |never )?(?:take|use|start|stop|switch|double|skip|avoid)\b/i,
+    /\b(?:you (?:have|do not have|don['’]t have|probably have)|you['’]re|you are) (?:[^.!?;]{0,36} )?(?:allergy|allergies|allergic)\b/i,
+    /https?:|[<>\r\n]/i
+  ];
   if(typeof takeaway!=='string'||typeof questionForPharmacist!=='string')throw new Error('Invalid synthesis');
   const summary=takeaway.trim();
   const question=questionForPharmacist.trim();
   if(summary.length<20||summary.length>360||question.length<12||question.length>180||
-    !question.endsWith('?')||prohibited.test(summary)||prohibited.test(question))throw new Error('Invalid synthesis');
+    !question.endsWith('?')||prohibited.some(pattern=>pattern.test(summary)||pattern.test(question)))throw new Error('Invalid synthesis');
   return {takeaway:summary,questionForPharmacist:question};
 }

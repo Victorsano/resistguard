@@ -80,6 +80,10 @@ test('the result accepts a tailored takeaway and a question while rejecting dire
   assert.throws(()=>validateCheckSynthesis('Take two capsules twice today.',question));
   assert.throws(()=>validateCheckSynthesis('You should stop your prescription today.',question));
   assert.throws(()=>validateCheckSynthesis('This looks safe to take with your medicines.',question));
+  assert.throws(()=>validateCheckSynthesis('You should not take it for a skin colour change.',question));
+  assert.throws(()=>validateCheckSynthesis('You have a penicillin allergy and should ask a pharmacist.',question));
+  assert.throws(()=>validateCheckSynthesis('You have no known penicillin allergy.',question));
+  assert.throws(()=>validateCheckSynthesis(takeaway,'What safe antibiotic options exist for my skin change?'));
   assert.throws(()=>validateCheckSynthesis(takeaway,'Visit https://example.invalid?'));
   assert.throws(()=>validateCheckSynthesis(takeaway,'Ask your pharmacist today.'));
 });
