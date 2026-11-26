@@ -1,0 +1,50 @@
+{
+  "checked": "2026-11-26",
+  "products": [
+    {
+      "number": "A4-8312",
+      "name": "Emzifix 400 mg Tablet",
+      "status": "Active",
+      "url": "https://greenbook.nafdac.gov.ng/products/details/4888",
+      "ingredients": "Cefixime (Cefixime Trihydrate)",
+      "strength": "400 mg",
+      "manufacturer": "Emzor Pharmaceutical Industries Limited"
+    },
+    {
+      "number": "04-5729",
+      "name": "Emzoclox Capsule",
+      "status": "Expired",
+      "url": "https://greenbook.nafdac.gov.ng/products/details/3931",
+      "ingredients": "Ampicillin (Ampicillin Trihydrate); Cloxacillin (Cloxacillin Sodium)",
+      "strength": "250 mg; 250 mg",
+      "manufacturer": "Emzor Pharmaceutical Industries Limited"
+    },
+    {
+      "number": "04-0396",
+      "name": "Emcillin Suspension",
+      "status": "Expired",
+      "url": "https://greenbook.nafdac.gov.ng/products/details/3911",
+      "ingredients": "Ampicillin (Ampicillin Trihydrate)",
+      "strength": "125 mg/5 mL",
+      "manufacturer": "Emzor Pharmaceutical Industries Limited"
+    },
+    {
+      "number": "B4-3237",
+      "name": "Emmox-250 Dispersible Tablet",
+      "status": "Ongoing Renewal",
+      "url": "https://greenbook.nafdac.gov.ng/products/details/4031",
+      "ingredients": "Amoxicillin (Amoxicillin Trihydrate)",
+      "strength": "250 mg",
+      "manufacturer": "Emzor Pharmaceutical Industries Limited"
+    },
+    {
+      "number": "04-0433",
+      "name": "Zinnat 250 mg Tablets",
+      "status": "Ongoing Renewal",
+      "url": "https://greenbook.nafdac.gov.ng/products/details/466",
+      "ingredients": "Cefuroxime (Cefuroxime Axetil)",
+      "strength": "250 mg",
+      "manufacturer": "Glaxo Operations UK Limited"
+    }
+  ]
+}

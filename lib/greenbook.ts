@@ -10,7 +10,7 @@ export type GreenbookRecord={
  url:string;
 };
 export type GreenbookLookup=
- |{status:'found';record:GreenbookRecord}
+ |{status:'found';record:GreenbookRecord;checked?:string}
  |{status:'not_found'|'unavailable'|'ambiguous'};
 
 export function registrationNumber(input:unknown):string|null{

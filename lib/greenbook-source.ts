@@ -1,3 +1,4 @@
+import saved from '@/data/greenbook-records.json';
 import {nigeriaProducts} from '@/lib/safety';
 import {registrationNumber,type GreenbookLookup,type GreenbookRecord} from '@/lib/greenbook';
 
@@ -44,11 +45,18 @@ export function parseGreenbookDetails(html:string,expected:string,url:string):Gr
 async function details(url:string,number:string,signal:AbortSignal){
  try{
   const response=await fetch(url,{redirect:'error',cache:'no-store',signal});
-  return response.ok?parseGreenbookDetails(await response.text(),number,url):null;
- }catch{return null;}
+  if(!response.ok){
+   console.warn('Greenbook record request returned HTTP '+response.status);
+   return null;
+  }
+  return parseGreenbookDetails(await response.text(),number,url);
+ }catch(error){
+  console.warn('Greenbook record request failed:',error instanceof Error?error.name:'unknown error');
+  return null;
+ }
 }
 
-export async function lookUpGreenbook(number:string):Promise<GreenbookLookup>{
+async function liveGreenbookLookup(number:string):Promise<GreenbookLookup>{
  const signal=AbortSignal.timeout(9_000);
  const known=nigeriaProducts.find(product=>product.number===number);
  if(known){
@@ -59,7 +67,10 @@ export async function lookUpGreenbook(number:string):Promise<GreenbookLookup>{
   const response=await fetch(greenbookSearch(number),{
    headers:{'X-Requested-With':'XMLHttpRequest',Accept:'application/json'},redirect:'error',cache:'no-store',signal
   });
-  if(!response.ok)return {status:'unavailable'};
+  if(!response.ok){
+   console.warn('Greenbook search returned HTTP '+response.status);
+   return {status:'unavailable'};
+  }
   const payload=await response.json();
   if(!Array.isArray(payload?.data)||!Number.isInteger(payload.recordsFiltered)||payload.error)return {status:'unavailable'};
   const matches=payload.data.filter((row:Record<string,unknown>)=>row&&registrationNumber(row.NAFDAC)===number);
@@ -75,5 +86,15 @@ export async function lookUpGreenbook(number:string):Promise<GreenbookLookup>{
   return {status:'found',record:record??{
    name,number,status,url,ingredients:plain(row.ingredient?.ingredient_name),strength:plain(row.strength),manufacturer:''
   }};
- }catch{return {status:'unavailable'};}
+ }catch(error){
+  console.warn('Greenbook search failed:',error instanceof Error?error.name:'unknown error');
+  return {status:'unavailable'};
+ }
+}
+
+export async function lookUpGreenbook(number:string):Promise<GreenbookLookup>{
+ const live=await liveGreenbookLookup(number);
+ if(live.status==='found'||live.status==='ambiguous')return live;
+ const record=saved.products.find(item=>item.number===number);
+ return record?{status:'found',record,checked:saved.checked}:live;
 }

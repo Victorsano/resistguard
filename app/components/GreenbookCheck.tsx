@@ -60,6 +60,7 @@ export default function GreenbookCheck({ingredients,suggestedNumber,aiAvailable}
    {busy&&<p role="status">Looking in the NAFDAC Greenbook…</p>}
    {record&&<div aria-live="polite">
     <h3>{record.name}</h3>
+    {lookup?.status==='found'&&lookup.checked&&<p>Saved Greenbook record checked on {lookup.checked}. The latest status could not be verified.</p>}
     <dl className="answer-medicine-record">
      <dt>NAFDAC number</dt><dd>{record.number}</dd>
      <dt>Registration status</dt><dd>{record.status}</dd>
