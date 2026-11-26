@@ -8,7 +8,7 @@
 .answer-action{margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid var(--line-strong)}
 .answer-action h2{margin:0 0 var(--s1);font-size:var(--text-small);font-weight:700}
 .answer-action p{font-weight:600}
-.answer-coverage,.answer>.next-steps{margin:var(--s4) 0}
+.answer>.next-steps{margin:var(--s4) 0}
 .answer-expanded{padding:0 18px 18px}
 .answer-expanded .source-links{padding-inline:0}
 .answer-classification-source{margin:var(--s1) 0 0;font-size:var(--text-small);color:var(--ink-2)}
@@ -53,3 +53,8 @@
 .registration-check form .primary{justify-self:start}
 .registration-check .answer-medicine-record dd{margin:0 0 var(--s2)}
 .registration-check h3{margin:var(--s4) 0 0}
+
+.answer-lead .answer-reported{margin:0 0 var(--s3);font-weight:650}
+.answer-lead .answer-source-gap{margin:0 0 var(--s3);color:var(--ink-2)}
+.answer-gaps{margin:0 0 var(--s3);padding:0 0 0 1.3em}
+.answer-gaps li+li{margin-top:var(--s1)}

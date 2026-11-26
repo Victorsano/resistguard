@@ -99,24 +99,51 @@ export const copy={
   noOtherMedicines:'None',
   unsureAboutNames:'Some names may be missing.',
   asTyped:'As typed',
-  interactionNote:'Some combinations could not be checked. Ask a pharmacist or prescriber.',
   guidance:'What to know about your check',
   guidancePending:'Groq is writing your result from your answers and the sources…',
   guidanceFallback:'Groq couldn’t finish this check.',
   guidanceBusy:'Groq reached a request limit.',
-  status:{concern:'Something to discuss',more_information:'More information needed',no_concern:'No concern found in the available sources'},
+  status:{concern:'Something to discuss',more_information:'More information needed',no_concern:'No concerns flagged by these checks'},
+  reportedPrescription:{
+   yes:'You said a doctor prescribed this medicine for this illness.',
+   no:'You said this medicine was not prescribed for this illness.'
+  },
+  reportedAssessment:{
+   yes:'You said a clinician already checked your symptoms.',
+   no:'You said a clinician has not checked your symptoms yet.',
+   unsure:'You’re unsure whether a clinician has checked your symptoms.'
+  },
+  gap:{
+   reason_missing:'We still need to know why you are taking the medicine.',
+   reason_evidence:'The available sources do not cover the full reason you entered.',
+   other_medicines:'We could not check all the medicines or combinations you listed.',
+   condition:'A clinician needs to review the long-term condition you reported.',
+   assessment:'Ask a doctor whether this medicine fits the reason you entered.',
+   unanswered:(question:string)=>`This question needs an answer. ${question}`,
+   unsure:(question:string)=>`You answered “Not sure” to this question. ${question}`
+  },
+  checks:{
+   'penicillin-reaction':'past reactions to penicillin','prior-reaction':'past reactions to this medicine',
+   'long-term-condition':'long-term health conditions','stomach-ulcer':'stomach ulcers',asthma:'asthma',
+   'kidney-or-liver':'kidney or liver conditions','paracetamol-overlap':'other medicines containing paracetamol',
+   pregnancy:'pregnancy',other:'other medicines'
+  } as Record<string,string>,
+  scope:(checks:string)=>`This result covers your answers about ${checks}.`,
+  prescriberConcern:'Tell your doctor what was flagged above and ask how it affects your prescription.',
+  reasonCoverage:(topics:string)=>`The sources used in this check do not cover ${topics}.`,
   statusNote:{
    concern:'Your answers or the source records flagged something to discuss.',
-   more_information:'Some details are missing or need to be checked.',
-   no_concern:'Only a clinician can tell you if this medicine is right for you.'
+   no_concern:'This result covers the follow-up questions and other medicines you answered about.'
   },
   nextAction:{
-   prescriber:'Talk to the doctor who prescribed it',
+   prescriber:'If you have questions, ask the doctor who prescribed it',
+   previous_clinician:'Check with the clinician who saw you',
    doctor:'Talk to a doctor',
    pharmacist:'Ask a pharmacist about your other medicines'
   },
   nextActionFallback:{
-   prescriber:'Tell the doctor what you reported in this check and ask what they need to review.',
+   prescriber:'If your instructions are unclear, ask what the medicine was prescribed for and how it fits your treatment plan.',
+   previous_clinician:'If you’re considering this medicine, ask whether it fits the plan they gave you.',
    doctor:'Tell the doctor why you are considering this medicine and share any other medicines or reactions you reported.',
    pharmacist:'Show the pharmacist the packs for the medicines you take and ask them to check how they may interact.'
   },

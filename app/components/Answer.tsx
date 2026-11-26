@@ -27,20 +27,36 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
 }){
  const t=copy.answer;
  const reason=details.reason.trim();
- const {status,clinician}=checkResult({
+ const {status,clinician,assessment,gaps}=checkResult({
   reason,prescribed:details.prescribed==='yes',questions:followUps,answers:followUpAnswers,
   interactions:guidance.interactions.length>0,needsInteractionReview:guidance.needsInteractionReview,needsReasonReview:guidance.needsReasonReview
  });
+ const uncovered=guidance.uncoveredReasons??[];
+ const format=new Intl.ListFormat('en');
+ const sourceGap=uncovered.length?t.reasonCoverage(format.format(uncovered)):t.gap.reason_evidence;
+ const checks=followUps.flatMap(({id})=>followUpAnswers[id]&&Object.hasOwn(t.checks,id)?[t.checks[id]]:[]);
+ if(details.otherMedicines)checks.push(t.checks.other);
+ const reported=[details.prescribed?t.reportedPrescription[details.prescribed]:'',assessment?t.reportedAssessment[assessment]:''].filter(Boolean);
+ const hasExistingPlan=clinician==='prescriber'||clinician==='previous_clinician';
+ const defaultAction=clinician==='prescriber'&&status==='concern'?t.prescriberConcern:t.nextActionFallback[clinician];
  return <section className="answer" aria-labelledby="answer-guidance">
   <div className="answer-context"><span>{medicine.name}</span><span>{medicine.antibiotic?t.antibiotic:t.notAntibiotic}</span></div>
   <div className="answer-lead" data-outcome={pending?undefined:status} data-motion="verdict">
    <h1 id="answer-guidance" tabIndex={-1} data-screen-heading>{pending?t.guidance:t.status[status]}</h1>
    <div aria-live="polite">
     {pending?<p role="status">{t.guidancePending}</p>:<>
-     <p className="answer-takeaway">{guidance.synthesis?.takeaway??t.statusNote[status]}</p>
+     {reported.length>0&&<p className="answer-reported">{reported.join(' ')}</p>}
+     {status==='no_concern'&&checks.length>0&&<p className="answer-source-gap">{t.scope(format.format(checks))}</p>}
+     {gaps.length>0&&<ul className="answer-gaps">
+      {gaps.map((gap,index)=><li key={index}>{'question' in gap?t.gap[gap.kind](gap.question):
+       gap.kind==='reason_evidence'?sourceGap:t.gap[gap.kind]}</li>)}
+     </ul>}
+     {uncovered.length>0&&!gaps.some(gap=>gap.kind==='reason_evidence')&&<p className="answer-source-gap">{sourceGap}</p>}
+     {guidance.synthesis?<p className="answer-takeaway">{guidance.synthesis.takeaway}</p>:
+      (status==='concern'||(status==='no_concern'&&!checks.length))&&<p className="answer-takeaway">{t.statusNote[status]}</p>}
      <div className="answer-action">
       <h2>{t.nextAction[clinician]}</h2>
-      <p>{guidance.synthesis?.nextAction??t.nextActionFallback[clinician]}</p>
+      <p>{(!hasExistingPlan&&guidance.synthesis?.nextAction)||defaultAction}</p>
      </div>
      {guidance.fallback&&<p className="answer-provider-note">{guidance.fallback==='rate_limit'?t.guidanceBusy:t.guidanceFallback}{' '}
       <button type="button" className="text-button answer-guidance-retry" onClick={onRetry}>{t.guidanceRetry}</button>
@@ -48,7 +64,6 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
     </>}
    </div>
   </div>
-  {!pending&&guidance.needsInteractionReview&&<p className="note answer-coverage">{t.interactionNote}</p>}
   <p className="answer-review"><BadgeInfo size={18} aria-hidden="true"/>{t.review}</p>
   <details className="answer-sources">
    <summary>{t.catalogue}<ChevronDown size={20} aria-hidden="true" className="answer-chevron"/></summary>

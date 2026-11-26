@@ -38,9 +38,11 @@ const reasonPhrases={
  typhoid:['typhoid'],
  diarrhoea:['diarrhoea','diarrhea','loose stools','watery stool'],
  urine:['pain when passing urine','pain when i pee','burning when i pee','painful urination'],
- skin:['wound','boil','infected cut'],
+ skin:['wound','wounds','infected cut'],
+ boil:['boil','boils'],
  dental:['tooth pain','toothache','tooth ache','dental pain'],
- pain:['headache','backache','back pain','body aches','joint pain','other pain']
+ headache:['headache','headaches'],
+ pain:['backache','back pain','body aches','joint pain','other pain']
 } as const;
 type ReasonId=keyof typeof reasonPhrases;
 

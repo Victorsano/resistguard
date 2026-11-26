@@ -100,12 +100,12 @@ test('optional details belong only to a yes answer that asks for them',()=>{
 test('concerns take precedence, uncertain answers stay open, and prescribing goes to a doctor',()=>{
  const questions=availableFollowUps(medicine('ampicillin-cloxacillin'),base);
  const input={prescribed:true,reason:'A sore throat',questions,interactions:false,needsInteractionReview:false,needsReasonReview:false};
- assert.deepEqual(checkResult({...input,answers:{'penicillin-reaction':'no'}}),{status:'no_concern',clinician:'prescriber'});
+ assert.deepEqual(checkResult({...input,answers:{'penicillin-reaction':'no'}}),{status:'no_concern',clinician:'prescriber',assessment:undefined,gaps:[]});
  assert.equal(checkResult({...input,answers:{'penicillin-reaction':'unsure'}}).status,'more_information');
  assert.equal(checkResult({...input,answers:{'penicillin-reaction':'no'},needsReasonReview:true}).status,'more_information');
  assert.equal(checkResult({...input,answers:{'penicillin-reaction':'yes'},needsInteractionReview:true}).status,'concern');
  assert.equal(checkResult({...input,prescribed:false,answers:{'penicillin-reaction':'no'}}).clinician,'doctor');
- assert.deepEqual(checkResult({...input,prescribed:false,reason:'',answers:{'penicillin-reaction':'no'},interactions:true}),{status:'concern',clinician:'pharmacist'});
+ assert.deepEqual(checkResult({...input,prescribed:false,reason:'',answers:{'penicillin-reaction':'no'},interactions:true}),{status:'concern',clinician:'pharmacist',assessment:undefined,gaps:[{kind:'reason_missing'}]});
 });
 
 test('new NAFDAC interactions and WHO evidence gaps use the source catalogue',()=>{
@@ -116,4 +116,30 @@ test('new NAFDAC interactions and WHO evidence gaps use the source catalogue',()
  assert.equal(result.interactions[0].id,'ampicillin-cloxacillin-allopurinol');
  assert.match(result.passages[0].source.url,/who\.int/);
  assert.equal(localGuidance(medicine('ampicillin-cloxacillin'),{...base,reason:'a new skin colour change'}).needsReasonReview,true);
+});
+
+test('a boil and headache keep their meanings for a current prescription',()=>{
+ const context={...base,medicineId:'ampicillin-cloxacillin',reason:'Headache and a boil in my elbow',prescribed:true};
+ const guidance=localGuidance(medicine(context.medicineId),context);
+ assert.ok(guidance.passages.some(item=>item.id==='boil'));
+ assert.ok(!guidance.passages.some(item=>item.id==='wound_assessment'));
+ assert.deepEqual(guidance.uncoveredReasons,['headache']);
+ const action='Ask your doctor which symptom the medicine is intended to help with.';
+ assert.throws(()=>validateCheckSynthesis(
+  'A wound may need more than an antibiotic and should be assessed by a health professional before use.',action,context));
+ assert.throws(()=>validateCheckSynthesis('This antibiotic was not prescribed for your symptoms.',action,context));
+ assert.doesNotThrow(()=>validateCheckSynthesis('Boil care can vary. The boil guidance does not cover headache.',action,context));
+});
+
+test('an existing assessment changes the handoff without turning it into a prescription',()=>{
+ const context={...base,medicineId:'ampicillin-cloxacillin',reason:'Headache and a boil'};
+ const questions=availableFollowUps(medicine(context.medicineId),context);
+ const input={...context,questions,interactions:false,needsInteractionReview:false,needsReasonReview:true};
+ const result=checkResult({...input,answers:{'penicillin-reaction':'no','reason-assessed':'yes'}});
+ assert.equal(result.assessment,'yes');
+ assert.equal(result.clinician,'previous_clinician');
+ assert.deepEqual(result.gaps,[{kind:'reason_evidence'}]);
+ assert.throws(()=>validateCheckSynthesis('A clinician hasn’t assessed whether this medicine is needed.',
+  'Ask the clinician to review the medicine.',{...context,assessment:'yes'}));
+ assert.equal(checkResult({...input,answers:{'penicillin-reaction':'no','reason-assessed':'no'}}).clinician,'doctor');
 });

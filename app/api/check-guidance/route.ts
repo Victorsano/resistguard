@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   const gate=await authorizeAI(request);
   if(!gate.ok)return Response.json({...fallback,fallback:gate.reason==='request_limit'?'rate_limit':'unavailable'},{headers});
 
-  const {candidates:evidence,reasonPassages,needsReasonReview}=evidenceForCheck(medicine,context);
+  const {candidates:evidence,reasonPassages,needsReasonReview,uncoveredReasons}=evidenceForCheck(medicine,context);
   const knownInteractions=interactionEvidence(medicine,context.otherMedicines,context.namesIncomplete);
   const outcome=answers?checkResult({
     ...context,questions:available,answers,
@@ -55,15 +55,19 @@ export async function POST(request: Request) {
       'Write a fresh plain-language takeaway under 55 words for this person.',
       'Lead with the most important detail raised by their reason, prescription status, confirmed medicines or follow-up answers.',
       'Refer to their stated reason in plain language when present. Leave out names and other identifying details.',
-      'Acknowledge if the medicine was not prescribed when it affects the next question.',
+      'The app displays reported prescription and assessment facts separately. Do not repeat, infer, or contradict them in the takeaway or next action.',
+      'If a doctor prescribed this medicine for this illness, give context for that existing plan. If a clinician already looked at the symptoms, build on that visit. In either case, do not tell the person to get an assessment or to get the symptoms checked again before using the medicine.',
+      'Keep different symptoms separate. Use the symptom words the person used. A boil and a wound are separate topics.',
+      'When a listed symptom is outside the supplied evidence, say what the evidence does cover without implying it covers that symptom or deciding what the prescription is for.',
       'If the evidence does not address that reason, say the sources cannot establish whether the medicine is appropriate for it.',
       'State yes or unsure responses as reported, never as a diagnosis. A no answer does not rule out a concern.',
       'A yes response to a past reaction means only that they report a reaction. Never call it an allergy diagnosis, and never say a no response means there is no allergy.',
       'If they answered yes to a past reaction, describe it as reported. Example: You reported a past reaction to penicillin. Tell the clinician what happened when you ask about this medicine. Omit negative reaction answers unless they help explain what to ask.',
       'Prioritize reported reactions or documented interactions when relevant. Describe evidence gaps without telling the user whether to take the medicine.',
       'Use follow-up details as statements reported by the person. Keep only relevant details and never repeat identifying information.',
-      'Follow the supplied outcome. A no_concern outcome only applies to the available evidence.',
-      'Write a direct next action under 25 words. Start with Ask, Tell, Show, Bring, or Share and address the supplied clinician. Refer to them as them so the action fits its heading. Use a concrete instruction about what information to share or what they can check. Use a declarative instruction with no question mark or wording like Should I discuss. Do not suggest treatment or alternatives.',
+      'Use the supplied outcome and gaps. A no_concern outcome refers only to the follow-up answers and medicine list, and does not give medication clearance.',
+      'Write a direct next action under 25 words. For an existing plan, make it conditional on the person having a concern or unclear instructions.' +
+      ' Start with Ask, Tell, Show, Bring, or Share and address the supplied clinician. Refer to them as them so the action fits its heading. Use a concrete instruction about what information to share or what they can check. Use a declarative instruction with no question mark or wording like Should I discuss. Do not suggest treatment or alternatives.',
       'Pick one to three supporting passage IDs. Omit URLs and do not quote the passages verbatim.'
     ].join(' ');
 
@@ -76,7 +80,7 @@ export async function POST(request: Request) {
         otherMedicines:context.otherMedicines.map(entry=>guidanceMedicine(entry.choice)?.name??entry.name),
         namesIncomplete:context.namesIncomplete,
         ...(asking?{optionalQuestions:available.filter(item=>!item.mandatory).map(({id,text})=>({id,text}))}:{
-          answered,outcome,
+          answered,outcome,uncoveredReasons,
           reasonSpecificEvidence:reasonPassages.map(item=>item.id),
           evidence:evidence.map(({id,title,text})=>({id,title,text})),
           documentedInteractions:knownInteractions.interactions.map(({title,text})=>({title,text})),
@@ -112,9 +116,11 @@ export async function POST(request: Request) {
     const result:CheckGuidance={
       passages:selected.map(id=>evidence.find(item=>item.id===id)!),
       ...interactionEvidence(medicine,corrected,context.namesIncomplete),
-      corrections,suggestions,needsReasonReview,source:'groq',
+      corrections,suggestions,needsReasonReview,uncoveredReasons,source:'groq',
       ...(asking?{questions:selectFollowUps(available,model.questionIds)}:{
-        synthesis:validateCheckSynthesis(model.takeaway,model.nextAction)
+        synthesis:validateCheckSynthesis(model.takeaway,model.nextAction,{
+          prescribed:context.prescribed,assessment:outcome?.assessment,reason:context.reason
+        })
       })
     };
     return Response.json(result,{headers});

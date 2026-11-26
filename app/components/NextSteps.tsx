@@ -2,6 +2,7 @@
 
 import {useState} from 'react';
 import {MessageCircle,ChevronDown} from 'lucide-react';
+import type {checkResult} from '@/lib/check-result';
 import {clinicianMessage,clinicianWhatsAppLink,pharmacistSection} from '@/lib/next-steps';
 import './next-steps.css';
 
@@ -11,7 +12,7 @@ export function PharmacistButton({href}:{href:string}){
 
 export default function NextSteps({medicine,clinician,prescribed,reason,flagged}:{
  medicine:{ingredients:readonly string[];antibiotic:boolean};
- clinician:'doctor'|'prescriber'|'pharmacist';
+ clinician:ReturnType<typeof checkResult>['clinician'];
  prescribed:boolean;
  reason:string;
  flagged:string[];

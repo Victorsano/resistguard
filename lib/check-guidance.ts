@@ -19,6 +19,7 @@ export type CheckGuidance = {
   interactions: Evidence[];
   needsInteractionReview: boolean;
   needsReasonReview: boolean;
+  uncoveredReasons: string[];
   corrections: {index: number; id: string}[];
   suggestions: MatchSuggestions;
   source: 'groq' | 'sources';
@@ -106,16 +107,26 @@ function passage(id: PassageId): Evidence {
 }
 
 const reasonEvidence: Partial<Record<ReturnType<typeof suggestReasons>[number],PassageId>>={
-  throat:'tonsillitis_assessment', typhoid:'typhoid_assessment', urine:'uti_assessment', skin:'wound_assessment',diarrhoea:'diarrhoea_assessment'
+  throat:'tonsillitis_assessment', typhoid:'typhoid_assessment', urine:'uti_assessment', skin:'wound_assessment',boil:'boil',diarrhoea:'diarrhoea_assessment'
+};
+const reasonLabels:Record<ReturnType<typeof suggestReasons>[number],string>={
+  cold:'cold or flu symptoms',throat:'sore throat',cough:'cough',fever:'fever',typhoid:'suspected typhoid',
+  diarrhoea:'diarrhoea',urine:'pain when passing urine',skin:'a wound',boil:'a boil',
+  dental:'tooth pain',headache:'headache',pain:'other pain'
 };
 const whoSafety={name:'WHO · 5 Moments for Medication Safety',url:'https://www.who.int/publications/i/item/WHO-HIS-SDS-2019.6'};
 
 export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
   const productSource={name:medicine.sourceLabel,url:medicine.source};
-  const relevant=suggestReasons(context.reason).flatMap((reason):Evidence[]=>{
-    if(reason==='cold'&&medicine.antibiotic)return [{id:'cold-use',title:scenarios.cold.title,text:scenarios.cold.text,source:sources[0]}];
+  const topics=suggestReasons(context.reason);
+  const uncoveredReasons:string[]=[];
+  const relevant=topics.flatMap((reason):Evidence[]=>{
+    if(!medicine.antibiotic)return [];
+    if(reason==='cold')return [{id:'cold-use',title:scenarios.cold.title,text:scenarios.cold.text,source:sources[0]}];
     const id=reasonEvidence[reason];
-    return id&&medicine.antibiotic?[passage(id)]:[];
+    if(id)return [passage(id)];
+    uncoveredReasons.push(reasonLabels[reason]);
+    return [];
   });
   const selection=[
     ...relevant,
@@ -134,7 +145,10 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     id:'prescription-to-discuss',title:'Check the prescription instructions',
     text:'Ask your prescriber or pharmacist to explain any instructions you are unsure about.',source:whoSafety
   });
-  return {candidates:selection,fallback:selection.slice(0,3),reasonPassages:relevant,needsReasonReview:!context.prescribed&&!relevant.length};
+  return {
+    candidates:selection,fallback:selection.slice(0,3),reasonPassages:relevant,uncoveredReasons,
+    needsReasonReview:!context.prescribed&&(!relevant.length||uncoveredReasons.length>0)
+  };
 }
 
 export function interactionEvidence(medicine: Medicine, entries: readonly OtherMedicine[], namesIncomplete: boolean) {
@@ -158,8 +172,8 @@ export function interactionEvidence(medicine: Medicine, entries: readonly OtherM
 }
 
 export function localGuidance(medicine: Medicine, context: GuidanceContext): CheckGuidance {
-  const {fallback:passages,needsReasonReview}=evidenceForCheck(medicine,context);
-  return {passages,needsReasonReview,...interactionEvidence(medicine,context.otherMedicines,context.namesIncomplete),
+  const {fallback:passages,needsReasonReview,uncoveredReasons}=evidenceForCheck(medicine,context);
+  return {passages,needsReasonReview,uncoveredReasons,...interactionEvidence(medicine,context.otherMedicines,context.namesIncomplete),
     corrections:[],suggestions:[],source:'sources'};
 }
 
@@ -184,7 +198,11 @@ export function validateMedicineMatches(input:unknown,options:MatchSuggestions) 
   return matches;
 }
 
-export function validateCheckSynthesis(takeaway:unknown,nextAction:unknown):NonNullable<CheckGuidance['synthesis']>{
+export function validateCheckSynthesis(takeaway:unknown,nextAction:unknown,reported?:{
+  prescribed:boolean;
+  assessment?:'yes'|'no'|'unsure';
+  reason:string;
+}):NonNullable<CheckGuidance['synthesis']>{
   const prohibited=[
     /\b(?:\d+\s*(?:mg|ml|grams?|tablets?|capsules?|times?)|dosage|safe to (?:take|use)|safe (?:antibiotics?|options?))\b/i,
     /\b(?:you|we) (?:can|could|should|must|ought to|need to|may) (?:(?:not|never) )?(?:take|use|start|stop|switch|double|skip|avoid)\b/i,
@@ -197,5 +215,15 @@ export function validateCheckSynthesis(takeaway:unknown,nextAction:unknown):NonN
   const action=nextAction.trim();
   if(summary.length<20||summary.length>360||action.length<12||action.length>180||
     !/^(?:Ask|Tell|Show|Bring|Share)\b/i.test(action)||action.includes('?')||prohibited.some(pattern=>pattern.test(summary)||pattern.test(action)))throw new Error('Invalid synthesis');
+  if(reported){
+    const text=summary+' '+action;
+    const history=/\b(?:was|were|is|been|has|have|had)(?:n['’]t)?\s+(?:(?:already|not|never|yet|previously|been)\s+)*(?:prescribed|assessed|examined|evaluated|checked)\b|\bdid(?:n['’]t)?\s+(?:not\s+)?(?:prescribe|assess|examine|evaluate|check)\b/i;
+    if(history.test(text))throw new Error('Synthesis restates reported clinical history');
+    if((reported.prescribed||reported.assessment==='yes')&&/\b(?:assess|evaluat|examin|diagnos)\w*\b/i.test(text))
+      throw new Error('Synthesis asks for a new assessment');
+    const topics=suggestReasons(reported.reason);
+    if(topics.includes('boil')&&!topics.includes('skin')&&/\bwounds?\b/i.test(text))
+      throw new Error('Synthesis recasts a boil as a wound');
+  }
   return {takeaway:summary,nextAction:action};
 }
