@@ -101,7 +101,7 @@ export const copy={
   asTyped:'As typed',
   guidance:'What to know about your check',
   guidancePending:'Groq is writing your result from your answers and the sources…',
-  guidanceFallback:'Groq couldn’t finish this check.',
+  guidanceFallback:'The AI explanation wasn’t available.',
   guidanceBusy:'Groq reached a request limit.',
   status:{concern:'Something to discuss',more_information:'More information needed',no_concern:'No concerns flagged by these checks'},
   reportedPrescription:{
@@ -117,7 +117,7 @@ export const copy={
    reason_missing:'We still need to know why you are taking the medicine.',
    reason_evidence:'The available sources do not cover the full reason you entered.',
    other_medicines:'We could not check all the medicines or combinations you listed.',
-   condition:'A clinician needs to review the long-term condition you reported.',
+   condition:'This check can’t tell how the conditions you reported affect this medicine.',
    assessment:'Ask a doctor whether this medicine fits the reason you entered.',
    unanswered:(question:string)=>`This question needs an answer. ${question}`,
    unsure:(question:string)=>`You answered “Not sure” to this question. ${question}`
@@ -130,6 +130,10 @@ export const copy={
   } as Record<string,string>,
   scope:(checks:string)=>`This result covers your answers about ${checks}.`,
   prescriberConcern:'Tell your doctor what was flagged above and ask how it affects your prescription.',
+  reportedConditions:'Conditions you reported',
+  reasonNotCovered:(reason:string)=>`The sources used here don’t explain this medicine’s use for “${reason}”.`,
+  prescriberAction:'Ask the doctor who prescribed it',
+  prescriberConditions:'Tell your doctor about the conditions listed above. Ask what the medicine is meant to treat and whether those conditions affect the plan.',
   reasonCoverage:(topics:string)=>`The sources used in this check do not cover ${topics}.`,
   statusNote:{
    concern:'Your answers or the source records flagged something to discuss.',

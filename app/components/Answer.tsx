@@ -33,12 +33,15 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
  });
  const uncovered=guidance.uncoveredReasons??[];
  const format=new Intl.ListFormat('en');
- const sourceGap=uncovered.length?t.reasonCoverage(format.format(uncovered)):t.gap.reason_evidence;
+ const sourceGap=uncovered.length?t.reasonCoverage(format.format(uncovered)):reason?t.reasonNotCovered(reason):t.gap.reason_evidence;
+ const conditions=followUpAnswers['long-term-condition']==='yes'?followUpDetails['long-term-condition']?.trim():'';
+ const namedConditions=conditions?.replace(/\s+([,;])/g,'$1');
  const checks=followUps.flatMap(({id})=>followUpAnswers[id]&&Object.hasOwn(t.checks,id)?[t.checks[id]]:[]);
  if(details.otherMedicines)checks.push(t.checks.other);
  const reported=[details.prescribed?t.reportedPrescription[details.prescribed]:'',assessment?t.reportedAssessment[assessment]:''].filter(Boolean);
  const hasExistingPlan=clinician==='prescriber'||clinician==='previous_clinician';
- const defaultAction=clinician==='prescriber'&&status==='concern'?t.prescriberConcern:t.nextActionFallback[clinician];
+ const defaultAction=clinician==='prescriber'&&namedConditions?t.prescriberConditions:
+  clinician==='prescriber'&&status==='concern'?t.prescriberConcern:t.nextActionFallback[clinician];
  return <section className="answer" aria-labelledby="answer-guidance">
   <div className="answer-context"><span>{medicine.name}</span><span>{medicine.antibiotic?t.antibiotic:t.notAntibiotic}</span></div>
   <div className="answer-lead" data-outcome={pending?undefined:status} data-motion="verdict">
@@ -46,6 +49,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
    <div aria-live="polite">
     {pending?<p role="status">{t.guidancePending}</p>:<>
      {reported.length>0&&<p className="answer-reported">{reported.join(' ')}</p>}
+     {namedConditions&&<p className="answer-source-gap"><strong>{t.reportedConditions}</strong><br/>{namedConditions}</p>}
      {status==='no_concern'&&checks.length>0&&<p className="answer-source-gap">{t.scope(format.format(checks))}</p>}
      {gaps.length>0&&<ul className="answer-gaps">
       {gaps.map((gap,index)=><li key={index}>{'question' in gap?t.gap[gap.kind](gap.question):
@@ -55,7 +59,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
      {guidance.synthesis?<p className="answer-takeaway">{guidance.synthesis.takeaway}</p>:
       (status==='concern'||(status==='no_concern'&&!checks.length))&&<p className="answer-takeaway">{t.statusNote[status]}</p>}
      <div className="answer-action">
-      <h2>{t.nextAction[clinician]}</h2>
+      <h2>{clinician==='prescriber'&&status!=='no_concern'?t.prescriberAction:t.nextAction[clinician]}</h2>
       <p>{(!hasExistingPlan&&guidance.synthesis?.nextAction)||defaultAction}</p>
      </div>
      {guidance.fallback&&<p className="answer-provider-note">{guidance.fallback==='rate_limit'?t.guidanceBusy:t.guidanceFallback}{' '}
@@ -76,7 +80,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
    </div>
   </details>
   <GreenbookCheck ingredients={medicine.ingredients} suggestedNumber={suggestedRegistration} aiAvailable={aiAvailable}/>
-  {!pending&&<details className="answer-sources">
+  {!pending&&<details className="answer-sources" open>
    <summary>{t.supporting}<ChevronDown size={20} aria-hidden="true" className="answer-chevron"/></summary>
    <div className="answer-expanded answer-guidance">
     {[...guidance.interactions,...guidance.passages].map(item=><article className="answer-guidance-item" key={item.id}>

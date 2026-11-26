@@ -25,7 +25,7 @@ export type CheckGuidance = {
   source: 'groq' | 'sources';
   fallback?: 'rate_limit' | 'unavailable';
   questions?: FollowUpQuestion[];
-  synthesis?: {takeaway:string; nextAction:string};
+  synthesis?: {takeaway:string; nextAction?:string};
 };
 
 const knownMedicines = [
@@ -135,7 +135,7 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
       id:'other-medicines',title:'Ask about your other medicines',
       text:'Show your medicine list to a pharmacist. Ask what could change if you add this medicine.',source:whoSafety
     }]:[]),
-    ...(medicine.antibiotic?[passage(context.prescribed?'prescription':'need'),passage('amr'),passage('nigeria_amr')]:[])
+    ...(medicine.antibiotic?[passage(context.prescribed?'prescription':'need')]:[])
   ];
   if(!medicine.antibiotic&&context.reason)selection.push({
     id:'reason-to-discuss',title:'Discuss why you want to take it',
@@ -147,7 +147,7 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
   });
   return {
     candidates:selection,fallback:selection.slice(0,3),reasonPassages:relevant,uncoveredReasons,
-    needsReasonReview:!context.prescribed&&(!relevant.length||uncoveredReasons.length>0)
+    needsReasonReview:(!context.prescribed||medicine.antibiotic)&&(!relevant.length||uncoveredReasons.length>0)
   };
 }
 
@@ -210,13 +210,14 @@ export function validateCheckSynthesis(takeaway:unknown,nextAction:unknown,repor
     /\b(?:you (?:have|do not have|don['’]t have|probably have)|you['’]re|you are) (?:[^.!?;]{0,36} )?(?:allergy|allergies|allergic)\b/i,
     /https?:|[<>\r\n]/i
   ];
-  if(typeof takeaway!=='string'||typeof nextAction!=='string')throw new Error('Invalid synthesis');
+  if(typeof takeaway!=='string'||(nextAction!==undefined&&typeof nextAction!=='string'))throw new Error('Invalid synthesis');
   const summary=takeaway.trim();
-  const action=nextAction.trim();
-  if(summary.length<20||summary.length>360||action.length<12||action.length>180||
-    !/^(?:Ask|Tell|Show|Bring|Share)\b/i.test(action)||action.includes('?')||prohibited.some(pattern=>pattern.test(summary)||pattern.test(action)))throw new Error('Invalid synthesis');
+  const action=nextAction?.trim();
+  if(summary.length<20||summary.length>520||prohibited.some(pattern=>pattern.test(summary)))throw new Error('Invalid synthesis');
+  if(action!==undefined&&(action.length<12||action.length>180||!/^(?:Ask|Tell|Show|Bring|Share)\b/i.test(action)||
+    prohibited.some(pattern=>pattern.test(action))))throw new Error('Invalid next action');
   if(reported){
-    const text=summary+' '+action;
+    const text=summary+(action?' '+action:'');
     const history=/\b(?:was|were|is|been|has|have|had)(?:n['’]t)?\s+(?:(?:already|not|never|yet|previously|been)\s+)*(?:prescribed|assessed|examined|evaluated|checked)\b|\bdid(?:n['’]t)?\s+(?:not\s+)?(?:prescribe|assess|examine|evaluate|check)\b/i;
     if(history.test(text))throw new Error('Synthesis restates reported clinical history');
     if((reported.prescribed||reported.assessment==='yes')&&/\b(?:assess|evaluat|examin|diagnos)\w*\b/i.test(text))
@@ -225,5 +226,5 @@ export function validateCheckSynthesis(takeaway:unknown,nextAction:unknown,repor
     if(topics.includes('boil')&&!topics.includes('skin')&&/\bwounds?\b/i.test(text))
       throw new Error('Synthesis recasts a boil as a wound');
   }
-  return {takeaway:summary,nextAction:action};
+  return {takeaway:summary,...(action?{nextAction:action}:{})};
 }

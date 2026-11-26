@@ -47,28 +47,21 @@ export async function POST(request: Request) {
     const candidates=spellingCandidates(entry.name);
     return candidates.length?[{index,candidates}]:[];
   });
-  const template=asking?'{"questionIds":["optional-id"],"matches":[]}':
-    '{"takeaway":"...","nextAction":"...", "passageIds":["evidence-id"],"matches":[]}';
+  const existingPlan=outcome?.clinician==='prescriber'||outcome?.clinician==='previous_clinician';
+  const template=asking?'{"questionIds":["optional-id"],"matches":[]}':existingPlan?
+    '{"takeaway":"...","passageIds":["evidence-id"],"matches":[]}':
+    '{"takeaway":"...","nextAction":"...","passageIds":["evidence-id"],"matches":[]}';
   const task=asking?
-    'Pick zero to two optional follow-ups relevant to this medicine and this person’s reason, prescription and other medicines. Skip questions already answered. Mandatory questions are added automatically, so return optional IDs only.':
+    'Pick up to two relevant optional follow-up IDs. Mandatory questions are added automatically.':
     [
-      'Write a fresh plain-language takeaway under 55 words for this person.',
-      'Lead with the most important detail raised by their reason, prescription status, confirmed medicines or follow-up answers.',
-      'Refer to their stated reason in plain language when present. Leave out names and other identifying details.',
-      'The app displays reported prescription and assessment facts separately. Do not repeat, infer, or contradict them in the takeaway or next action.',
-      'If a doctor prescribed this medicine for this illness, give context for that existing plan. If a clinician already looked at the symptoms, build on that visit. In either case, do not tell the person to get an assessment or to get the symptoms checked again before using the medicine.',
-      'Keep different symptoms separate. Use the symptom words the person used. A boil and a wound are separate topics.',
-      'When a listed symptom is outside the supplied evidence, say what the evidence does cover without implying it covers that symptom or deciding what the prescription is for.',
-      'If the evidence does not address that reason, say the sources cannot establish whether the medicine is appropriate for it.',
-      'State yes or unsure responses as reported, never as a diagnosis. A no answer does not rule out a concern.',
-      'A yes response to a past reaction means only that they report a reaction. Never call it an allergy diagnosis, and never say a no response means there is no allergy.',
-      'If they answered yes to a past reaction, describe it as reported. Example: You reported a past reaction to penicillin. Tell the clinician what happened when you ask about this medicine. Omit negative reaction answers unless they help explain what to ask.',
-      'Prioritize reported reactions or documented interactions when relevant. Describe evidence gaps without telling the user whether to take the medicine.',
-      'Use follow-up details as statements reported by the person. Keep only relevant details and never repeat identifying information.',
-      'Use the supplied outcome and gaps. A no_concern outcome refers only to the follow-up answers and medicine list, and does not give medication clearance.',
-      'Write a direct next action under 25 words. For an existing plan, make it conditional on the person having a concern or unclear instructions.' +
-      ' Start with Ask, Tell, Show, Bring, or Share and address the supplied clinician. Refer to them as them so the action fits its heading. Use a concrete instruction about what information to share or what they can check. Use a declarative instruction with no question mark or wording like Should I discuss. Do not suggest treatment or alternatives.',
-      'Pick one to three supporting passage IDs. Omit URLs and do not quote the passages verbatim.'
+      'In two short sentences, explain in plain language what the cited evidence helps clarify for this person.',
+      'Use their stated reason and relevant follow-up details as things they reported. Do not repeat any identifying information.',
+      'Name a real evidence gap if the sources do not address their reason or a condition they reported. Do not claim a condition is a contraindication unless a supplied source explicitly supports that conclusion.',
+      'Explain what a reported concern or missing detail means for this check. Keep different symptoms separate. Use the symptom words they used.',
+      'The app already displays what the person reported about prescription and assessment. Do not repeat or infer either.',
+      existingPlan?'They already have a clinician involved. Do not request another assessment or write a next action.':
+        'Give a specific next action for the supplied clinician. Start with Ask, Tell, Show, Bring, or Share. Say what to ask or share.',
+      'Cite one to three supplied passage IDs. For a gap in symptom evidence, use the most relevant available source, such as label-caution. Do not invent a source.'
     ].join(' ');
 
   try{
@@ -93,8 +86,8 @@ export async function POST(request: Request) {
       })}
     ],true);
     const model=JSON.parse(raw);
-    const keys=asking?'matches,questionIds':'matches,nextAction,passageIds,takeaway';
-    if(!model||Object.keys(model).sort().join(',')!==keys)throw new Error('Invalid response shape');
+    const keys=asking?'matches,questionIds':'matches,passageIds,takeaway';
+    if(!model||Object.keys(model).filter(key=>asking||key!=='nextAction').sort().join(',')!==keys)throw new Error('Invalid response shape');
     const matchOptions=possible.map(({index,candidates})=>({index,ids:candidates.map(item=>item.id)}));
     const selection=asking?{passageIds:[],matches:validateMedicineMatches(model.matches,matchOptions)}:validateGuidanceSelection(
       JSON.stringify({matches:model.matches,passageIds:model.passageIds}),evidence.map(item=>item.id),matchOptions
@@ -113,14 +106,21 @@ export async function POST(request: Request) {
     }
     const corrected=context.otherMedicines.map((entry,index)=>({...entry,choice:corrections.find(item=>item.index===index)?.id??entry.choice}));
     const selected=[...new Set([...selection.passageIds,...reasonPassages.map(item=>item.id)])].slice(0,4);
+    const reported={prescribed:context.prescribed,assessment:outcome?.assessment,reason:context.reason};
+    let synthesis:CheckGuidance['synthesis'];
+    if(!asking){
+      synthesis=validateCheckSynthesis(model.takeaway,undefined,reported);
+      if(!existingPlan&&model.nextAction){
+        try{synthesis=validateCheckSynthesis(model.takeaway,model.nextAction,reported);}
+        catch{ /* The result can show its own next action. */ }
+      }
+    }
     const result:CheckGuidance={
       passages:selected.map(id=>evidence.find(item=>item.id===id)!),
       ...interactionEvidence(medicine,corrected,context.namesIncomplete),
       corrections,suggestions,needsReasonReview,uncoveredReasons,source:'groq',
       ...(asking?{questions:selectFollowUps(available,model.questionIds)}:{
-        synthesis:validateCheckSynthesis(model.takeaway,model.nextAction,{
-          prescribed:context.prescribed,assessment:outcome?.assessment,reason:context.reason
-        })
+        synthesis
       })
     };
     return Response.json(result,{headers});

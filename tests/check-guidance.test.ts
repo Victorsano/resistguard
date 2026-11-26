@@ -143,3 +143,12 @@ test('an existing assessment changes the handoff without turning it into a presc
   'Ask the clinician to review the medicine.',{...context,assessment:'yes'}));
  assert.equal(checkResult({...input,answers:{'penicillin-reaction':'no','reason-assessed':'no'}}).clinician,'doctor');
 });
+
+test('an unfamiliar reason remains an evidence gap even with a prescription',()=>{
+ const context={...base,medicineId:'ampicillin-cloxacillin',reason:'Dermatographia',prescribed:true};
+ const guidance=localGuidance(medicine(context.medicineId),context);
+ assert.equal(guidance.needsReasonReview,true);
+ assert.deepEqual(guidance.passages.map(passage=>passage.id),['label-caution','prescription']);
+ const explanation='The label describes the medicine, and the supplied sources do not explain its use for the skin condition you reported.';
+ assert.deepEqual(validateCheckSynthesis(explanation,undefined,context),{takeaway:explanation});
+});
