@@ -6,7 +6,6 @@ import {
   conversationTopics,getPassage,retrieveUseEvidence,usePlans,useTopics,validateEvidenceOrder,
   type PassageId,type UsePlan,type UseTopic
 } from '@/lib/use-check';
-import {emergency} from '@/lib/safety';
 import './use-check.css';
 
 type QuestionTopic=keyof typeof conversationTopics;
@@ -170,7 +169,6 @@ export default function UseCheck(){
           </ul>
           {topics.includes('age')&&<p>{getPassage('children').text} <a href={getPassage('children').reference.url} target="_blank" rel="noreferrer">CDC guidance</a></p>}
           </div>
-          <p className="use-urgent">{emergency}</p>
           <button className="text-button" onClick={()=>selectTopic(topic)}><RotateCcw size={15}/> Reset this example</button>
         </>:<div className="use-empty"><BookOpen size={38}/><h2>Why do you want to use it?</h2><p>Choose a situation and a possible action. The explanation will show the relevant public guidance and the questions you can bring to a pharmacist.</p></div>}
       </section>

@@ -22,12 +22,10 @@
  --signal-50:#E9ECFF;      /* informational note ground on paper */
  --signal-ink:#2A3BB8;     /* text on signal-50 */
  --on-signal:#FFFFFF;      /* label on a signal fill, 5.1:1 */
- --on-emergency:#FFFFFF;   /* text on the emergency strip, 6.5:1 */
 
  /* Meaning colours, unchanged from the reviewed answer screen */
  --amber-50:#FFF0D4;--amber-line:#B25E00;--amber-icon:#8A4500;--amber-ink:#4D2600;   /* antibiotic caution */
  --slate-50:#E8EEF5;--slate-line:#4F6B8A;--slate-icon:#34506F;--slate-ink:#1D3350;   /* not an antibiotic */
- --emergency:#B3261E;      /* emergency strip only */
 
  /* Type: Bricolage Grotesque for everything, Fraunces italic for one word per heading */
  --font-sans:var(--font-bricolage),'Bricolage Grotesque Fallback',sans-serif;

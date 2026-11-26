@@ -4,7 +4,6 @@ import {medicines} from '@/lib/safety';
 const lowerFirst=(name:string)=>name.charAt(0).toLowerCase()+name.slice(1);
 export const copy={
  back:'Back',
- emergency:'Trouble breathing, a swollen face or throat, or fainting? Get emergency help now.',
  home:{
   // Redesign v3: approved Tool Home heading and lead. The one emphasised word is titleEm.
   title:'What are you about to take?',

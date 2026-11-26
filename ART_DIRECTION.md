@@ -4,7 +4,7 @@
 A dark room with one lamp on. You walk in holding a medicine pack and one question, and the room answers it. The landing page is the room (night). The checker is the sheet of paper the answer is written on (paper). Everything else is subtracted.
 
 ## 2. Emotional response
-Doubt, then clarity, then reassurance. The hero names the doubt in big, plain type. One blue word marks the turn. The page goes quiet after that. The checker should feel like a pharmacist's counter in daylight: white cards on warm paper and large text. A verdict should never feel like a warning siren unless it is the emergency strip.
+Doubt, then clarity, then reassurance. The hero names the doubt in big, plain type. One blue word marks the turn. The page goes quiet after that. The checker should feel like a pharmacist's counter in daylight: white cards on warm paper and large text. A verdict should never feel like a warning siren.
 
 ## 3. Night & Paper on each surface
 | | Night (landing, tool top bar, video) | Paper (tool) |
@@ -14,7 +14,7 @@ Doubt, then clarity, then reassurance. The hero names the doubt in big, plain ty
 | Signal `#3D5AFE` | Fill of the one primary button (white label, 5.1:1). Large emphasis word only (3.8:1, so 24px and up). Small signal text uses `#6E80FF` | Primary button, links (4.6:1). Notes on `signal-50 #E9ECFF` with `#2A3BB8` text |
 | Lines | `rgba(255,255,255,.12)` | `rgba(11,13,16,.12)` |
 
-Each colour has one meaning. Signal means "do this next". Amber (`#fff0d4` / `#b25e00` / `#4d2600`) means antibiotic caution. Slate (`#e8eef5` / `#4f6b8a` / `#1d3350`) means not an antibiotic. Red `#b3261e` is the emergency strip only. The palette has no green, lavender or old cobalt. There are no shadows or gradients, except the single hero glow.
+Each colour has one meaning. Signal means "do this next". Amber (`#fff0d4` / `#b25e00` / `#4d2600`) means antibiotic caution. Slate (`#e8eef5` / `#4f6b8a` / `#1d3350`) means not an antibiotic. The palette has no red, green, lavender or old cobalt. There are no shadows or gradients, except the single hero glow.
 
 Radius is 4px on every control (buttons, inputs, chips) and 12px on paper cards. Focus is a 2px ring offset by 4px: `#6E80FF` on night, `#3D5AFE` on paper. It is the same shape everywhere.
 

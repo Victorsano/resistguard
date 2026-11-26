@@ -35,7 +35,6 @@
 .use-next h3 {margin:0 0 .65rem}
 .use-next ul {list-style:disc;padding-left:1.2rem;font-size:.9rem;line-height:1.5}
 .use-next li+li {margin-top:.55rem}
-.use-urgent {font-size:.85rem;background:var(--amber-50);border-left:3px solid var(--amber-icon);padding:.85rem;margin:1rem 0}
 .resistance-lesson {background:var(--ink);color:var(--card);padding:clamp(1.3rem,4vw,3rem);margin-top:2.5rem}
 .resistance-lesson .eyebrow,.resistance-lesson p,.resistance-lesson a {color:var(--signal-50)}
 .lesson-stages {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;list-style:none;padding:0;margin:2rem 0 1.5rem}

@@ -197,7 +197,6 @@ On the right-hand panel:
 4. **"Explain this simply"**: opens the **Ask ResistGuard** dialog with the explanation for the chosen scenario already running (see sections 7 and 8). It no longer expands inside the page.
 5. For antibiotics, a link to the **Antibiotic use** tab.
 6. "A useful next conversation" (what to bring to a pharmacist), source links, the date the source was checked, and "Pharmacist review pending".
-7. On every page: a fixed emergency notice (trouble breathing, throat swelling or collapse → seek emergency help).
 
 ---
 

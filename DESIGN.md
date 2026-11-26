@@ -2,7 +2,7 @@
 
 One product, one design language. The landing page (`/`) is night. The medicine checker (`/check`) is paper under a night top bar. Both are surfaces of the same product. The direction and its reasoning live in `ART_DIRECTION.md`; this file is the working reference. Every value below is defined once in `app/tokens.css`, and nothing else may define a colour, font or motion value.
 
-## Colour: one brand colour, three meaning colours
+## Colour: one brand colour, two meaning colours
 
 | Token | Value | Use |
 |---|---|---|
@@ -19,7 +19,6 @@ One product, one design language. The landing page (`/`) is night. The medicine 
 | `--signal-50` / `--signal-ink` | `#E9ECFF` / `#2A3BB8` | Information notes on paper (paused photo reading, "AI read this", timeouts) |
 | `--amber-*` | `#FFF0D4` `#B25E00` `#8A4500` `#4D2600` | **Antibiotic caution** only: verdict and chips |
 | `--slate-*` | `#E8EEF5` `#4F6B8A` `#34506F` `#1D3350` | **Not an antibiotic** only: calm information |
-| `--emergency` | `#B3261E` | The emergency strip, nothing else |
 
 Rules:
 - No green anywhere: "not an antibiotic" must never read as "safe to take".
@@ -61,7 +60,6 @@ Rules:
 - **Wordmark:** `app/components/Wordmark.tsx`. "ResistGuard" followed by "Demo" in small text. No monogram, no badge.
 - **Buttons:** `.primary` (signal fill), `.secondary` (white with a 1px border), `.text-button` (signal underline). The landing page uses `.landing-button` with a trailing arrow: one rectangle, one arrow.
 - **Notes:** `.note` (signal-50) for information; `.caution` (white card) for medicine cautions.
-- **Emergency strip:** rendered once by `CheckApp`, in normal flow at the bottom of every tool screen. It is never fixed or sticky.
 - **Hero media:** `app/components/HeroMedia.tsx`. The rules are in `lib/hero-media.ts`:
   - The video renders only when `NEXT_PUBLIC_HERO_VIDEO=1` and `public/media/hero.webm` or `hero.mp4` exists.
   - `hero-poster.jpg` is shown for reduced motion, Save-Data and 2G.
