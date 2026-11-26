@@ -1,16 +1,10 @@
-/* The answer. Amber means antibiotic caution, slate means not an antibiotic. The verdict never relies on colour alone: icon and words carry it too. */
+/* The answer is the success moment: the dark room gives its answer. One card for both outcomes, with a check
+   that says the check is done; the words say which outcome. No warning colours or alert icons on the verdict. */
 .answer{display:block}
-.answer-verdict{display:flex;gap:14px;align-items:flex-start;margin-top:var(--s3);padding:18px;border:2px solid;border-radius:var(--radius-card)}
-.answer .answer-verdict h1{margin:0;font-size:clamp(28px,3vw,34px);font-weight:700;font-stretch:86%;line-height:1.1;letter-spacing:-.02em;text-wrap:wrap}
-.answer-verdict-antibiotic{background:var(--amber-50);border-color:var(--amber-line)}
-.answer .answer-verdict-antibiotic h1{color:var(--amber-ink)}
-.answer-verdict-antibiotic .answer-verdict-icon{color:var(--amber-icon)}
-.answer-verdict-other{background:var(--slate-50);border-color:var(--slate-line)}
-.answer .answer-verdict-other h1{color:var(--slate-ink)}
-.answer-verdict-other .answer-verdict-icon{color:var(--slate-icon)}
-.answer-verdict-icon{position:relative;display:flex;flex-shrink:0;margin-top:1px}
-.answer-verdict-alert{position:absolute;right:-8px;top:-8px;border-radius:50%;background:var(--amber-50)}
-.answer-name{margin:6px 0 0;font-size:var(--text-body);font-weight:500;line-height:1.4;color:var(--ink-2)}
+.answer-verdict{display:flex;gap:14px;align-items:flex-start;margin-top:var(--s3);padding:20px;border-radius:var(--radius-card);background:var(--night);color:var(--on-night)}
+.answer .answer-verdict h1{margin:0;font-size:clamp(28px,3vw,34px);font-weight:700;font-stretch:86%;line-height:1.1;letter-spacing:-.02em;text-wrap:wrap;color:var(--on-night)}
+.answer-verdict-icon{display:flex;flex-shrink:0;margin-top:1px;color:var(--signal-300)}
+.answer-name{margin:6px 0 0;font-size:var(--text-body);font-weight:500;line-height:1.4;color:var(--on-night-2)}
 .answer-review{display:inline-flex;align-items:center;gap:var(--s2);margin:var(--s4) 0 0;padding:6px 12px;border:1px solid var(--line-strong);border-radius:var(--radius-control);background:var(--card);font-size:var(--text-small);font-weight:600;line-height:1.4;color:var(--ink)}
 .answer-review svg{flex-shrink:0}
 .answer-summary{margin:var(--s4) 0 0;font-size:var(--text-body);line-height:1.6}

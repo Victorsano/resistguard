@@ -24,8 +24,8 @@
  --on-signal:#FFFFFF;      /* label on a signal fill, 5.1:1 */
 
  /* Meaning colours, unchanged from the reviewed answer screen */
- --amber-50:#FFF0D4;--amber-line:#B25E00;--amber-icon:#8A4500;--amber-ink:#4D2600;   /* antibiotic caution */
- --slate-50:#E8EEF5;--slate-line:#4F6B8A;--slate-icon:#34506F;--slate-ink:#1D3350;   /* not an antibiotic */
+ --amber-50:#FFF0D4;--amber-line:#B25E00;--amber-ink:#4D2600;   /* the "Antibiotic" label on list chips */
+ --slate-50:#E8EEF5;--slate-line:#4F6B8A;--slate-ink:#1D3350;   /* the "Not an antibiotic" label on list chips */
 
  /* Type: Bricolage Grotesque for everything, Fraunces italic for one word per heading */
  --font-sans:var(--font-bricolage),'Bricolage Grotesque Fallback',sans-serif;
