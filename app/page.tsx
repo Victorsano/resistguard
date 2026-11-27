@@ -4,6 +4,7 @@ import {ArrowRight,ScanLine,MessageCircle,ShieldCheck,LockKeyhole,BadgeInfo,Arro
 import {landing as t} from '@/lib/landing-copy';
 import {availableHeroMedia} from '@/lib/hero-media';
 import HeroMedia from './components/HeroMedia';
+import HeroParticles from './components/HeroParticles';
 import Wordmark from './components/Wordmark';
 import Emphasis from './components/Emphasis';
 import './landing.css';
@@ -20,6 +21,7 @@ export default function Landing(){
  <main id="main-content">
   <section className="hero" aria-labelledby="hero-title">
    <HeroMedia {...media}/>
+   <HeroParticles/>
    <div className="hero-copy">
     <p className="hero-eyebrow" data-motion="hero-eyebrow">{t.eyebrow}</p>
     <h1 id="hero-title" className="hero-title"><span className="hero-line-1" data-motion="hero-line-1">{t.line1.before}<br/> {t.line1.after} <em>{t.line1.em}</em>{t.line1.end}</span><span className="hero-line-2" data-motion="hero-line-2">{t.line2}</span></h1>
