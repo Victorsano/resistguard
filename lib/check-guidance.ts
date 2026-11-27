@@ -16,6 +16,7 @@ type Evidence = {id: string; title: string; text: string; source: {name: string;
 export type MatchSuggestions = {index: number; ids: string[]}[];
 export type CheckGuidance = {
   passages: Evidence[];
+  citedPassageIds?: string[];
   interactions: Evidence[];
   needsInteractionReview: boolean;
   needsReasonReview: boolean;

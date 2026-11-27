@@ -38,7 +38,7 @@ const reasonPhrases={
  typhoid:['typhoid'],
  diarrhoea:['diarrhoea','diarrhea','loose stools','watery stool'],
  urine:['pain when passing urine','pain when i pee','burning when i pee','painful urination'],
- skin:['wound','wounds','infected cut'],
+ skin:['wound','wounds','infected cut','skin cut','cut on my skin','cut in my skin'],
  boil:['boil','boils'],
  dental:['tooth pain','toothache','tooth ache','dental pain'],
  headache:['headache','headaches'],
@@ -58,7 +58,8 @@ export function suggestReasons(input:string):ReasonId[]{
  if(/\b(?:no|not|without|never)\b|n['’]t\b/i.test(input))return [];
  const words=` ${input.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim()} `;
  const ids=Object.keys(reasonPhrases) as ReasonId[];
- return ids.filter(id=>reasonPhrases[id].some(phrase=>words.includes(` ${phrase} `)));
+ return ids.filter(id=>reasonPhrases[id].some(phrase=>words.includes(` ${phrase} `))||
+  (id==='skin'&&words.includes(' cut ')&&words.includes(' pus ')));
 }
 
 // Same fields the Catalogue searches: name, category, ingredients, product names and NAFDAC numbers.

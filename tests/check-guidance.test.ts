@@ -200,3 +200,13 @@ test('new co-amoxiclav combinations can be resolved from typed names',()=>{
  const guidance=localGuidance(medicine(context.medicineId),context);
  assert.deepEqual(guidance.interactions.map(({id})=>id),['co-amoxiclav-warfarin','co-amoxiclav-mycophenolate']);
 });
+
+test('pus from a skin cut reaches wound guidance without inferring a diagnosis',()=>{
+ const candidate=medicine('ampicillin-cloxacillin');
+ const context={...base,medicineId:candidate.id,prescribed:true,reason:'PUS IS COMING OUT OF MY SKIN CUT'};
+ const guidance=localGuidance(candidate,context);
+ assert.equal(guidance.needsReasonReview,false);
+ assert.ok(guidance.passages.some(passage=>passage.id==='wound_assessment'&&passage.text.includes('can be a sign')));
+ assert.equal(localGuidance(candidate,{...context,reason:'Pus is coming out'}).needsReasonReview,true);
+ assert.equal(localGuidance(candidate,{...context,reason:'No pus from a skin cut'}).needsReasonReview,true);
+});

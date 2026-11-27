@@ -15,7 +15,6 @@
 .answer-review{display:inline-flex;align-items:center;gap:var(--s2);margin:var(--s4) 0 0;padding:6px 12px;border:1px solid var(--line-strong);border-radius:var(--radius-control);background:var(--card);font-size:var(--text-small);font-weight:600;line-height:1.4;color:var(--ink)}
 .answer-review svg{flex-shrink:0}
 .answer-summary{margin:var(--s4) 0 0;font-size:var(--text-body);line-height:1.6}
-.answer-boundary{margin:var(--s5) 0 0;padding-left:14px;border-left:3px solid var(--ink);font-size:var(--text-body);font-weight:600;line-height:1.5}
 .answer-heading{margin:var(--s7) 0 var(--s4);font-size:26px;font-weight:650;font-stretch:92%;line-height:1.15;letter-spacing:-.02em}
 .answer-details{
  margin-top:var(--s6);padding:var(--s4);border:1px solid var(--line);
@@ -28,11 +27,8 @@
 .answer-details ul{padding-inline-start:var(--s5);list-style:disc}
 .answer-as-typed{margin-inline-start:var(--s2);color:var(--ink-2);font-size:var(--text-small)}
 .answer-details>p{margin:var(--s3) 0 0;color:var(--ink-2)}
-.answer-guidance{display:grid;gap:var(--s3)}
-.answer-guidance-item{padding:var(--s4);border:1px solid var(--line-strong);border-radius:var(--radius-card);background:var(--card)}
-.answer-guidance-item h3{margin:0 0 var(--s2);font-size:var(--text-body);font-weight:650}
-.answer-guidance-item p{margin:0 0 var(--s2);line-height:var(--leading-body)}
-.answer-guidance-item a{font-size:var(--text-small)}
+.answer-guidance{display:grid;gap:var(--s3);list-style:none;margin:0}
+.answer-guidance>li>ul{margin:var(--s2) 0 0;padding-inline-start:1.25em}
 .answer-guidance-retry{justify-self:start}
 .answer-match{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s3)}
 .answer-chevron{flex-shrink:0;color:var(--signal)}

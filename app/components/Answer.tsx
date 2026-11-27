@@ -31,8 +31,23 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
   reason,prescribed:details.prescribed==='yes',questions:followUps,answers:followUpAnswers,
   interactions:guidance.interactions.length>0,needsInteractionReview:guidance.needsInteractionReview,needsReasonReview:guidance.needsReasonReview
  });
- const followUpSources=[...new Map(followUps.filter(question=>Object.hasOwn(followUpAnswers,question.id)).map(({source})=>[source.url,source])).values()];
- const supportingItems=[...guidance.interactions,...guidance.passages];
+ const sourceUses=new Map<string,{name:string;uses:Set<string>}>();
+ function addSource(url:string,name:string,use:string){
+  const existing=sourceUses.get(url);
+  if(existing)existing.uses.add(use);
+  else sourceUses.set(url,{name,uses:new Set([use])});
+ }
+ addSource(medicine.source,medicine.sourceLabel,
+  medicine.id==='ampicillin-cloxacillin'?'Medicine record: ingredients (sections 1–3) and uses (section 4.1)':'Medicine record');
+ if('ingredientSource' in medicine&&typeof medicine.ingredientSource==='string')
+  addSource(medicine.ingredientSource,'Manufacturer ingredient leaflet','Medicine record ingredients');
+ for(const item of guidance.interactions)addSource(item.source.url,item.source.name,'Interaction check: '+item.title);
+ for(const item of guidance.passages){
+  const use=guidance.citedPassageIds?.includes(item.id)?'AI explanation: ':'Guidance: ';
+  addSource(item.source.url,item.source.name,use+item.title);
+ }
+ for(const question of followUps)
+  addSource(question.source.url,question.source.name,'Follow-up question: '+question.text);
  const uncovered=guidance.uncoveredReasons??[];
  const format=new Intl.ListFormat('en');
  const sourceGap=uncovered.length?t.reasonCoverage(format.format(uncovered)):reason?t.reasonNotCovered(reason):t.gap.reason_evidence;
@@ -65,6 +80,9 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
      {!guidance.synthesis&&uncovered.length>0&&!gaps.some(gap=>gap.kind==='reason_evidence')&&<p className="answer-source-gap">{sourceGap}</p>}
      {guidance.synthesis?<p className="answer-takeaway">{guidance.synthesis.takeaway}</p>:
       (status==='concern'||(status==='no_concern'&&!checks.length))&&<p className="answer-takeaway">{t.statusNote[status]}</p>}
+     {guidance.interactions.length>0&&<ul className="answer-gaps" aria-label="Documented medicine interactions">
+      {guidance.interactions.map(item=><li key={item.id}>{item.text}</li>)}
+     </ul>}
      <div className="answer-action">
       <h2>{clinician==='prescriber'&&status!=='no_concern'?t.prescriberAction:t.nextAction[clinician]}</h2>
       <p>{guidance.synthesis?.nextAction||action}</p>
@@ -82,22 +100,18 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
     <p className="answer-classification-source">{t.catalogueClassification} · {medicine.category}</p>
     <dl className="answer-medicine-record"><dt>{t.activeIngredients}</dt><dd>{medicine.ingredients.join(' + ')}</dd></dl>
     <p className="answer-summary">{medicine.summary}</p>
-    <p className="answer-boundary">{t.boundary}</p>
-    <div className="source-links"><a href={medicine.source} target="_blank" rel="noreferrer">{medicine.sourceLabel} · {medicine.name} ↗</a>{'ingredientSource' in medicine&&typeof medicine.ingredientSource==='string'&&<a href={medicine.ingredientSource} target="_blank" rel="noreferrer">Manufacturer ingredient leaflet ↗</a>}<p>{t.checked(medicine.checked)}</p></div>
+    <p>{t.checked(medicine.checked)}</p>
    </div>
   </details>
   <GreenbookCheck ingredients={medicine.ingredients} suggestedNumber={suggestedRegistration} aiAvailable={aiAvailable}/>
-  {!pending&&(supportingItems.length>0||followUpSources.length>0)&&<details className="answer-sources">
+  {!pending&&<details className="answer-sources">
    <summary>{t.supporting}<ChevronDown size={20} aria-hidden="true" className="answer-chevron"/></summary>
-   <div className="answer-expanded answer-guidance">
-    {supportingItems.map(item=><article className="answer-guidance-item" key={item.id}>
-     <h3>{item.title}</h3><p>{item.text}</p>
-     <a href={item.source.url} target="_blank" rel="noreferrer">{item.source.name} ↗</a>
-    </article>)}
-    {followUpSources.map(source=>
-     <a href={source.url} key={source.url} target="_blank" rel="noreferrer">{source.name} ↗</a>
-    )}
-   </div>
+   <ul className="answer-expanded answer-guidance">
+    {[...sourceUses].map(([url,{name,uses}])=><li key={url}>
+     <a href={url} target="_blank" rel="noreferrer">{name} ↗</a>
+     <ul>{[...uses].map(use=><li key={use}>{use}</li>)}</ul>
+    </li>)}
+   </ul>
   </details>}
   <details className="answer-sources answer-details">
    <summary>{t.yourAnswers}<ChevronDown size={20} aria-hidden="true" className="answer-chevron"/></summary>

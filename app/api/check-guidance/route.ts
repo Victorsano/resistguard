@@ -59,6 +59,7 @@ export async function POST(request: Request) {
       'Explain what a reported concern or missing detail means for this check. Keep different symptoms separate. Use natural symptom wording, quietly correcting obvious typos or rephrasing colloquial terms without changing their meaning. Use the same neutral wording in both the takeaway and nextAction. Do not quote their input back.',
       'The app already displays what the person reported about prescription and assessment. Do not repeat or infer either.',
       'Give a specific next action for the supplied clinician. Connect the medicine to the symptom or concern they reported. For a prescription, start with Ask your prescribing doctor and suggest what to clarify about the condition it is meant to treat. Ask whether the medicine relates to the symptom rather than assuming it was chosen for that symptom. Do not assume a diagnosis, a treatment plan, or unclear instructions. For a prior symptom check without a prescription, direct the person to a doctor without assuming the clinician gave them anything.',
+      'When a supplied source says the symptom can indicate a condition within the medicine’s usual uses, explain that plausible fit first. Treat pus from a cut as a possible sign of a skin infection, not a confirmed diagnosis. If prescribed for that illness, acknowledge the potential fit without suggesting the prescriber made a mistake. For a supported reason, focus the question on what improvement to expect and when to follow up.',
       'When the reason has no supporting evidence, use the medicine summary to explain why the symptom alone does not establish that the medicine is needed. For antibiotics, the screen already explains their general purpose, so focus the takeaway on the symptom and what remains unclear. For example, refer to farting as passing gas and distinguish a medicine’s general purpose from whether it would help that symptom. Do not declare that the prescription is wrong.',
       'Cite one to three supplied passage IDs. For a gap in symptom evidence, use the most relevant available source, such as label-caution. Do not invent a source.'
     ].join(' ');
@@ -117,6 +118,7 @@ export async function POST(request: Request) {
       }
     }
     const result:CheckGuidance={
+      ...(synthesis?{citedPassageIds:selection.passageIds}:{}),
       passages:selected.map(id=>evidence.find(item=>item.id===id)!),
       ...interactionEvidence(medicine,corrected,context.namesIncomplete),
       corrections,suggestions,needsReasonReview,uncoveredReasons,source:'groq',
