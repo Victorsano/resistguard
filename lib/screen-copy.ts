@@ -89,7 +89,12 @@ export const copy={
  },
  answer:{
   antibiotic:'This is an antibiotic',
-  antibioticPurpose:(name:string,headache:boolean)=>`${name} treats certain bacterial infections.${headache?' It doesn’t relieve headache pain directly.':''}`,
+  antibioticPurpose:(name:string,headache:boolean,examples?:string)=>
+   `${name} treats certain bacterial infections${examples?', such as '+examples:''}.${headache?' It doesn’t relieve headache pain directly.':''}`,
+  antibioticExamples:{
+   'ampicillin-cloxacillin':'some skin and chest infections',
+   amoxicillin:'some chest infections and dental abscesses'
+  } as Partial<Record<string,string>>,
   headacheAction:(name:string,prescribed:boolean)=>prescribed
    ? `Ask your prescribing doctor, “What infection is ${name} meant to treat, and is it related to my headache?”`
    : `Tell a doctor about your headache and that you’re considering ${name}. Ask what might be causing the headache and whether an antibiotic is needed.`,

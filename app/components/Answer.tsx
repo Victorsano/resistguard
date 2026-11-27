@@ -54,7 +54,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
    <h1 id="answer-guidance" tabIndex={-1} data-screen-heading>{pending?t.guidance:t.status[status]}</h1>
    <div aria-live="polite">
     {pending?<p role="status">{t.guidancePending}</p>:<>
-     {medicine.antibiotic&&<p className="answer-takeaway">{t.antibioticPurpose(medicine.name,antibioticForHeadache)}</p>}
+     {medicine.antibiotic&&<p className="answer-takeaway">{t.antibioticPurpose(medicine.name,antibioticForHeadache,t.antibioticExamples[medicine.id])}</p>}
      {reported.length>0&&<p className="answer-reported">{reported.join(' ')}</p>}
      {namedConditions&&<p className="answer-source-gap"><strong>{t.reportedConditions}</strong><br/>{namedConditions}</p>}
      {status==='no_concern'&&checks.length>0&&<p className="answer-source-gap">{t.scope(format.format(checks))}</p>}
