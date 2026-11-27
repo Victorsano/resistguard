@@ -52,6 +52,12 @@ export function normaliseCheckReason(reason:string){
  ));
 }
 
+export function reportsSurgicalWoundPus(reason:string){
+ return /\bpus\b/i.test(reason)&&/\b(?:scar|wound|incision|stitches)\b/i.test(reason)&&
+  /\b(?:surgical|surgery|operation|postoperative|post.op|incision)\b/i.test(reason)&&
+  !/\b(?:no|not|without|never)\s+(?:any\s+)?pus\b/i.test(reason);
+}
+
 export function scarDischargeSymptom(reason:string):'pus'|'white discharge'|null{
  if(!/\bscar\b/i.test(reason)||
   /\b(?:no|not|without|never|surgical|surgery|incision|operation|postoperative|post.op|fever|chills)\b|n['’]t\b/i.test(reason))return null;

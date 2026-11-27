@@ -1,4 +1,4 @@
-import {scarDischargeSymptom} from './flow';
+import {reportsSurgicalWoundPus,scarDischargeSymptom} from './flow';
 import type {checkResult} from './check-result';
 import type {YesNo} from './flow';
 
@@ -68,7 +68,9 @@ const clinicianQuestions:Record<CheckClinician,string>={
 
 export function clinicianMessage(medicine:ConfirmedMedicine,prescribed:YesNo|null,clinician:CheckClinician,reason:string,otherMedicines:readonly string[],flagged:readonly string[]){
  const symptom=scarDischargeSymptom(reason);
- const question=clinician==='pharmacist'||!reason?clinicianQuestions[clinician]:
+ const question=reportsSurgicalWoundPus(reason)
+  ? 'Pus is coming from my surgery wound. Could your team check it promptly and tell me whether this medicine is meant for it?'
+  : clinician==='pharmacist'||!reason?clinicianQuestions[clinician]:
   symptom?(clinician==='prescriber'
    ? `Was this medicine meant for the ${symptom} coming from my scar, and does the area need to be checked?`
    : `Could you check the ${symptom} coming from my scar and tell me whether I need this medicine or other wound care?`):

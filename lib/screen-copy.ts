@@ -100,6 +100,11 @@ export const copy={
   scarDischargeAction:(prescribed:boolean,symptom:string)=>prescribed
    ? `Tell the doctor who prescribed it that ${symptom} is coming from your scar. Ask whether this antibiotic was meant for the scar and whether the area needs to be checked.`
    : 'Ask a doctor to check the scar and tell you whether you need an antibiotic or other wound care.',
+  surgicalWoundTakeaway:'Pus coming from a wound after surgery can be a sign of infection. The surgical team can check what wound care you need.',
+  surgicalWoundTitle:'Contact your surgical team promptly',
+  surgicalWoundAction:(name:string,prescribed:boolean)=>prescribed
+   ? `Tell them pus is coming from your surgery wound and that you were given ${name} through your care team. Ask whether the wound needs to be checked and whether this medicine was meant for it.`
+   : `Tell them pus is coming from your surgery wound. Ask them to check the wound and whether you need ${name} or other care.`,
   woundAction:(prescribed:boolean)=>prescribed
    ? 'Tell your prescribing doctor what you noticed at the wound or scar. Ask whether the antibiotic was meant for that and whether the area needs to be checked.'
    : 'Tell a doctor what you noticed at the wound or scar. Ask them to check the area and tell you whether an antibiotic is needed.',

@@ -1,5 +1,5 @@
 import {matchIngredient,matchIngredients,medicines,nigeriaProducts,scenarios,sources,type Medicine} from '@/lib/safety';
-import {scarDischargeSymptom,suggestReasons,type OtherMedicine} from '@/lib/flow';
+import {reportsSurgicalWoundPus,scarDischargeSymptom,suggestReasons,type OtherMedicine} from '@/lib/flow';
 import {getPassage,type PassageId} from '@/lib/use-check';
 import interactions from '@/data/check-interactions.json';
 import type {FollowUpQuestion} from '@/lib/check-follow-ups';
@@ -142,6 +142,8 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     const id=backgroundByReason[reason];
     return id?[passage(id)]:[];
   }):[];
+  const surgicalWound=reportsSurgicalWoundPus(context.reason);
+  if(surgicalWound)backgroundPassages.unshift(passage('surgical_wound_discharge'));
   if(medicine.id==='ampicillin-cloxacillin'&&scarDischargeSymptom(context.reason)&&!relevant.some(item=>item.id==='wound_assessment'))
     backgroundPassages.unshift(passage('wound_assessment'));
   const reasonSearch=medicine.antibiotic&&context.reason.trim()?searchableReasonPassages.map(passage):[];
@@ -171,7 +173,7 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
   return {
     candidates:[...new Map([...selection,...medicineUses,...reasonSearch].map(item=>[item.id,item])).values()],
     reasonSearchIds:reasonSearch.map(item=>item.id),fallback:selection.slice(0,Math.max(3,relevant.length+backgroundPassages.length)),reasonPassages:relevant,backgroundPassages,uncoveredReasons,
-    needsReasonReview:(!context.prescribed||medicine.antibiotic)&&(!relevant.length||uncoveredReasons.length>0)
+    needsReasonReview:surgicalWound||(!context.prescribed||medicine.antibiotic)&&(!relevant.length||uncoveredReasons.length>0)
   };
 }
 

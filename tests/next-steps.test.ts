@@ -89,3 +89,10 @@ test('the WhatsApp draft mentions pus from a scar only when the reason is shared
  assert.doesNotMatch(draft,/A doctor prescribed/);
  assert.doesNotMatch(clinicianMessage(candidate,null,'prescriber','',[],[]),/pus|scar/);
 });
+
+test('the surgical wound draft asks the surgical team to check it when the reason is shared',()=>{
+ const candidate=record('ampicillin-cloxacillin');
+ const draft=clinicianMessage(candidate,null,'prescriber','Pus is coming out of my scar after the operation I had',[],[]);
+ assert.match(draft,/Could your team check it promptly/);
+ assert.doesNotMatch(clinicianMessage(candidate,null,'prescriber','',[],[]),/pus|surgery/i);
+});

@@ -254,3 +254,11 @@ test('pus from a scar reaches the wound source, while negated and surgical wordi
   assert.ok(!localGuidance(candidate,{...context,reason}).passages.some(item=>item.id==='wound_assessment'));
  }
 });
+
+test('post-operative pus keeps the surgical wound source and review gap without AI',()=>{
+ const candidate=medicine('ampicillin-cloxacillin');
+ const guidance=localGuidance(candidate,{...base,medicineId:candidate.id,prescribed:true,
+  reason:'Pus is coming out of my scar after the operation I had'});
+ assert.ok(guidance.passages.some(item=>item.id==='surgical_wound_discharge'));
+ assert.equal(guidance.needsReasonReview,true);
+});
