@@ -103,7 +103,7 @@ export const copy={
   surgicalWoundTakeaway:'Pus coming from a wound after surgery can be a sign of infection. The surgical team can check what wound care you need.',
   surgicalWoundTitle:'Contact your surgical team promptly',
   surgicalWoundAction:(name:string,prescribed:boolean)=>prescribed
-   ? `Tell them pus is coming from your surgery wound and that you were given ${name} through your care team. Ask whether the wound needs to be checked and whether this medicine was meant for it.`
+   ? `You said a doctor prescribed ${name} for this problem. If you already told the team about the pus, update them on whether it is still draining or has changed. Ask when to expect improvement and whether they need to see the wound now. If the team hasn’t heard about the pus, tell them now.`
    : `Tell them pus is coming from your surgery wound. Ask them to check the wound and whether you need ${name} or other care.`,
   woundAction:(prescribed:boolean)=>prescribed
    ? 'Tell your prescribing doctor what you noticed at the wound or scar. Ask whether the antibiotic was meant for that and whether the area needs to be checked.'

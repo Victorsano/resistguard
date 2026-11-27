@@ -69,7 +69,7 @@ const clinicianQuestions:Record<CheckClinician,string>={
 export function clinicianMessage(medicine:ConfirmedMedicine,prescribed:YesNo|null,clinician:CheckClinician,reason:string,otherMedicines:readonly string[],flagged:readonly string[]){
  const symptom=scarDischargeSymptom(reason);
  const question=reportsSurgicalWoundPus(reason)
-  ? 'Pus is coming from my surgery wound. Could your team check it promptly and tell me whether this medicine is meant for it?'
+  ? 'Pus is coming from my surgery wound. Could your team check it promptly and tell me what improvement to expect?'
   : clinician==='pharmacist'||!reason?clinicianQuestions[clinician]:
   symptom?(clinician==='prescriber'
    ? `Was this medicine meant for the ${symptom} coming from my scar, and does the area need to be checked?`
