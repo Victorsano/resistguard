@@ -1,6 +1,6 @@
 # ResistGuard: new check flow spec
 
-Status: agreed design with the first post-confirmation screens implemented. Written 26 November 2026 for the two developers implementing it.
+Historical design and implementation notes from 26 November 2026. See [the current project context](../../PROJECT_MAP.md) for the live flow and open work.
 
 File paths come from the repo snapshot of 25 November 2026. Check them against the current branch before editing. If this doc and the code disagree, the code is right, so update this doc.
 

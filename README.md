@@ -48,13 +48,13 @@ Read in this order if you are new:
 
 | Doc | Read it for |
 |---|---|
-| [`PROJECT_MAP.md`](PROJECT_MAP.md) | What the product is, who it is for, every screen, what is real, hidden or not built |
+| [`PROJECT_MAP.md`](PROJECT_MAP.md) | Current implementation, deployment, evidence decisions and open work |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to add a feature: branches, code patterns, the review packet, the pull request checklist |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Folder layout, request flow, API routes, data files and the patterns to copy |
 | [`DESIGN.md`](DESIGN.md) | Night & Paper design system: tokens, type, components, layout, motion |
 | [`ART_DIRECTION.md`](ART_DIRECTION.md) | The reasoning behind the design |
 | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) | Environment variables, limits, deploy, scripts, pharmacist review, pilot |
-| [`docs/specs/check-flow.md`](docs/specs/check-flow.md) | **Next build:** the agreed new check flow (reason, other medicines, questions, result) |
+| [`docs/specs/check-flow.md`](docs/specs/check-flow.md) | Original check-flow design and historical implementation notes |
 | [`docs/FEATURE_SPEC_TEMPLATE.md`](docs/FEATURE_SPEC_TEMPLATE.md) | Template for writing a new feature spec |
 | [`docs/USER-GUIDE.md`](docs/USER-GUIDE.md) | Plain guide for someone using the app |
 | [`VERIFICATION.md`](VERIFICATION.md) | What has been tested, and what has not |
@@ -62,4 +62,4 @@ Read in this order if you are new:
 
 ## Safety boundaries
 
-ResistGuard informs; it never decides. It does not diagnose, prescribe, give doses, or say a medicine is safe, genuine or right for you. AI only copies ingredient names; plain code matches them and the user confirms. Photos are never stored. See `PROJECT_MAP.md` sections 6 and 8.
+ResistGuard informs; it never decides. It does not diagnose, prescribe, give doses, or say a medicine is safe, genuine or right for you. AI reads label text and can explain source-linked guidance. The app matches ingredients and the user confirms them. ResistGuard does not store photos. See [project context](PROJECT_MAP.md).

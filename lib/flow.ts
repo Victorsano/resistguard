@@ -52,6 +52,11 @@ export function normaliseCheckReason(reason:string){
  ));
 }
 
+export function isWhiteScarDischarge(reason:string){
+ return /\bwhite\s+discharge\b/i.test(reason) && /\bscar\b/i.test(reason) &&
+  !/\b(?:no|not|without|never|surgical|surgery|incision|operation|postoperative|post.op|fever|chills)\b|n['’]t\b/i.test(reason);
+}
+
 export function suggestReasons(input:string):ReasonId[]{
  input=normaliseCheckReason(input);
  // Keep negated descriptions for the user to classify. These are text matches, never diagnoses.

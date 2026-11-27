@@ -233,3 +233,14 @@ test('a result for an unprescribed medicine cannot send the person to a prescrib
  assert.doesNotThrow(()=>validateCheckSynthesis(takeaway,action,{...context,prescribed:true}));
  assert.doesNotThrow(()=>validateCheckSynthesis(takeaway,'Ask a doctor to check the scar and whether an antibiotic is needed.',context));
 });
+
+test('scar discharge includes wound guidance without clearing uncertainty',()=>{
+ const candidate=medicine('ampicillin-cloxacillin');
+ for(const prescribed of [true,false]){
+  const guidance=localGuidance(candidate,{...base,medicineId:candidate.id,reason:'White discharge from my scar',prescribed});
+  assert.ok(guidance.passages.some(item=>item.id==='wound_assessment'));
+  assert.equal(guidance.needsReasonReview,true);
+ }
+ const guidance=localGuidance(candidate,{...base,medicineId:candidate.id,reason:'No white discharge from my scar'});
+ assert.ok(!guidance.passages.some(item=>item.id==='wound_assessment'));
+});

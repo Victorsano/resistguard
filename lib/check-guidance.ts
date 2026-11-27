@@ -1,5 +1,5 @@
 import {matchIngredient,matchIngredients,medicines,nigeriaProducts,scenarios,sources,type Medicine} from '@/lib/safety';
-import {suggestReasons,type OtherMedicine} from '@/lib/flow';
+import {isWhiteScarDischarge,suggestReasons,type OtherMedicine} from '@/lib/flow';
 import {getPassage,type PassageId} from '@/lib/use-check';
 import interactions from '@/data/check-interactions.json';
 import type {FollowUpQuestion} from '@/lib/check-follow-ups';
@@ -142,6 +142,8 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     const id=backgroundByReason[reason];
     return id?[passage(id)]:[];
   }):[];
+  if(medicine.id==='ampicillin-cloxacillin'&&isWhiteScarDischarge(context.reason)&&!relevant.some(item=>item.id==='wound_assessment'))
+    backgroundPassages.unshift(passage('wound_assessment'));
   const reasonSearch=medicine.antibiotic&&context.reason.trim()?searchableReasonPassages.map(passage):[];
   const medicineUses:Evidence[]=
     medicine.id==='ampicillin-cloxacillin'?[{

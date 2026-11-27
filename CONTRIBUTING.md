@@ -113,7 +113,7 @@ These are product decisions, not style preferences. Raise them with the team bef
 - No storage: no `localStorage`, cookies, database or analytics.
 - Never send a photo, name or typed text anywhere new.
 - Leave `data/*.json`, `lib/scan.ts` and `lib/safety.ts` alone unless the spec asks.
-- Never describe a NOT BUILT feature (see `PROJECT_MAP.md` section 9) as working, in code, copy or docs.
+- Check the current implementation and open work in [PROJECT_MAP.md](PROJECT_MAP.md) before describing a feature as available.
 - Never hand-edit `public/review-packet.json` or `data/content-manifest.json`.
 
 ## 10. Pull request checklist

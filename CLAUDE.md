@@ -2,16 +2,16 @@
 
 # ResistGuard: rules for Claude Code
 
-Read PROJECT_MAP.md before you change the scan flow, the catalogue or any medical text. Never describe a NOT BUILT feature as working. Code marked HIDDEN in PROJECT_MAP.md builds but is not reachable; do not revive it unless asked.
+Read PROJECT_MAP.md for the current flow and open work before changing the checker, catalogue or medical text. Check the entry point before describing a feature as available.
 
 ## Docs map
-- `PROJECT_MAP.md`: product, users, screens, AI, privacy, NOT BUILT, code map
+- `PROJECT_MAP.md`: current product, flow, AI, evidence, deployment and open work
 - `CONTRIBUTING.md`: how to build a feature, review packet, pull request checklist
 - `docs/ARCHITECTURE.md`: folders, request flow, API routes, data, patterns
 - `DESIGN.md`, `ART_DIRECTION.md`: design system
 - `docs/OPERATIONS.md`: env vars, limits, deploy, scripts, review and pilot
 - `docs/FEATURE_SPEC_TEMPLATE.md`: spec format for `/add-feature`
-- `docs/specs/`: feature specs; `docs/specs/check-flow.md` is the agreed next build (read its section 0 first)
+- `docs/specs/`: feature specs; `docs/specs/check-flow.md` records the original checker design
 - `VERIFICATION.md`: what is tested and what is not; add a dated entry when you verify a release
 When a change makes one of these wrong, fix the doc in the same change.
 

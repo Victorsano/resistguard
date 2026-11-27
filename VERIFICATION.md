@@ -2,7 +2,11 @@
 
 What has been tested, how, and what has not. Add a dated entry at the top of "Log" whenever you verify a release. Record failures as plainly as passes. Never record a review, participant or result that did not happen.
 
-## Current state (26 November 2026, commit `d3c7189`)
+## Current verification
+
+The latest production-flow checks and outstanding work are summarized in [PROJECT_MAP.md](PROJECT_MAP.md). Physical-phone testing, pharmacist review and a supervised pilot remain open.
+
+## Historical snapshot (26 November 2026, commit `d3c7189`)
 
 | Area | Status |
 |---|---|
