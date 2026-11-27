@@ -1,11 +1,13 @@
 import 'server-only';
 export class GroqError extends Error {constructor(public readonly reason:'not_configured'|'spending_limit'|'rate_limit'|'authentication'|'model_unavailable'|'timeout'|'connection'|'invalid_response'){super(reason);}}
-export async function groq(model:string,messages:unknown[],json=false) {
+export async function groq(model:string,messages:unknown[],json=false,options?:{deliberate?:boolean;signal?:AbortSignal}) {
  if(!process.env.GROQ_API_KEY || process.env.DISABLE_AI==='1') throw new GroqError('not_configured');
+ const deadline=AbortSignal.timeout(options?.deliberate?25_000:18_000);
+ const signal=options?.signal?AbortSignal.any([options.signal,deadline]):deadline;
  let response:Response;
  try{response=await fetch('https://api.groq.com/openai/v1/chat/completions',{
  method:'POST',headers:{Authorization:`Bearer ${process.env.GROQ_API_KEY}`,'Content-Type':'application/json'},
- body:JSON.stringify({model,messages,max_completion_tokens:1500,...(model.startsWith('qwen/')?{reasoning_effort:'none',temperature:.1}:model.startsWith('openai/gpt-oss-')?{reasoning_effort:'low'}:{}),...(json?{response_format:{type:'json_object'}}:{})}),signal:AbortSignal.timeout(18_000),cache:'no-store'});}catch(e){throw new GroqError(e instanceof Error&&e.name==='TimeoutError'?'timeout':'connection');}
+ body:JSON.stringify({model,messages,max_completion_tokens:options?.deliberate?4096:1500,...(model.startsWith('qwen/')?{reasoning_effort:'none',temperature:.1}:model.startsWith('openai/gpt-oss-')?{reasoning_effort:options?.deliberate?'high':'low'}:{}),...(json?{response_format:{type:'json_object'}}:{})}),signal,cache:'no-store'});}catch(e){throw new GroqError(e instanceof Error&&e.name==='TimeoutError'?'timeout':'connection');}
  if(!response.ok){
   if(response.status===400){const error=await response.json().catch(()=>null);if(error?.error?.code==='blocked_api_access')throw new GroqError('spending_limit');}
   throw new GroqError(response.status===429?'rate_limit':[401,403].includes(response.status)?'authentication':[400,404].includes(response.status)?'model_unavailable':'connection');

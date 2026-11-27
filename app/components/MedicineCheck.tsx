@@ -114,7 +114,7 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
 
   const controller=new AbortController();
   guidanceRequest.current=controller;
-  const timeout=setTimeout(()=>controller.abort(),24_000);
+  const timeout=setTimeout(()=>controller.abort(),answers===undefined?24_000:55_000);
   try{
    const response=await fetch('/api/check-guidance',{
     method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...context,followUp:answers,followUpDetails:answers?followUpDetails:undefined}),signal:controller.signal
