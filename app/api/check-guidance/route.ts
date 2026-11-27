@@ -77,10 +77,10 @@ export async function POST(request: Request) {
     }));
     const matchOptions=possible.map(({index,candidates})=>({index,ids:candidates.map(item=>item.id)}));
     const firstTask=asking
-      ? 'Pick up to two relevant optional follow-up IDs. Mandatory questions are added automatically. Return {"questionIds":[],"matches":[]}.'
-      : 'Read the complete reported case before selecting evidence. Consider the symptom, purpose of the check, prescription, other medicines, and what the person already reported or did. Then search the supplied catalogue index by meaning. Select one to three IDs directly relevant to the case. Use the label caution when no symptom evidence fits. Do not infer a diagnosis or pick surgical-wound evidence without surgery or an operation being reported. Return {"passageIds":[],"matches":[]}.';
+      ? 'Pick up to two relevant optional follow-up IDs. Mandatory questions are added automatically. Return JSON {"questionIds":[],"matches":[]}.'
+      : 'Read the complete reported case before selecting evidence. Consider the symptom, purpose of the check, prescription, other medicines, and what the person already reported or did. Then search the supplied catalogue index by meaning. Select one to three IDs directly relevant to the case. Use the label caution when no symptom evidence fits. Do not infer a diagnosis or pick surgical-wound evidence without surgery or an operation being reported. Return a JSON object with passageIds containing at least one supplied ID, and matches as an array.';
     const first=JSON.parse(await groq(modelName,[
-      {role:'system',content:`${groundRules} ${firstTask} For spelling, choose only a supplied ID clearly identified by that name. Omit uncertain names. Each match is {"index":0,"id":"listed-id"}.`},
+      {role:'system',content:`${groundRules} ${firstTask} The matches array is only for spelling corrections to companion medicine names from possibleNames. It must be empty when possibleNames is empty. Never put evidence IDs in matches. Each correction is {"index":0,"id":"listed-medicine-id"}. Omit uncertain names.`},
       {role:'user',content:JSON.stringify({
         ...reportedCase,otherMedicines:describeMedicines(context.otherMedicines),possibleNames:nameOptions,
         ...(asking?{optionalQuestions:modelFollowUps(available).map(({id,text})=>({id,text}))}:{
@@ -90,13 +90,20 @@ export async function POST(request: Request) {
         })
       })}
     ],true,{deliberate:!asking,signal:request.signal}));
-    if(asking&&(!first||Object.keys(first).sort().join(',')!=='matches,questionIds'))throw new Error('Invalid question selection');
-    const selection=asking?{passageIds:[],matches:validateMedicineMatches(first.matches,matchOptions)}:
-      validateGuidanceSelection(JSON.stringify(first),evidence.map(item=>item.id),matchOptions);
+    const firstKeys=asking?'matches,questionIds':'matches,passageIds';
+    if(!first||Object.keys(first).sort().join(',')!==firstKeys)throw new Error('Invalid initial output shape');
+    const passageIds=asking?[]:validateGuidanceSelection(
+      JSON.stringify({passageIds:first.passageIds,matches:[]}),evidence.map(item=>item.id),[]
+    ).passageIds;
+    let matches=new Map<number,string>();
+    if(matchOptions.length){
+      try{matches=validateMedicineMatches(first.matches,matchOptions);}
+      catch{ /* Keep the original names when spelling suggestions are invalid. */ }
+    }
     const corrections:CheckGuidance['corrections']=[];
     const suggestions:CheckGuidance['suggestions']=[];
     for(const {index,candidates} of possible){
-      const match=selection.matches.get(index);
+      const match=matches.get(index);
       if(!match)continue;
       if(candidates.length===1&&candidates[0].distance===1&&context.otherMedicines[index].name.length>=6&&
         guidanceMedicine(match)?.ingredients.length===1){
@@ -106,7 +113,7 @@ export async function POST(request: Request) {
       }
     }
     const corrected=context.otherMedicines.map((entry,index)=>({...entry,choice:corrections.find(item=>item.index===index)?.id??entry.choice}));
-    const retrieved=[...new Set([...reasonPassages.map(item=>item.id),...backgroundPassages.map(item=>item.id),...selection.passageIds])]
+    const retrieved=[...new Set([...reasonPassages.map(item=>item.id),...backgroundPassages.map(item=>item.id),...passageIds])]
       .map(id=>evidence.find(item=>item.id===id)!);
     const interactionCheck=interactionEvidence(medicine,corrected,context.namesIncomplete);
     let synthesis:CheckGuidance['synthesis'];
@@ -117,7 +124,7 @@ export async function POST(request: Request) {
         needsInteractionReview:interactionCheck.needsInteractionReview,needsReasonReview
       });
       const model=JSON.parse(await groq(modelName,[
-        {role:'system',content:`${groundRules} ${synthesisTask} Return only {"takeaway":"...","nextAction":"...","passageIds":["evidence-id"]}.`},
+        {role:'system',content:`${groundRules} ${synthesisTask} Return only JSON {"takeaway":"...","nextAction":"...","passageIds":["evidence-id"]}.`},
         {role:'user',content:JSON.stringify({
           ...reportedCase,medicineSummary:medicine.summary,otherMedicines:describeMedicines(corrected),
           outcome,uncoveredReasons,evidence:retrieved.map(({id,title,text})=>({id,title,text})),
@@ -150,6 +157,7 @@ export async function POST(request: Request) {
     };
     return Response.json(result,{headers});
   }catch(error){
+    console.warn("Check guidance failed",error instanceof GroqError?error.reason:"invalid_output");
     const reason=error instanceof GroqError&&error.reason==='rate_limit'?'rate_limit':'unavailable';
     return Response.json({...fallback,fallback:reason},{headers});
   }
