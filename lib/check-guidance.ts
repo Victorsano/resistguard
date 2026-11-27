@@ -110,6 +110,15 @@ function passage(id: PassageId): Evidence {
 const reasonEvidence: Partial<Record<ReturnType<typeof suggestReasons>[number],PassageId>>={
   throat:'tonsillitis_assessment', typhoid:'typhoid_assessment', urine:'uti_assessment', skin:'wound_assessment',boil:'boil',diarrhoea:'diarrhoea_assessment'
 };
+const backgroundByReason: Partial<Record<ReturnType<typeof suggestReasons>[number],PassageId>>={
+    cough:'cough_aware',fever:'fever_ncdc',dental:'tooth_pain_aware'
+};
+
+// Search these vetted passages by meaning when the user’s wording differs from the known phrases.
+const searchableReasonPassages=[
+ ...Object.values(reasonEvidence),...Object.values(backgroundByReason),'surgical_wound_discharge'
+] as const;
+
 const reasonLabels:Record<ReturnType<typeof suggestReasons>[number],string>={
   cold:'cold or flu symptoms',throat:'sore throat',cough:'cough',fever:'fever',typhoid:'suspected typhoid',
   diarrhoea:'diarrhoea',urine:'pain when passing urine',skin:'a wound',boil:'a boil',
@@ -129,13 +138,16 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     uncoveredReasons.push(reasonLabels[reason]);
     return [];
   });
-  const backgroundByReason: Partial<Record<ReturnType<typeof suggestReasons>[number],PassageId>>={
-    cough:'cough_aware',fever:'fever_ncdc',dental:'tooth_pain_aware'
-  };
   const backgroundPassages=medicine.antibiotic?topics.flatMap(reason=>{
     const id=backgroundByReason[reason];
     return id?[passage(id)]:[];
   }):[];
+  const reasonSearch=medicine.antibiotic&&context.reason.trim()?searchableReasonPassages.map(passage):[];
+  const medicineUses:Evidence[]=
+    medicine.id==='ampicillin-cloxacillin'?[{
+      id:'medicine-uses',title:'What ampicillin + cloxacillin treats',text:medicine.summary,
+      source:{...productSource,name:productSource.name+' · section 4.1'}
+    }]:[];
   const selection=[
     ...backgroundPassages,
     ...relevant,
@@ -155,7 +167,8 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     text:'Ask your prescriber or pharmacist to explain any instructions you are unsure about.',source:whoSafety
   });
   return {
-    candidates:selection,fallback:selection.slice(0,Math.max(3,relevant.length+backgroundPassages.length)),reasonPassages:relevant,backgroundPassages,uncoveredReasons,
+    candidates:[...new Map([...selection,...medicineUses,...reasonSearch].map(item=>[item.id,item])).values()],
+    reasonSearchIds:reasonSearch.map(item=>item.id),fallback:selection.slice(0,Math.max(3,relevant.length+backgroundPassages.length)),reasonPassages:relevant,backgroundPassages,uncoveredReasons,
     needsReasonReview:(!context.prescribed||medicine.antibiotic)&&(!relevant.length||uncoveredReasons.length>0)
   };
 }

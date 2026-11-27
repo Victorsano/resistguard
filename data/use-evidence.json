@@ -74,6 +74,11 @@
       "name": "NCDC · Malaria fact sheet",
       "url": "https://ncdc.gov.ng/diseases/factsheet/24",
       "version": "Online fact sheet"
+    },
+    "surgical_wounds": {
+      "name": "Gloucestershire Hospitals NHS · Surgical wounds and preventing infections",
+      "url": "https://www.gloshospitals.nhs.uk/your-visit/patient-information-leaflets/surgical-wounds-and-preventing-infections/",
+      "version": "Online patient guidance"
     }
   },
   "checked": "2026-11-24",
@@ -205,6 +210,12 @@
       "text": "WHO guidance explains that most dental pain and infections can be treated with dental care. Ask a dentist what is causing the pain and whether an antibiotic is needed.",
       "source": "who_aware",
       "section": "Dental infections"
+    },
+    "surgical_wound_discharge": {
+      "title": "Discharge from a wound after surgery",
+      "text": "After surgery, pus draining from the wound can be a sign of infection. Contact the healthcare team promptly if this happens. This advice applies to a surgical wound.",
+      "source": "surgical_wounds",
+      "section": "Signs and symptoms"
     }
   }
 }

@@ -4,7 +4,7 @@ import {medicines} from '../lib/safety';
 import {checkResult} from '../lib/check-result';
 import {availableFollowUps,parseFollowUpAnswers,parseFollowUpDetails,selectFollowUps} from '../lib/check-follow-ups';
 import {
-  interactionEvidence,localGuidance,matchTypedMedicine,parseGuidanceContext,
+  evidenceForCheck,interactionEvidence,localGuidance,matchTypedMedicine,parseGuidanceContext,
   spellingCandidates,validateCheckSynthesis,validateGuidanceSelection,type GuidanceContext
 } from '../lib/check-guidance';
 
@@ -209,4 +209,18 @@ test('pus from a skin cut reaches wound guidance without inferring a diagnosis',
  assert.ok(guidance.passages.some(passage=>passage.id==='wound_assessment'&&passage.text.includes('can be a sign')));
  assert.equal(localGuidance(candidate,{...context,reason:'Pus is coming out'}).needsReasonReview,true);
  assert.equal(localGuidance(candidate,{...context,reason:'No pus from a skin cut'}).needsReasonReview,true);
+});
+
+test('semantic retrieval can cite wound guidance for unfamiliar wording without clearing the source-based gap',()=>{
+ const candidate=medicine('ampicillin-cloxacillin');
+ const context={...base,medicineId:candidate.id,reason:'Pus from my scar',prescribed:true};
+ const guidance=localGuidance(candidate,context);
+ assert.equal(guidance.needsReasonReview,true);
+ assert.ok(!guidance.passages.some(item=>item.id==='wound_assessment'));
+ const evidence=evidenceForCheck(candidate,context);
+ assert.ok(evidence.reasonSearchIds.includes('wound_assessment'));
+ assert.ok(evidence.reasonSearchIds.includes('surgical_wound_discharge'));
+ assert.ok(evidence.candidates.some(item=>item.id==='medicine-uses'&&item.source.name.includes('section 4.1')));
+ assert.deepEqual(validateGuidanceSelection('{"passageIds":["wound_assessment","medicine-uses"],"matches":[]}',
+  evidence.candidates.map(item=>item.id),[]).passageIds,['wound_assessment','medicine-uses']);
 });

@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   const gate=await authorizeAI(request);
   if(!gate.ok)return Response.json({...fallback,fallback:gate.reason==='request_limit'?'rate_limit':'unavailable'},{headers});
 
-  const {candidates:evidence,reasonPassages,backgroundPassages,needsReasonReview,uncoveredReasons}=evidenceForCheck(medicine,context);
+  const {candidates:evidence,reasonPassages,backgroundPassages,reasonSearchIds,needsReasonReview,uncoveredReasons}=evidenceForCheck(medicine,context);
   const knownInteractions=interactionEvidence(medicine,context.otherMedicines,context.namesIncomplete);
   const outcome=answers?checkResult({
     ...context,questions:available,answers,
@@ -52,6 +52,8 @@ export async function POST(request: Request) {
   const task=asking?
     'Pick up to two relevant optional follow-up IDs. Mandatory questions are added automatically.':
     [
+      'Before writing, read the short list of reason-search passages and select any that directly address the reported symptom, by meaning even if the words differ. The automatic phrase matches are hints only. Compare the chosen symptom source with the medicine-uses passage when available. Cite both if the explanation makes that connection.',
+      'Pus around a scar can be relevant to wound guidance. Use the surgical-wound passage only when the person reports surgery or an operation. Do not turn a symptom or an uncertain match into a diagnosis, and leave unrelated passages uncited.',
       'Use one or two short sentences and at most 35 words. Use everyday words and speak directly to the person.',
       'Use their stated reason and relevant follow-up details as things they reported. Do not repeat any identifying information.',
       'Name the reported symptom or condition when explaining a gap. If the source lacks an answer about it, say so plainly. Do not infer a cause or suggest a test to fill the gap. Skip general advice that does not explain the gap. Only identify a contraindication if a supplied source explicitly supports it.',
@@ -60,7 +62,7 @@ export async function POST(request: Request) {
       'The app already displays what the person reported about prescription and assessment. Do not repeat or infer either.',
       'Give a specific next action for the supplied clinician. Connect the medicine to the symptom or concern they reported. For a prescription, start with Ask your prescribing doctor and suggest what to clarify about the condition it is meant to treat. Ask whether the medicine relates to the symptom rather than assuming it was chosen for that symptom. Do not assume a diagnosis, a treatment plan, or unclear instructions. For a prior symptom check without a prescription, direct the person to a doctor without assuming the clinician gave them anything.',
       'When a supplied source says the symptom can indicate a condition within the medicine’s usual uses, explain that plausible fit first. Treat pus from a cut as a possible sign of a skin infection, not a confirmed diagnosis. If prescribed for that illness, acknowledge the potential fit without suggesting the prescriber made a mistake. For a supported reason, focus the question on what improvement to expect and when to follow up.',
-      'When the reason has no supporting evidence, use the medicine summary to explain why the symptom alone does not establish that the medicine is needed. For antibiotics, the screen already explains their general purpose, so focus the takeaway on the symptom and what remains unclear. For example, refer to farting as passing gas and distinguish a medicine’s general purpose from whether it would help that symptom. Do not declare that the prescription is wrong.',
+      'When no passage fits after you check the candidate list, use the medicine summary to explain why the symptom alone does not establish that the medicine is needed. For antibiotics, the screen already explains their general purpose, so focus the takeaway on the symptom and what remains unclear. For example, refer to farting as passing gas and distinguish a medicine’s general purpose from whether it would help that symptom. Do not declare that the prescription is wrong.',
       'Cite one to three supplied passage IDs. For a gap in symptom evidence, use the most relevant available source, such as label-caution. Do not invent a source.'
     ].join(' ');
 
@@ -74,7 +76,7 @@ export async function POST(request: Request) {
         namesIncomplete:context.namesIncomplete,
         ...(asking?{optionalQuestions:modelFollowUps(available).map(({id,text})=>({id,text}))}:{
           answered,outcome,uncoveredReasons,
-          reasonSpecificEvidence:reasonPassages.map(item=>item.id),
+          reasonSpecificEvidence:reasonPassages.map(item=>item.id),reasonSearchIds,
           evidence:evidence.map(({id,title,text})=>({id,title,text})),
           documentedInteractions:knownInteractions.interactions.map(({title,text})=>({title,text})),
           incompleteInteractionCoverage:knownInteractions.needsInteractionReview
