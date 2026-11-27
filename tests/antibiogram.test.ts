@@ -92,3 +92,9 @@ test('expected resistance follows EUCAST v1.2: Acinetobacter is expected resista
  const a:Antibiogram={organism:'acinetobacter-baumannii',results:{ceftriaxone:'S',chloramphenicol:'S'}};
  assert.deepEqual(titles(a),['Check the ceftriaxone result']);
 });
+
+test('nitrofurantoin and, for S. aureus, penicillin do not count towards multidrug resistance',()=>{
+ assert.equal(classCounts(sheet('1')).tested,6);
+ assert.equal(classCounts(sheet('3')).resistant.includes('Penicillins'),false);
+ assert.deepEqual(titles(sheet('3')),['Methicillin-resistant Staphylococcus aureus (MRSA)','Multidrug resistant']);
+});

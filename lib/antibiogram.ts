@@ -72,11 +72,14 @@ const carbapenems:AntibioticId[]=['ertapenem','imipenem','meropenem'];
 const thirdGen:AntibioticId[]=['cefotaxime','ceftriaxone','ceftazidime'];
 
 // Classes tested and classes with at least one non-susceptible result. Expected resistance is left out, as in the ECDC and CDC definitions.
+// Classes the ECDC and CDC lists leave out (cross-checked against the open-source AMR package for R, which implements them):
+// nitrofurantoin for every organism here, and penicillin for S. aureus.
+const uncounted=(a:Antibiogram,id:AntibioticId)=>id==='nitrofurantoin'||(a.organism==='staphylococcus-aureus'&&id==='penicillin');
 export function classCounts(a:Antibiogram){
  const expected=organisms[a.organism].expectedResistant;
  const tested=new Map<string,boolean>();
  for(const [id,result] of Object.entries(a.results) as [AntibioticId,Result][]){
-  if(!result||expected.includes(id))continue;
+  if(!result||expected.includes(id)||uncounted(a,id))continue;
   const name=antibiotics[id].class;
   tested.set(name,(tested.get(name)??false)||notSusceptible(result));
  }
