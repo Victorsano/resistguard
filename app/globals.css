@@ -29,7 +29,6 @@ em{font-style:inherit}
 .wordmark{display:inline-flex;align-items:baseline;gap:10px;padding-block:12px;color:var(--on-night);text-decoration:none;font-size:22px;font-weight:720;font-stretch:86%;letter-spacing:-.025em;line-height:1}
 .wordmark:hover{text-decoration:none}
 @media (max-width:760px){.wordmark{font-size:20px}}
-.wordmark-demo{font-size:14px;font-weight:500;font-stretch:100%;letter-spacing:.01em;color:var(--on-night-3)}
 
 /* Buttons: one rectangular signal action, one quiet secondary, one text link. */
 .primary,.secondary{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:var(--control);padding:0 22px;border-radius:var(--radius-control);border:1px solid transparent;font-family:var(--font-sans);font-size:var(--text-body);font-weight:600;line-height:1.2;letter-spacing:-.005em;text-align:center;text-decoration:none;cursor:pointer}
