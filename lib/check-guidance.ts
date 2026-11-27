@@ -241,6 +241,8 @@ export function validateCheckSynthesis(takeaway:unknown,nextAction:unknown,repor
   if(reported){
     const text=summary+(action?' '+action:'');
     const history=/\b(?:was|were|is|been|has|have|had)(?:n['’]t)?\s+(?:(?:already|not|never|yet|previously|been)\s+)*(?:prescribed|assessed|examined|evaluated|checked)\b|\bdid(?:n['’]t)?\s+(?:not\s+)?(?:prescribe|assess|examine|evaluate|check)\b/i;
+    if(!reported.prescribed&&/\b(?:your|the)\s+(?:prescriber|prescribing doctor|prescribing clinician)\b/i.test(text))
+      throw new Error('Synthesis assumes a prescriber');
     if(history.test(text))throw new Error('Synthesis restates reported clinical history');
     if((reported.prescribed||reported.assessment==='yes')&&/\b(?:assess|evaluat|examin|diagnos)\w*\b/i.test(text))
       throw new Error('Synthesis asks for a new assessment');

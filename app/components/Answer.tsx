@@ -57,12 +57,14 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
  if(details.otherMedicines)checks.push(t.checks.other);
  const reported=[details.prescribed?t.reportedPrescription[details.prescribed]:'',assessment?t.reportedAssessment[assessment]:''].filter(Boolean);
  const antibioticForHeadache=medicine.antibiotic&&suggestReasons(reason).includes('headache');
- const visibleGaps=guidance.synthesis?gaps.filter(gap=>gap.kind!=='reason_evidence'):gaps;
+ const visibleGaps=guidance.synthesis?gaps.filter(gap=>gap.kind!=='reason_evidence'&&gap.kind!=='assessment'):gaps;
  const usualAction=clinician==='prescriber'&&namedConditions?t.prescriberConditions:
   clinician==='prescriber'&&status==='concern'?t.prescriberConcern:t.nextActionFallback[clinician];
  const action=antibioticForHeadache
   ? t.headacheAction(medicine.name,details.prescribed==='yes')+(namedConditions?' '+t.shareConditions:'')
-  : usualAction;
+  : guidance.citedPassageIds?.includes('wound_assessment')
+    ? t.woundAction(details.prescribed==='yes')
+    : usualAction;
  return <section className="answer" aria-labelledby="answer-guidance">
   <div className="answer-context"><span>{medicine.name}</span><span>{medicine.antibiotic?t.antibiotic:t.notAntibiotic}</span></div>
   <div className="answer-lead" data-outcome={pending?undefined:status} data-motion="verdict">

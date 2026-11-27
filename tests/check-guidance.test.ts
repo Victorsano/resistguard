@@ -224,3 +224,12 @@ test('semantic retrieval can cite wound guidance for unfamiliar wording without 
  assert.deepEqual(validateGuidanceSelection('{"passageIds":["wound_assessment","medicine-uses"],"matches":[]}',
   evidence.candidates.map(item=>item.id),[]).passageIds,['wound_assessment','medicine-uses']);
 });
+
+test('a result for an unprescribed medicine cannot send the person to a prescribing doctor',()=>{
+ const context={...base,reason:'White discharge from my scar'};
+ const takeaway='White discharge from a scar can be a sign of infection.';
+ const action='Ask your prescribing doctor whether the antibiotic was meant for the discharge.';
+ assert.throws(()=>validateCheckSynthesis(takeaway,action,context),/assumes a prescriber/);
+ assert.doesNotThrow(()=>validateCheckSynthesis(takeaway,action,{...context,prescribed:true}));
+ assert.doesNotThrow(()=>validateCheckSynthesis(takeaway,'Ask a doctor to check the scar and whether an antibiotic is needed.',context));
+});

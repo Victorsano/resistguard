@@ -96,6 +96,9 @@ export const copy={
   headacheAction:(name:string,prescribed:boolean)=>prescribed
    ? `Ask your prescribing doctor, “What infection is ${name} meant to treat, and is it related to my headache?”`
    : `Tell a doctor about your headache and that you’re considering ${name}. Ask what might be causing the headache and whether an antibiotic is needed.`,
+  woundAction:(prescribed:boolean)=>prescribed
+   ? 'Tell your prescribing doctor what you noticed at the wound or scar. Ask whether the antibiotic was meant for that and whether the area needs to be checked.'
+   : 'Tell a doctor what you noticed at the wound or scar. Ask them to check the area and tell you whether an antibiotic is needed.',
   shareConditions:'Also tell the doctor about the conditions you listed.',
   notAntibiotic:'This is not an antibiotic',
   review:'Not yet reviewed by a pharmacist',
