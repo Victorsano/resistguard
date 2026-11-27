@@ -126,6 +126,7 @@ export const copy={
    'penicillin-reaction':'past reactions to penicillin','prior-reaction':'past reactions to this medicine',
    'long-term-condition':'long-term health conditions','stomach-ulcer':'stomach ulcers',asthma:'asthma',
    'kidney-or-liver':'kidney or liver conditions','co-amoxiclav-liver-reaction':'past jaundice or liver problems after co-amoxiclav','paracetamol-overlap':'other medicines containing paracetamol',
+   'cipro-child':'whether the medicine is for a child or teen','cipro-tendon':'past tendon problems after this type of antibiotic',
    pregnancy:'pregnancy',other:'other medicines'
   } as Record<string,string>,
   scope:(checks:string)=>`This result covers your answers about ${checks}.`,

@@ -128,7 +128,13 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     uncoveredReasons.push(reasonLabels[reason]);
     return [];
   });
-  const backgroundPassages=medicine.antibiotic&&topics.includes('cough')?[passage('cough_aware')]:[];
+  const backgroundByReason: Partial<Record<ReturnType<typeof suggestReasons>[number],PassageId>>={
+    cough:'cough_aware',fever:'fever_ncdc',dental:'tooth_pain_aware'
+  };
+  const backgroundPassages=medicine.antibiotic?topics.flatMap(reason=>{
+    const id=backgroundByReason[reason];
+    return id?[passage(id)]:[];
+  }):[];
   const selection=[
     ...backgroundPassages,
     ...relevant,
@@ -148,7 +154,7 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     text:'Ask your prescriber or pharmacist to explain any instructions you are unsure about.',source:whoSafety
   });
   return {
-    candidates:selection,fallback:selection.slice(0,3),reasonPassages:relevant,backgroundPassages,uncoveredReasons,
+    candidates:selection,fallback:selection.slice(0,Math.max(3,relevant.length+backgroundPassages.length)),reasonPassages:relevant,backgroundPassages,uncoveredReasons,
     needsReasonReview:(!context.prescribed||medicine.antibiotic)&&(!relevant.length||uncoveredReasons.length>0)
   };
 }

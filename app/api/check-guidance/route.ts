@@ -106,7 +106,7 @@ export async function POST(request: Request) {
       }
     }
     const corrected=context.otherMedicines.map((entry,index)=>({...entry,choice:corrections.find(item=>item.index===index)?.id??entry.choice}));
-    const selected=[...new Set([...reasonPassages.map(item=>item.id),...backgroundPassages.map(item=>item.id),...selection.passageIds])].slice(0,4);
+    const selected=[...new Set([...reasonPassages.map(item=>item.id),...backgroundPassages.map(item=>item.id),...selection.passageIds])];
     const reported={prescribed:context.prescribed,assessment:outcome?.assessment,reason:context.reason};
     let synthesis:CheckGuidance['synthesis'];
     // The app already states an unsupported reason plainly. Keep any separate documented concern.

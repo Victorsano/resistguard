@@ -19,6 +19,7 @@ const euroclox={
  name:'NAFDAC Greenbook · Euroclox-500, section 4.3',
  url:'https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2023/10/02/2023100254627596-886a-56ef-84c2-4303afc55ae6.pdf'
 };
+const ciprovam={name:'NAFDAC Greenbook · Ciprovam product information, section 4.4',url:'https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2025/01/07/2025010755c585d3-8351-5f2f-ba64-dcad70462399.pdf'};
 const ibuprofen={name:'NHS · Who can and cannot take ibuprofen',url:'https://www.nhs.uk/medicines/ibuprofen-for-adults/'};
 const paracetamol={name:'NHS · Taking paracetamol with other medicines',url:'https://www.nhs.uk/medicines/paracetamol-for-adults/taking-paracetamol-for-adults-with-other-medicines-and-herbal-supplements/'};
 const penicillins=['amoxicillin','ampicillin','cloxacillin','flucloxacillin','phenoxymethylpenicillin'];
@@ -38,6 +39,10 @@ export function availableFollowUps(medicine:Medicine,context:GuidanceContext):Fo
    id:'co-amoxiclav-liver-reaction',text:'After taking co-amoxiclav, did your skin or eyes turn yellow, or were you told it caused liver problems?',
    mandatory:true,concernOnYes:true,source:{name:'NAFDAC Greenbook · Co-amoxiclav product information, section 4.3',url:'https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2024/09/16/202409168dbda631-b788-59cd-b794-17c96b430497.pdf'}
   }]:[]),
+  ...(medicine.id==='ciprofloxacin'?[
+   {id:'cipro-child',text:'Is this medicine for someone under 18?',mandatory:true,concernOnYes:true,source:ciprovam},
+   {id:'cipro-tendon',text:'Have you had a tendon problem after taking ciprofloxacin or a similar antibiotic?',mandatory:true,concernOnYes:true,source:ciprovam}
+  ]:[]),
   ...(ibuprofenCheck?[
    {id:'stomach-ulcer',text:'Have you ever had a stomach ulcer?',mandatory:true,concernOnYes:true,source:ibuprofen},
    {id:'asthma',text:'Do you have asthma?',mandatory:false,concernOnYes:true,source:ibuprofen},

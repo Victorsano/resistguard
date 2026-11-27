@@ -69,6 +69,11 @@
       "name": "WHO · AWaRe antibiotic book",
       "url": "https://iris.who.int/bitstream/handle/10665/365237/9789240062382-eng.pdf",
       "version": "2022"
+    },
+    "ncdc_malaria": {
+      "name": "NCDC · Malaria fact sheet",
+      "url": "https://ncdc.gov.ng/diseases/factsheet/24",
+      "version": "Online fact sheet"
     }
   },
   "checked": "2026-11-24",
@@ -188,6 +193,18 @@
       "text": "WHO guidance explains that antibiotics do not help with acute bronchitis. A cough alone cannot show whether someone has bronchitis or another condition, or whether they need an antibiotic.",
       "source": "who_aware",
       "section": "Acute bronchitis"
+    },
+    "fever_ncdc": {
+      "title": "Fever has several possible causes",
+      "text": "Fever alone does not tell you whether you need an antibiotic. Nigeria’s CDC recommends a test to confirm malaria when a health professional suspects it.",
+      "source": "ncdc_malaria",
+      "section": "Diagnosis"
+    },
+    "tooth_pain_aware": {
+      "title": "Tooth pain needs a dental check",
+      "text": "WHO guidance explains that most dental pain and infections can be treated with dental care. Ask a dentist what is causing the pain and whether an antibiotic is needed.",
+      "source": "who_aware",
+      "section": "Dental infections"
     }
   }
 }

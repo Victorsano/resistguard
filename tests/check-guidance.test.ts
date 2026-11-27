@@ -176,3 +176,27 @@ test('co-amoxiclav asks about a past liver reaction and flags documented combina
  assert.equal(checkResult({...context,questions,answers:{'penicillin-reaction':'no','co-amoxiclav-liver-reaction':'yes'},
   interactions:false,needsInteractionReview:false,needsReasonReview:false}).status,'concern');
 });
+
+test('fever and dental evidence guide the conversation without filling an evidence gap',()=>{
+ const guidance=localGuidance(medicine(base.medicineId),{...base,reason:'Fever and toothache'});
+ assert.deepEqual(guidance.passages.slice(0,2).map(item=>item.id),['fever_ncdc','tooth_pain_aware']);
+ assert.deepEqual(guidance.uncoveredReasons,['fever','tooth pain']);
+ assert.equal(guidance.needsReasonReview,true);
+});
+
+test('ciprofloxacin retains required checks and flags documented interactions without Groq',()=>{
+ const context={...base,medicineId:'ciprofloxacin',otherMedicines:[{name:'Tizanidine',choice:matchTypedMedicine('Tizanidine')}]};
+ const candidate=medicine(context.medicineId);
+ const questions=selectFollowUps(availableFollowUps(candidate,context),[]);
+ assert.deepEqual(questions.map(({id})=>id),['prior-reaction','cipro-child','cipro-tendon']);
+ const guidance=localGuidance(candidate,context);
+ assert.deepEqual(guidance.interactions.map(({id})=>id),['ciprofloxacin-tizanidine']);
+ assert.equal(checkResult({...context,questions,answers:{'prior-reaction':'no','cipro-child':'no','cipro-tendon':'no'},
+  ...guidance,interactions:guidance.interactions.length>0}).status,'concern');
+});
+
+test('new co-amoxiclav combinations can be resolved from typed names',()=>{
+ const context={...base,medicineId:'co-amoxiclav',otherMedicines:['Warfarin','Mycophenolate mofetil'].map(name=>({name,choice:matchTypedMedicine(name)}))};
+ const guidance=localGuidance(medicine(context.medicineId),context);
+ assert.deepEqual(guidance.interactions.map(({id})=>id),['co-amoxiclav-warfarin','co-amoxiclav-mycophenolate']);
+});

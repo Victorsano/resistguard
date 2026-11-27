@@ -48,6 +48,20 @@
       "ingredients": [
         "probenecid"
       ]
+    },
+    {
+      "id": "tizanidine",
+      "name": "Tizanidine",
+      "ingredients": [
+        "tizanidine"
+      ]
+    },
+    {
+      "id": "mycophenolate mofetil",
+      "name": "Mycophenolate mofetil",
+      "ingredients": [
+        "mycophenolate mofetil"
+      ]
     }
   ],
   "pairs": [
@@ -186,6 +200,59 @@
       ],
       "title": "Co-amoxiclav and probenecid",
       "text": "Probenecid can raise and prolong amoxicillin levels when used with co-amoxiclav. Ask a pharmacist or prescriber to check these medicines together.",
+      "source": {
+        "name": "NAFDAC Greenbook · Co-amoxiclav product information, section 4.5",
+        "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2024/09/16/202409168dbda631-b788-59cd-b794-17c96b430497.pdf"
+      }
+    },
+    {
+      "id": "ciprofloxacin-tizanidine",
+      "ingredients": [
+        [
+          "ciprofloxacin"
+        ],
+        [
+          "tizanidine"
+        ]
+      ],
+      "title": "Ciprofloxacin and tizanidine",
+      "text": "Ciprofloxacin can greatly increase tizanidine levels and its effects, including low blood pressure and drowsiness. The product information says these medicines must not be used together.",
+      "source": {
+        "name": "NAFDAC Greenbook · Ciprovam product information, section 4.5",
+        "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2025/01/07/2025010755c585d3-8351-5f2f-ba64-dcad70462399.pdf"
+      }
+    },
+    {
+      "id": "co-amoxiclav-warfarin",
+      "ingredients": [
+        [
+          "amoxicillin",
+          "clavulanic acid"
+        ],
+        [
+          "warfarin"
+        ]
+      ],
+      "title": "Co-amoxiclav and warfarin",
+      "text": "The product information reports changes in blood clotting tests in people taking warfarin with amoxicillin. Ask your prescriber or pharmacist about monitoring.",
+      "source": {
+        "name": "NAFDAC Greenbook · Co-amoxiclav product information, section 4.5",
+        "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2024/09/16/202409168dbda631-b788-59cd-b794-17c96b430497.pdf"
+      }
+    },
+    {
+      "id": "co-amoxiclav-mycophenolate",
+      "ingredients": [
+        [
+          "amoxicillin",
+          "clavulanic acid"
+        ],
+        [
+          "mycophenolate mofetil"
+        ]
+      ],
+      "title": "Co-amoxiclav and mycophenolate mofetil",
+      "text": "Co-amoxiclav can lower the level of the active form of mycophenolate between doses. The product information calls for monitoring during and shortly after the combination.",
       "source": {
         "name": "NAFDAC Greenbook · Co-amoxiclav product information, section 4.5",
         "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2024/09/16/202409168dbda631-b788-59cd-b794-17c96b430497.pdf"
