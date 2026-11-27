@@ -2,7 +2,7 @@
 
 import {ChevronDown,RotateCcw,BadgeInfo} from 'lucide-react';
 import {type Medicine} from '@/lib/safety';
-import {isWhiteScarDischarge,normaliseCheckReason,suggestReasons,type CheckDetails} from '@/lib/flow';
+import {scarDischargeSymptom,normaliseCheckReason,suggestReasons,type CheckDetails} from '@/lib/flow';
 import {guidanceMedicine,type CheckGuidance} from '@/lib/check-guidance';
 import type {FollowUpQuestion,FollowUpAnswers,FollowUpDetails} from '@/lib/check-follow-ups';
 import {checkResult} from '@/lib/check-result';
@@ -58,7 +58,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
  const reported=[details.prescribed?t.reportedPrescription[details.prescribed]:'',assessment?t.reportedAssessment[assessment]:''].filter(Boolean);
  const antibioticForHeadache=medicine.antibiotic&&suggestReasons(reason).includes('headache');
  const scarDischarge=medicine.id==='ampicillin-cloxacillin'&&status!=='concern'&&
-  !namedConditions&&isWhiteScarDischarge(reason);
+  !namedConditions?scarDischargeSymptom(reason):null;
  const visibleGaps=guidance.synthesis||scarDischarge?gaps.filter(gap=>gap.kind!=='reason_evidence'&&gap.kind!=='assessment'):gaps;
  const usualAction=clinician==='prescriber'&&namedConditions?t.prescriberConditions:
   clinician==='prescriber'&&status==='concern'?t.prescriberConcern:t.nextActionFallback[clinician];
@@ -82,7 +82,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
        gap.kind==='reason_evidence'?sourceGap:t.gap[gap.kind]}</li>)}
      </ul>}
      {!guidance.synthesis&&uncovered.length>0&&!gaps.some(gap=>gap.kind==='reason_evidence')&&<p className="answer-source-gap">{sourceGap}</p>}
-     {scarDischarge?<p className="answer-takeaway">{t.scarDischargeTakeaway}</p>:
+     {scarDischarge?<p className="answer-takeaway">{t.scarDischargeTakeaway(scarDischarge)}</p>:
       guidance.synthesis?<p className="answer-takeaway">{guidance.synthesis.takeaway}</p>:
       (status==='concern'||(status==='no_concern'&&!checks.length))&&<p className="answer-takeaway">{t.statusNote[status]}</p>}
      {guidance.interactions.length>0&&<ul className="answer-gaps" aria-label="Documented medicine interactions">
@@ -90,7 +90,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
      </ul>}
      <div className="answer-action">
       <h2>{clinician==='prescriber'&&status!=='no_concern'?t.prescriberAction:t.nextAction[clinician]}</h2>
-      <p>{scarDischarge?t.scarDischargeAction(details.prescribed==='yes'):guidance.synthesis?.nextAction||action}</p>
+      <p>{scarDischarge?t.scarDischargeAction(details.prescribed==='yes',scarDischarge):guidance.synthesis?.nextAction||action}</p>
      </div>
      {guidance.fallback&&<p className="answer-provider-note">{guidance.fallback==='rate_limit'?t.guidanceBusy:t.guidanceFallback}{' '}
       <button type="button" className="text-button answer-guidance-retry" onClick={onRetry}>{t.guidanceRetry}</button>

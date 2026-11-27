@@ -52,9 +52,11 @@ export function normaliseCheckReason(reason:string){
  ));
 }
 
-export function isWhiteScarDischarge(reason:string){
- return /\bwhite\s+discharge\b/i.test(reason) && /\bscar\b/i.test(reason) &&
-  !/\b(?:no|not|without|never|surgical|surgery|incision|operation|postoperative|post.op|fever|chills)\b|n['’]t\b/i.test(reason);
+export function scarDischargeSymptom(reason:string):'pus'|'white discharge'|null{
+ if(!/\bscar\b/i.test(reason)||
+  /\b(?:no|not|without|never|surgical|surgery|incision|operation|postoperative|post.op|fever|chills)\b|n['’]t\b/i.test(reason))return null;
+ if(/\bpus\b/i.test(reason))return 'pus';
+ return /\bwhite\s+discharge\b/i.test(reason)?'white discharge':null;
 }
 
 export function suggestReasons(input:string):ReasonId[]{

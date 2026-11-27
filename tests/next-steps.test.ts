@@ -65,7 +65,7 @@ test('share preview includes only the answers selected for sharing',()=>{
  assert.match(shared,/Fictional reason/);
  assert.match(shared,/Fictional answer/);
  assert.match(shared,/Fictional medicine/);
- assert.match(shared,/Could you explain what this medicine is meant to treat/);
+ assert.match(shared,/whether this medicine is meant to help with the symptoms I described/);
  const pharmacist=clinicianMessage(m,null,'pharmacist','',[],[]);
  assert.doesNotMatch(pharmacist,/prescribed/);
  assert.match(pharmacist,/interacts with anything else/);
@@ -78,4 +78,14 @@ test('a prior symptom check does not imply the recipient prescribed a medicine o
  assert.match(message,/A doctor did not prescribe it/);
  assert.match(message,/Could you tell me whether I need this medicine/);
  assert.doesNotMatch(message,/already checked|you gave|you assessed|treatment plan/i);
+});
+
+
+test('the WhatsApp draft mentions pus from a scar only when the reason is shared',()=>{
+ const candidate=record('ampicillin-cloxacillin');
+ const reason='pus is coming out of my scar';
+ const draft=clinicianMessage(candidate,null,'prescriber',reason,[],[]);
+ assert.match(draft,/Was this medicine meant for the pus coming from my scar, and does the area need to be checked/);
+ assert.doesNotMatch(draft,/A doctor prescribed/);
+ assert.doesNotMatch(clinicianMessage(candidate,null,'prescriber','',[],[]),/pus|scar/);
 });

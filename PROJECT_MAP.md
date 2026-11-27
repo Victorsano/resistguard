@@ -26,7 +26,7 @@ ResistGuard helps people in Nigeria identify the active ingredients in a medicin
 - `lib/flow.ts` handles reason wording and conservative phrase matching. `lib/check-guidance.ts` selects passages and checks documented interactions. `data/use-evidence.json` holds symptom passages and source links. `data/medicines.json` and `data/nigeria-catalogue.json` hold medicine records. `data/check-interactions.json` holds the documented pairs. `lib/check-follow-ups.ts` holds sourced questions.
 - `app/api/check-guidance/route.ts` sends a bounded set of evidence to Groq. The model can select a relevant passage by meaning even if the user’s wording missed the automatic phrase list. It returns citation IDs from that set and has no live web access during the check. A model citation alone does not clear an evidence gap or determine the clinical outcome.
 - `lib/check-result.ts` owns result status and clinician routing. `app/components/Answer.tsx` and `lib/screen-copy.ts` handle presentation and source-based wording. A prescription for this illness routes to the prescribing doctor. An unprescribed medicine must never imply the user has a prescriber or was given a treatment plan.
-- For example, the checker recognizes `headace` as headache and explains that antibiotics do not directly relieve headache pain. For white discharge from a scar and ampicillin + cloxacillin, it explains the possible sign of infection and gives a specific question about getting the scar checked. The prescribed and unprescribed paths use different next steps. A surgical wound has its own evidence and the general scar wording is kept separate from it.
+- For example, the checker recognizes `headace` as headache and explains that antibiotics do not directly relieve headache pain. For pus or white discharge from a scar and ampicillin + cloxacillin, it explains the possible sign of infection and gives a specific question about getting the scar checked. The prescribed and unprescribed paths use different next steps. A surgical wound has its own evidence and the general scar wording is kept separate from it.
 - Source links are grouped by URL with the uses listed under each link. Product examples are general uses supported by product information. A symptom match alone cannot establish the cause or whether an antibiotic is needed.
 
 ## What is still open
@@ -38,7 +38,7 @@ ResistGuard helps people in Nigeria identify the active ingredients in a medicin
 
 ## Latest verification
 
-The automated suite passed 82 tests and the production build succeeded. The earlier live browser walkthroughs used fictional inputs and covered typed lookup, result guidance in both prescription paths, source links, and WhatsApp sharing controls. Physical camera and pharmacist review remain open.
+The automated suite passed 84 tests and the production build succeeded. The earlier live browser walkthroughs used fictional inputs and covered typed lookup, result guidance in both prescription paths, source links, and WhatsApp sharing controls. Physical camera and pharmacist review remain open.
 
 ## Start developing
 

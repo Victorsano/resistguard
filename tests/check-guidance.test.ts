@@ -213,7 +213,7 @@ test('pus from a skin cut reaches wound guidance without inferring a diagnosis',
 
 test('semantic retrieval can cite wound guidance for unfamiliar wording without clearing the source-based gap',()=>{
  const candidate=medicine('ampicillin-cloxacillin');
- const context={...base,medicineId:candidate.id,reason:'Pus from my scar',prescribed:true};
+ const context={...base,medicineId:candidate.id,reason:'Thick fluid is leaking from an old mark on my skin',prescribed:true};
  const guidance=localGuidance(candidate,context);
  assert.equal(guidance.needsReasonReview,true);
  assert.ok(!guidance.passages.some(item=>item.id==='wound_assessment'));
@@ -243,4 +243,14 @@ test('scar discharge includes wound guidance without clearing uncertainty',()=>{
  }
  const guidance=localGuidance(candidate,{...base,medicineId:candidate.id,reason:'No white discharge from my scar'});
  assert.ok(!guidance.passages.some(item=>item.id==='wound_assessment'));
+});
+
+
+test('pus from a scar reaches the wound source, while negated and surgical wording stay separate',()=>{
+ const candidate=medicine('ampicillin-cloxacillin');
+ const context={...base,medicineId:candidate.id,prescribed:true,reason:'Pus is coming out of my scar'};
+ assert.ok(localGuidance(candidate,context).passages.some(item=>item.id==='wound_assessment'));
+ for(const reason of ['No pus from my scar','Pus from my surgical scar']){
+  assert.ok(!localGuidance(candidate,{...context,reason}).passages.some(item=>item.id==='wound_assessment'));
+ }
 });

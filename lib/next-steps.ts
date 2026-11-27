@@ -1,3 +1,4 @@
+import {scarDischargeSymptom} from './flow';
 import type {checkResult} from './check-result';
 import type {YesNo} from './flow';
 
@@ -66,13 +67,19 @@ const clinicianQuestions:Record<CheckClinician,string>={
 };
 
 export function clinicianMessage(medicine:ConfirmedMedicine,prescribed:YesNo|null,clinician:CheckClinician,reason:string,otherMedicines:readonly string[],flagged:readonly string[]){
+ const symptom=scarDischargeSymptom(reason);
+ const question=clinician==='pharmacist'||!reason?clinicianQuestions[clinician]:
+  symptom?(clinician==='prescriber'
+   ? `Was this medicine meant for the ${symptom} coming from my scar, and does the area need to be checked?`
+   : `Could you check the ${symptom} coming from my scar and tell me whether I need this medicine or other wound care?`):
+  clinician==='prescriber'?'Could you explain whether this medicine is meant to help with the symptoms I described?':clinicianQuestions[clinician];
  return [
-  'Hello, I’d like to ask about a medicine containing '+joinIngredients(medicine.ingredients)+'?',
+  'Hello, I’d like to ask about a medicine containing '+joinIngredients(medicine.ingredients)+'.',
   ...(prescribed===null?[]:[prescribed==='yes'?'A doctor prescribed it for this illness.':'A doctor did not prescribe it for this illness.']),
   ...(reason?['Reason: '+reason]:[]),
   ...(otherMedicines.length?['Other medicines or supplements: '+otherMedicines.join(', ')]:[]),
   ...(flagged.length?['Details from my check:',...flagged.map(item=>'- '+item)]:[]),
-  clinicianQuestions[clinician]
+  question
  ].join('\n');
 }
 

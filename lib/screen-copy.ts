@@ -96,9 +96,9 @@ export const copy={
   headacheAction:(name:string,prescribed:boolean)=>prescribed
    ? `Ask your prescribing doctor, “What infection is ${name} meant to treat, and is it related to my headache?”`
    : `Tell a doctor about your headache and that you’re considering ${name}. Ask what might be causing the headache and whether an antibiotic is needed.`,
-  scarDischargeTakeaway:'White discharge from a scar can be a sign of infection. A doctor can check whether the scar is infected and what care it needs.',
-  scarDischargeAction:(prescribed:boolean)=>prescribed
-   ? 'Tell the doctor who prescribed it about the white discharge. Ask whether this antibiotic was meant for the scar and whether the area needs to be checked.'
+  scarDischargeTakeaway:(symptom:string)=>`${symptom==='pus'?'Pus':'White discharge'} coming from a scar can be a sign of infection. A doctor can check whether the scar is infected and what care it needs.`,
+  scarDischargeAction:(prescribed:boolean,symptom:string)=>prescribed
+   ? `Tell the doctor who prescribed it that ${symptom} is coming from your scar. Ask whether this antibiotic was meant for the scar and whether the area needs to be checked.`
    : 'Ask a doctor to check the scar and tell you whether you need an antibiotic or other wound care.',
   woundAction:(prescribed:boolean)=>prescribed
    ? 'Tell your prescribing doctor what you noticed at the wound or scar. Ask whether the antibiotic was meant for that and whether the area needs to be checked.'
