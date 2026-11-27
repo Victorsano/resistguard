@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect,useRef,useState} from 'react';
+import {useCallback,useEffect,useRef,useState} from 'react';
 import './hero-particles.css';
 
 const steps=[
@@ -17,14 +17,29 @@ export default function HeroParticles(){
  const current=useRef<Step>('scan');
  const [active,setActive]=useState<Step>('scan');
  const [ready,setReady]=useState(false);
+ const [hovered,setHovered]=useState(false);
+ const [keyboardFocus,setKeyboardFocus]=useState(false);
+ const [paused,setPaused]=useState(false);
  const step=steps.find(item=>item.id===active)!;
 
- function choose(id:Step){
+ const choose=useCallback((id:Step)=>{
   if(current.current===id)return;
   current.current=id;
   setActive(id);
   select.current(id);
- }
+ },[]);
+
+ useEffect(()=>{
+  if(hovered||keyboardFocus||paused)return;
+  const motion=matchMedia('(prefers-reduced-motion: reduce)');
+  const timer=window.setInterval(()=>{
+   if(document.hidden)return;
+   if(motion.matches)return;
+   const index=steps.findIndex(item=>item.id===active);
+   choose(steps[(index+1)%steps.length].id);
+  },1000);
+  return ()=>window.clearInterval(timer);
+ },[active,choose,hovered,keyboardFocus,paused]);
 
  useEffect(()=>{
   const host=stage.current!;
@@ -137,7 +152,11 @@ export default function HeroParticles(){
   };
  },[]);
 
- return <div className="hero-particles">
+ return <div className="hero-particles"
+  onPointerEnter={event=>{if(event.pointerType!=='touch')setHovered(true);}}
+  onPointerLeave={event=>{if(event.pointerType!=='touch')setHovered(false);}}
+  onFocus={event=>setKeyboardFocus(event.target.matches(':focus-visible'))}
+  onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget))setKeyboardFocus(false);}}>
   <div ref={stage} className="hero-particles-stage" aria-hidden="true">
    {!ready&&<img src={'/hero-particles/'+active+'.png'} alt=""/>}
   </div>
@@ -148,6 +167,9 @@ export default function HeroParticles(){
     <img src={'/hero-particles/'+item.id+'.png'} alt=""/>
    </button>)}
   </div>
-  <p className="hero-particles-caption" aria-live="polite"><strong>{step.label}</strong>{step.detail}</p>
+  <p className="hero-particles-caption"><strong>{step.label}</strong>{step.detail}</p>
+  <button type="button" className="hero-particles-playback" onClick={()=>setPaused(value=>!value)}>
+   {paused?'Resume animation':'Pause animation'}
+  </button>
  </div>;
 }

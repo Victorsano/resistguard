@@ -14,3 +14,5 @@
  .hero-particles{grid-column:1 / -1;grid-row:auto;width:min(100%,360px);justify-self:center;margin-bottom:22px}
  .hero-particles-stage{aspect-ratio:1.35;max-height:none}
 }
+.hero-particles-playback{background:none;border:0;color:var(--on-night-2);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:8px}
+@media(prefers-reduced-motion:reduce){.hero-particles-playback{display:none}}
