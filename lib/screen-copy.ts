@@ -109,7 +109,7 @@ export const copy={
    no:'You said this medicine was not prescribed for this illness.'
   },
   reportedAssessment:{
-   yes:'You said a clinician already checked your symptoms.',
+   yes:'You said a doctor or pharmacist already checked your symptoms.',
    no:'You said a clinician has not checked your symptoms yet.',
    unsure:'You’re unsure whether a clinician has checked your symptoms.'
   },
@@ -131,7 +131,7 @@ export const copy={
   scope:(checks:string)=>`This result covers your answers about ${checks}.`,
   prescriberConcern:'Tell your doctor what was flagged above and ask how it affects your prescription.',
   reportedConditions:'Conditions you reported',
-  reasonNotCovered:(reason:string)=>`The sources used here don’t explain this medicine’s use for “${reason}”.`,
+  reasonNotCovered:(reason:string)=>`The sources we checked can’t tell us whether this medicine would help with what you reported: “${reason}”.`,
   prescriberAction:'Ask the doctor who prescribed it',
   prescriberConditions:'Tell your doctor about the conditions listed above. Ask what the medicine is meant to treat and whether those conditions affect the plan.',
   reasonCoverage:(topics:string)=>`The sources used in this check do not cover ${topics}.`,
@@ -141,13 +141,13 @@ export const copy={
   },
   nextAction:{
    prescriber:'If you have questions, ask the doctor who prescribed it',
-   previous_clinician:'Check with the clinician who saw you',
+   previous_clinician:'Ask a doctor about your symptoms',
    doctor:'Talk to a doctor',
    pharmacist:'Ask a pharmacist about your other medicines'
   },
   nextActionFallback:{
    prescriber:'If your instructions are unclear, ask what the medicine was prescribed for and how it fits your treatment plan.',
-   previous_clinician:'If you’re considering this medicine, ask whether it fits the plan they gave you.',
+   previous_clinician:'Tell the doctor that someone already checked your symptoms and that you’re considering this medicine. Ask whether you need it.',
    doctor:'Tell the doctor why you are considering this medicine and share any other medicines or reactions you reported.',
    pharmacist:'Show the pharmacist the packs for the medicines you take and ask them to check how they may interact.'
   },

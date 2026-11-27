@@ -71,3 +71,11 @@ test('share preview includes only the answers selected for sharing',()=>{
  assert.match(pharmacist,/interacts with anything else/);
  assert.equal(decode(clinicianWhatsAppLink(shared)),shared);
 });
+
+
+test('a prior symptom check does not imply the recipient prescribed a medicine or gave a plan',()=>{
+ const message=clinicianMessage(record('ampicillin-cloxacillin'),'no','previous_clinician','',[],[]);
+ assert.match(message,/A doctor did not prescribe it/);
+ assert.match(message,/Could you tell me whether I need this medicine/);
+ assert.doesNotMatch(message,/you gave|you assessed|treatment plan/i);
+});

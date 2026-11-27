@@ -47,20 +47,20 @@ export async function POST(request: Request) {
     const candidates=spellingCandidates(entry.name);
     return candidates.length?[{index,candidates}]:[];
   });
-  const existingPlan=outcome?.clinician==='prescriber'||outcome?.clinician==='previous_clinician';
-  const template=asking?'{"questionIds":["optional-id"],"matches":[]}':existingPlan?
+  const useAppNextAction=outcome?.clinician==='prescriber'||outcome?.clinician==='previous_clinician';
+  const template=asking?'{"questionIds":["optional-id"],"matches":[]}':useAppNextAction?
     '{"takeaway":"...","passageIds":["evidence-id"],"matches":[]}':
     '{"takeaway":"...","nextAction":"...","passageIds":["evidence-id"],"matches":[]}';
   const task=asking?
     'Pick up to two relevant optional follow-up IDs. Mandatory questions are added automatically.':
     [
-      'In two short sentences, explain in plain language what the cited evidence helps clarify for this person.',
+      'Use one or two short sentences and at most 35 words. Use everyday words and speak directly to the person.',
       'Use their stated reason and relevant follow-up details as things they reported. Do not repeat any identifying information.',
-      'Name the reported symptom or condition when explaining a gap. If the source lacks an answer about it, say so plainly. Skip general advice that does not explain the gap. Only identify a contraindication if a supplied source explicitly supports it.',
+      'Name the reported symptom or condition when explaining a gap. If the source lacks an answer about it, say so plainly. Do not infer a cause or suggest a test to fill the gap. Skip general advice that does not explain the gap. Only identify a contraindication if a supplied source explicitly supports it.',
       'Use plain source names such as the medicine leaflet in the takeaway. Put citation IDs only in passageIds.',
       'Explain what a reported concern or missing detail means for this check. Keep different symptoms separate. Use the symptom words they used.',
       'The app already displays what the person reported about prescription and assessment. Do not repeat or infer either.',
-      existingPlan?'They already have a clinician involved. Do not request another assessment or write a next action.':
+      useAppNextAction?'The app provides the next step. Do not assume the person received this medicine or a treatment plan. Do not write a next action.':
         'Give a specific next action for the supplied clinician. Start with Ask, Tell, Show, Bring, or Share. Say what to ask or share.',
       'Cite one to three supplied passage IDs. For a gap in symptom evidence, use the most relevant available source, such as label-caution. Do not invent a source.'
     ].join(' ');
@@ -109,10 +109,11 @@ export async function POST(request: Request) {
     const selected=[...new Set([...selection.passageIds,...reasonPassages.map(item=>item.id)])].slice(0,4);
     const reported={prescribed:context.prescribed,assessment:outcome?.assessment,reason:context.reason};
     let synthesis:CheckGuidance['synthesis'];
-    if(!asking){
+    // The app already states an unsupported reason plainly. Keep any separate documented concern.
+    if(!asking&&(!needsReasonReview||reasonPassages.length>0||outcome?.status==='concern')){
       const takeaway=typeof model.takeaway==='string'?model.takeaway.replace(/\blabel[-‑]caution(?: source)?\b/gi,'medicine leaflet'):model.takeaway;
       synthesis=validateCheckSynthesis(takeaway,undefined,reported);
-      if(!existingPlan&&model.nextAction){
+      if(!useAppNextAction&&model.nextAction){
         try{synthesis=validateCheckSynthesis(takeaway,model.nextAction,reported);}
         catch{ /* The result can show its own next action. */ }
       }

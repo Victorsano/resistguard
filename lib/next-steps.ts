@@ -60,7 +60,7 @@ export type CheckClinician=ReturnType<typeof checkResult>['clinician'];
 
 const clinicianQuestions:Record<CheckClinician,string>={
  prescriber:'What was this medicine prescribed to treat, and do the details I shared affect my treatment plan?',
- previous_clinician:'Does this medicine fit the plan you gave me when you assessed my symptoms?',
+ previous_clinician:'A doctor or pharmacist already checked my symptoms. Could you tell me whether I need this medicine?',
  doctor:'Could you review my symptoms and tell me whether this medicine is appropriate?',
  pharmacist:'Could you check whether this medicine interacts with anything else I take?'
 };

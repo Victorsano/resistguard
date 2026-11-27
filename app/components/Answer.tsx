@@ -41,7 +41,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
  const checks=followUps.flatMap(({id})=>followUpAnswers[id]&&Object.hasOwn(t.checks,id)?[t.checks[id]]:[]);
  if(details.otherMedicines)checks.push(t.checks.other);
  const reported=[details.prescribed?t.reportedPrescription[details.prescribed]:'',assessment?t.reportedAssessment[assessment]:''].filter(Boolean);
- const hasExistingPlan=clinician==='prescriber'||clinician==='previous_clinician';
+ const useAppNextAction=clinician==='prescriber'||clinician==='previous_clinician';
  const defaultAction=clinician==='prescriber'&&namedConditions?t.prescriberConditions:
   clinician==='prescriber'&&status==='concern'?t.prescriberConcern:t.nextActionFallback[clinician];
  return <section className="answer" aria-labelledby="answer-guidance">
@@ -62,7 +62,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
       (status==='concern'||(status==='no_concern'&&!checks.length))&&<p className="answer-takeaway">{t.statusNote[status]}</p>}
      <div className="answer-action">
       <h2>{clinician==='prescriber'&&status!=='no_concern'?t.prescriberAction:t.nextAction[clinician]}</h2>
-      <p>{(!hasExistingPlan&&guidance.synthesis?.nextAction)||defaultAction}</p>
+      <p>{(!useAppNextAction&&guidance.synthesis?.nextAction)||defaultAction}</p>
      </div>
      {guidance.fallback&&<p className="answer-provider-note">{guidance.fallback==='rate_limit'?t.guidanceBusy:t.guidanceFallback}{' '}
       <button type="button" className="text-button answer-guidance-retry" onClick={onRetry}>{t.guidanceRetry}</button>
