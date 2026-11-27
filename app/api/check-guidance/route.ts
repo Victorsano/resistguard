@@ -44,22 +44,31 @@ export async function POST(request: Request) {
   });
   const synthesisTask=
     [
-      'Reconsider the original reason, prescription status, follow-up answers and details, and other medicines together with the retrieved passages. Pay attention to what the person has already done and what is still unknown. If they already reported a problem, focus the action on follow-up rather than first reporting it. Compare symptom evidence with medicine uses when available and cite both if the explanation connects them.',
-      'Pus around a scar can be relevant to wound guidance. Use the surgical-wound passage only when the person reports surgery or an operation. Do not turn a symptom or an uncertain match into a diagnosis, and leave unrelated passages uncited.',
+      // Shared rules for every case.
+      'Your job is to help the person understand their medicine and how it relates to the problem they reported. Read the reason, prescription answer, follow-up answers and details, other medicines and the retrieved passages together.',
       'Use one or two short sentences and at most 35 words. Use everyday words and speak directly to the person.',
-      'Use their stated reason and relevant follow-up details as things they reported. Do not repeat any identifying information.',
-      'Name the reported symptom or condition when explaining a gap. If the source lacks an answer about it, say so plainly. Do not infer a cause or suggest a test to fill the gap. Skip general advice that does not explain the gap. Only identify a contraindication if a supplied source explicitly supports it.',
-      'Use plain source names such as the medicine leaflet in the takeaway. Put citation IDs only in passageIds.',
-      'Explain what a reported concern or missing detail means for this check. Keep different symptoms separate. Use natural symptom wording, quietly correcting obvious typos or rephrasing colloquial terms without changing their meaning. Use the same neutral wording in both the takeaway and nextAction. Do not quote their input back.',
+      'Treat their reason and follow-up details as facts they reported. Do not quote their input back or repeat identifying information. Use natural symptom wording, quietly correcting obvious typos or rephrasing colloquial terms without changing their meaning. For example, refer to farting as passing gas.',
       'The app already displays what the person reported about prescription and assessment. Do not repeat or infer either.',
-      'Give one concrete next step. Name the symptom in the action so the person knows what to say. Do not assume a diagnosis, a treatment plan, or unclear instructions.',
-      context.prescribed
-        ? 'Start nextAction with Ask your prescribing doctor. Ask whether the medicine was meant for the reported problem and what to do about it.'
-        : 'The medicine was not prescribed for this illness. Never say your prescriber or your prescribing doctor. If the route is doctor or previous_clinician, start nextAction with Ask a doctor and ask about the specific symptom and whether an antibiotic is needed. For the pharmacist route, ask about the documented medicine concern.',
-      'For white discharge from a scar, say it can be a sign of infection without calling it pus unless the person said pus. If the screen already explains the medicine’s general purpose, do not repeat it.',
-      'When a supplied source says the symptom can indicate a condition within the medicine’s usual uses, explain that plausible fit first. Treat pus from a cut as a possible sign of a skin infection, not a confirmed diagnosis. If prescribed for that illness, acknowledge the potential fit without suggesting the prescriber made a mistake. For a supported reason, focus the question on what improvement to expect and when to follow up.',
-      'When no passage fits after you check the candidate list, use the medicine summary to explain why the symptom alone does not establish that the medicine is needed. For antibiotics, the screen already explains their general purpose, so focus the takeaway on the symptom and what remains unclear. For example, refer to farting as passing gas and distinguish a medicine’s general purpose from whether it would help that symptom. Do not declare that the prescription is wrong.',
-      'Cite one to three supplied passage IDs. For a gap in symptom evidence, use the most relevant available source, such as label-caution. Do not invent a source.'
+      'The screen already shows the medicine’s general purpose. Do not just repeat it. Connect it to the reported problem instead.',
+      'Never say the medicine is right, safe or needed for them, or that it will or may help them. Describe what it treats, not what it will do for them. Never diagnose, name a cause, suggest a test, or assume a treatment plan. Say can or some, not that something is their cause.',
+      'If the outcome reports a concern, such as a past reaction or a documented interaction, explain that first and cite its source. Only identify a contraindication if a supplied source explicitly supports it. Keep different symptoms separate.',
+      'Pus around a scar can be relevant to wound guidance. Use the surgical-wound passage only when the person reports surgery or an operation. For white discharge from a scar, say it can be a sign of infection without calling it pus unless the person said pus. Treat pus from a cut as a possible sign of a skin infection, not a confirmed diagnosis.',
+      'Use plain source names such as the medicine leaflet in the takeaway. Put citation IDs only in passageIds. Cite one to three supplied passage IDs. Use label-caution when no other passage fits. Leave unrelated passages uncited and do not invent a source.',
+      'Give one concrete next step in nextAction. Name the symptom in it so the person knows what to say. Use the same neutral wording in the takeaway and nextAction.',
+      ...(context.prescribed?[
+        // Prescribed: the person is right. Explain the medicine, do not audit the doctor.
+        'A doctor prescribed this medicine for the reported problem. Accept that as true. Explain the medicine. Do not question the prescription or the reason.',
+        'Explain how the medicine’s uses can connect to the reported problem, using medicineSummary and the evidence. For example, an antibiotic that treats some gut infections can be given when one of those infections causes diarrhoea.',
+        'Do not say the problem has many causes, that the reason needs confirming, or that a label cannot establish the cause. Use assessment passages only for warning signs to watch for.',
+        'If a supplied source clearly says the medicine does not treat the reported problem, say so gently in one short clause. Say the doctor may be treating something else. Never say the doctor made a mistake or that the prescription is wrong.',
+        'Start nextAction with Ask your prescribing doctor. If your takeaway says the medicine does not treat the reported problem, the next step must ask what the medicine is treating. Otherwise ask what change to expect in the symptom and when to go back if it does not improve.'
+      ]:[
+        // Not prescribed: acknowledge a fit if the sources show one, but a professional decides.
+        'Nobody prescribed this medicine for the reported problem. Never say your prescriber or your prescribing doctor.',
+        'If a supplied source shows the medicine is used for this kind of problem, say that plainly first. For example, a medicine used for some urine infections fits pain when passing urine. Then say a doctor needs to check whether this problem is one it treats.',
+        'If no source links the medicine to the problem, use medicineSummary to explain that the symptom alone does not show this medicine would help, and name what is still unclear.',
+        'If the route is doctor or previous_clinician, start nextAction with Ask a doctor and ask about the specific symptom and whether an antibiotic is needed. For the pharmacist route, ask about the documented medicine concern.'
+      ])
     ].join(' ');
 
   try{
