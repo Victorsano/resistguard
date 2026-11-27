@@ -37,7 +37,7 @@ export default function HeroParticles(){
    if(motion.matches)return;
    const index=steps.findIndex(item=>item.id===active);
    choose(steps[(index+1)%steps.length].id);
-  },1000);
+  },2000);
   return ()=>window.clearInterval(timer);
  },[active,choose,hovered,keyboardFocus,paused]);
 
