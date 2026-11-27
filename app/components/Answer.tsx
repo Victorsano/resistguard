@@ -42,7 +42,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
  if(details.otherMedicines)checks.push(t.checks.other);
  const reported=[details.prescribed?t.reportedPrescription[details.prescribed]:'',assessment?t.reportedAssessment[assessment]:''].filter(Boolean);
  const antibioticForHeadache=medicine.antibiotic&&suggestReasons(reason).includes('headache');
- const useAppNextAction=antibioticForHeadache||clinician==='prescriber'||clinician==='previous_clinician';
+ const visibleGaps=guidance.synthesis?gaps.filter(gap=>gap.kind!=='reason_evidence'):gaps;
  const usualAction=clinician==='prescriber'&&namedConditions?t.prescriberConditions:
   clinician==='prescriber'&&status==='concern'?t.prescriberConcern:t.nextActionFallback[clinician];
  const action=antibioticForHeadache
@@ -55,19 +55,19 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
    <div aria-live="polite">
     {pending?<p role="status">{t.guidancePending}</p>:<>
      {medicine.antibiotic&&<p className="answer-takeaway">{t.antibioticPurpose(medicine.name,antibioticForHeadache,t.antibioticExamples[medicine.id])}</p>}
-     {reported.length>0&&<p className="answer-reported">{reported.join(' ')}</p>}
+     {!guidance.synthesis&&reported.length>0&&<p className="answer-reported">{reported.join(' ')}</p>}
      {namedConditions&&<p className="answer-source-gap"><strong>{t.reportedConditions}</strong><br/>{namedConditions}</p>}
      {status==='no_concern'&&checks.length>0&&<p className="answer-source-gap">{t.scope(format.format(checks))}</p>}
-     {gaps.length>0&&<ul className="answer-gaps">
-      {gaps.map((gap,index)=><li key={index}>{'question' in gap?t.gap[gap.kind](gap.question):
+     {visibleGaps.length>0&&<ul className="answer-gaps">
+      {visibleGaps.map((gap,index)=><li key={index}>{'question' in gap?t.gap[gap.kind](gap.question):
        gap.kind==='reason_evidence'?sourceGap:t.gap[gap.kind]}</li>)}
      </ul>}
-     {uncovered.length>0&&!gaps.some(gap=>gap.kind==='reason_evidence')&&<p className="answer-source-gap">{sourceGap}</p>}
+     {!guidance.synthesis&&uncovered.length>0&&!gaps.some(gap=>gap.kind==='reason_evidence')&&<p className="answer-source-gap">{sourceGap}</p>}
      {guidance.synthesis?<p className="answer-takeaway">{guidance.synthesis.takeaway}</p>:
       (status==='concern'||(status==='no_concern'&&!checks.length))&&<p className="answer-takeaway">{t.statusNote[status]}</p>}
      <div className="answer-action">
       <h2>{clinician==='prescriber'&&status!=='no_concern'?t.prescriberAction:t.nextAction[clinician]}</h2>
-      <p>{(!useAppNextAction&&guidance.synthesis?.nextAction)||action}</p>
+      <p>{guidance.synthesis?.nextAction||action}</p>
      </div>
      {guidance.fallback&&<p className="answer-provider-note">{guidance.fallback==='rate_limit'?t.guidanceBusy:t.guidanceFallback}{' '}
       <button type="button" className="text-button answer-guidance-retry" onClick={onRetry}>{t.guidanceRetry}</button>

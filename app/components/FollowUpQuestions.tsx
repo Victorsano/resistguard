@@ -38,7 +38,6 @@ export default function FollowUpQuestions({questions,answers,details,pending,use
    {useAI&&<p className="check-questions-hint" id="follow-up-consent">{t.consent}</p>}
    <button type="button" className="primary check-questions-continue" disabled={!ready}
     aria-describedby={useAI?'follow-up-consent':undefined} onClick={()=>onContinue(useAI)}>{t.finish}</button>
-   {useAI&&<button type="button" className="text-button" disabled={!ready} onClick={()=>onContinue(false)}>{copy.questions.localGuidance}</button>}
   </>}
  </div>;
 }

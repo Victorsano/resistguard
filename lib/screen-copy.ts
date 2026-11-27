@@ -65,7 +65,7 @@ export const copy={
  questions:{
   reason:'Why are you taking this medicine?',
   reasonLabel:'Your reason (optional)',
-  privacy:'You can choose whether to send your answers for guidance.',
+  privacy:'Your answers help tailor your medicine check.',
   prescription:'Did a doctor prescribe this medicine for you for this illness?',
   otherMedicines:'Do you take other medicines, vitamins, or herbal products?',
   medicineName:'Find or type the name on the pack',
@@ -76,15 +76,13 @@ export const copy={
   yes:'Yes',
   no:'No',
   continue:'Continue',
-  guidanceConsent:'Groq will get your answers and medicine names to choose follow-up questions.',
-  guidance:'Continue with Groq',
-  localGuidance:'Continue without Groq'
+  guidanceConsent:'Continue sends your answers and medicine names to our AI provider to choose follow-up questions.'
  },
  followUp:{
   title:'A few more questions',
   loading:'Choosing questions for your medicine and answers…',
   yes:'Yes',no:'No',unsure:'Not sure',optional:'Optional',
-  consent:'Choose See my result to send these answers and any details you add to Groq.',
+  consent:'Choose See my result to send these answers and any details you add to our AI provider.',
   finish:'See my result'
  },
  answer:{
@@ -110,9 +108,9 @@ export const copy={
   unsureAboutNames:'Some names may be missing.',
   asTyped:'As typed',
   guidance:'What to know about your check',
-  guidancePending:'Groq is writing your result from your answers and the sources…',
+  guidancePending:'The AI is writing your result from your answers and the sources…',
   guidanceFallback:'The AI explanation wasn’t available.',
-  guidanceBusy:'Groq reached a request limit.',
+  guidanceBusy:'AI guidance is busy right now.',
   status:{concern:'Something to discuss',more_information:'More information needed',no_concern:'No concerns flagged by these checks'},
   reportedPrescription:{
    yes:'You said a doctor prescribed this medicine for this illness.',
@@ -157,7 +155,7 @@ export const copy={
    pharmacist:'Ask a pharmacist about your other medicines'
   },
   nextActionFallback:{
-   prescriber:'If your instructions are unclear, ask what the medicine was prescribed for and how it fits your treatment plan.',
+   prescriber:'Ask what the medicine is meant to treat and how it relates to the symptoms you reported.',
    previous_clinician:'Tell the doctor what symptoms you have and which medicine you’re considering. Ask whether you need it.',
    doctor:'Tell the doctor why you are considering this medicine and share any other medicines or reactions you reported.',
    pharmacist:'Show the pharmacist the packs for the medicines you take and ask them to check how they may interact.'
@@ -165,7 +163,7 @@ export const copy={
   catalogue:'Medicine record',
   activeIngredients:'Active ingredients',
   supporting:'Supporting sources',
-  guidanceRetry:'Try Groq again',
+  guidanceRetry:'Try AI guidance again',
   catalogueClassification:'Catalogue classification',
   matchedFrom:(name:string)=>`Matched from ${name}`,
   checkMatch:'Compare these ingredients with the pack before choosing a match.',

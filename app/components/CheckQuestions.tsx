@@ -104,10 +104,9 @@ export default function CheckQuestions({step,details,medicineName,aiAvailable,on
     </label>
    </div>}
   </>}
-  {step==='other-medicines'&&aiAvailable?<>
-   <p className="check-questions-hint" id="guidance-consent">{t.guidanceConsent}</p>
-   <button type="button" className="primary check-questions-continue" data-motion="press" aria-describedby="guidance-consent" disabled={!canContinue||scanPack} onClick={()=>continueCheck(true)}>{t.guidance}</button>
-   <button type="button" className="text-button" data-motion="press" disabled={!canContinue||scanPack} onClick={()=>continueCheck(false)}>{t.localGuidance}</button>
-  </>:<button type="button" className="primary check-questions-continue" data-motion="press" disabled={!canContinue||scanPack} onClick={()=>continueCheck(false)}>{t.continue}</button>}
+  {step==='other-medicines'&&<p className="check-questions-hint" id="guidance-consent">{t.guidanceConsent}</p>}
+  <button type="button" className="primary check-questions-continue" data-motion="press"
+   aria-describedby={step==='other-medicines'?'guidance-consent':undefined}
+   disabled={!canContinue||scanPack} onClick={()=>continueCheck(step==='other-medicines')}>{t.continue}</button>
  </div>;
 }

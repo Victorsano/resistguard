@@ -15,7 +15,7 @@ On the first screen, tap **See an example**. A made-up amoxicillin label opens, 
 3. **Agree and read.** Tick the box to agree to send the photo to Groq, our AI provider. ResistGuard doesn't keep it. Tap **Read the label**. It usually takes under 20 seconds.
 4. **Is this what your pack says?** Look at your pack. If it lists exactly these ingredients and nothing more, tap **Yes, that's it**. If anything differs, or you can't tell, tap **No, or I'm not sure**.
 5. **Answer a few questions.** Type why you are taking the medicine and say whether a doctor prescribed it for this illness. Include any other medicines, vitamins, or herbal products. You can search, type a name, or scan and confirm the ingredients on another pack.
-6. **Answer follow-up questions.** Choose **Continue with Groq** to pick relevant questions, or continue without Groq. Choose **Not sure** when needed. Some Yes answers open an optional detail field.
+6. **Answer follow-up questions.** Choose **Continue** to send your answers to the AI provider and pick relevant questions. If the provider is unavailable, the checker can still show its source-based result. Choose **Not sure** when needed. Some Yes answers open an optional detail field.
 7. **Read your result.** **See my result** uses the answers you chose to send. Read the takeaway and next action first. Expand the medicine record, sources, or your answers for more detail.
 8. **Check registration or preview a message.** Look up the NAFDAC number inside ResistGuard. Compare the returned product record with your pack. If the current lookup is unavailable, any saved record shows the date it was checked. For WhatsApp, choose which information to add and review the message before opening it.
 
