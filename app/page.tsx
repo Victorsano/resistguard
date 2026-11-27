@@ -1,6 +1,6 @@
 import {existsSync} from 'node:fs';
 import {join} from 'node:path';
-import {ArrowRight,ScanLine,MessageCircle,ShieldCheck,LockKeyhole,BadgeInfo,ArrowUpRight} from 'lucide-react';
+import {ArrowRight,ScanLine,MessageCircle,ShieldCheck,LockKeyhole,BadgeInfo,ArrowUpRight,Camera,FlaskConical,Download} from 'lucide-react';
 import {landing as t} from '@/lib/landing-copy';
 import {availableHeroMedia} from '@/lib/hero-media';
 import HeroMedia from './components/HeroMedia';
@@ -9,6 +9,7 @@ import Wordmark from './components/Wordmark';
 import Emphasis from './components/Emphasis';
 import './landing.css';
 const featureIcons={label:ScanLine,pharmacist:MessageCircle,pack:ShieldCheck,privacy:LockKeyhole};
+const researchIcons={read:Camera,flag:FlaskConical,record:Download};
 // Only media files that really exist in public/ reach the page.
 const media=availableHeroMedia(path=>existsSync(join(process.cwd(),'public',path)));
 function Actions({hero}:{hero:boolean}){
@@ -36,6 +37,12 @@ export default function Landing(){
   <section className="landing-section landing-how" data-motion="reveal" aria-labelledby="how-title">
    <h2 id="how-title" className="landing-side-title">{t.howTitle}</h2>
    <ul className="landing-features">{t.features.map(f=>{const Icon=featureIcons[f.id];return <li key={f.id}><Icon size={26} strokeWidth={1.75} aria-hidden="true"/><h3>{f.title}</h3><p>{f.text}</p></li>;})}</ul>
+  </section>
+  <section className="landing-section landing-how landing-research" data-motion="reveal" aria-labelledby="research-title">
+   <h2 id="research-title" className="landing-side-title">{t.research.title}</h2>
+   <p className="landing-research-lead">{t.research.lead}</p>
+   <ul className="landing-features landing-research-features">{t.research.features.map(f=>{const Icon=researchIcons[f.id];return <li key={f.id}><Icon size={26} strokeWidth={1.75} aria-hidden="true"/><h3>{f.title}</h3><p>{f.text}</p></li>;})}</ul>
+   <div className="landing-actions landing-research-actions"><a className="landing-button" href="/lab" data-motion="press"><span>{t.research.cta}</span><ArrowRight size={22} strokeWidth={2.25} aria-hidden="true"/></a></div>
   </section>
   <section className="landing-section landing-close" data-motion="reveal" aria-labelledby="close-title">
    <h2 id="close-title" className="landing-close-title"><Emphasis text={t.closing.text} word={t.closing.em}/></h2>
