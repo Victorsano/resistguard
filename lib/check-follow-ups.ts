@@ -53,10 +53,16 @@ export function availableFollowUps(medicine:Medicine,context:GuidanceContext):Fo
  ];
 }
 
+export function modelFollowUps(available:FollowUpQuestion[]){
+ return available.filter(question=>!question.mandatory&&question.id!=='reason-assessed');
+}
+
 export function selectFollowUps(available:FollowUpQuestion[],ids:unknown):FollowUpQuestion[]{
+ const choices=modelFollowUps(available);
  if(!Array.isArray(ids)||ids.length>2||new Set(ids).size!==ids.length||
-  !ids.every(id=>available.some(question=>!question.mandatory&&question.id===id)))throw new Error('Invalid follow-up selection');
- return [...available.filter(question=>question.mandatory),...ids.map(id=>available.find(question=>question.id===id)!)];
+  !ids.every(id=>choices.some(question=>question.id===id)))throw new Error('Invalid follow-up selection');
+ return [...available.filter(question=>question.mandatory||question.id==='reason-assessed'),
+  ...ids.map(id=>choices.find(question=>question.id===id)!)];
 }
 
 export function parseFollowUpAnswers(input:unknown,available:FollowUpQuestion[]):FollowUpAnswers|null{

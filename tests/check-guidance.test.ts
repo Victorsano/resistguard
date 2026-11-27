@@ -63,7 +63,10 @@ test('guidance rejects unsupported medicine IDs and any output outside the suppl
 
 test('follow-up selection uses this medicine and cannot skip required allergy or ulcer checks',()=>{
   const penicillin=availableFollowUps(medicine('ampicillin-cloxacillin'),{...base,reason:'a new skin change'});
-  assert.deepEqual(selectFollowUps(penicillin,['reason-assessed']).map(question=>question.id),['penicillin-reaction','reason-assessed']);
+  assert.deepEqual(selectFollowUps(penicillin,[]).map(question=>question.id),['penicillin-reaction','reason-assessed']);
+  assert.deepEqual(selectFollowUps(penicillin,['long-term-condition']).map(question=>question.id),['penicillin-reaction','reason-assessed','long-term-condition']);
+  assert.throws(()=>selectFollowUps(penicillin,['reason-assessed']));
+  assert.deepEqual(parseFollowUpAnswers({'penicillin-reaction':'no'},penicillin),{'penicillin-reaction':'no'});
   assert.match(penicillin[0].source.url,/\.nafdac\.gov\.ng\//);
   assert.throws(()=>selectFollowUps(penicillin,['stomach-ulcer']));
   const ibuprofen=availableFollowUps(medicine('ibuprofen'),{...base,prescribed:true});

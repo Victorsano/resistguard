@@ -2,7 +2,7 @@ import {authorizeAI} from '@/lib/availability';
 import {allow,readBody,sameOrigin} from '@/lib/guard';
 import {groq,GroqError} from '@/lib/groq';
 import {medicines} from '@/lib/safety';
-import {availableFollowUps,parseFollowUpAnswers,parseFollowUpDetails,selectFollowUps} from '@/lib/check-follow-ups';
+import {availableFollowUps,modelFollowUps,parseFollowUpAnswers,parseFollowUpDetails,selectFollowUps} from '@/lib/check-follow-ups';
 import {checkResult} from '@/lib/check-result';
 import {
   evidenceForCheck,guidanceMedicine,interactionEvidence,localGuidance,parseGuidanceContext,
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
         reason:context.reason,prescribed:context.prescribed,
         otherMedicines:context.otherMedicines.map(entry=>guidanceMedicine(entry.choice)?.name??entry.name),
         namesIncomplete:context.namesIncomplete,
-        ...(asking?{optionalQuestions:available.filter(item=>!item.mandatory).map(({id,text})=>({id,text}))}:{
+        ...(asking?{optionalQuestions:modelFollowUps(available).map(({id,text})=>({id,text}))}:{
           answered,outcome,uncoveredReasons,
           reasonSpecificEvidence:reasonPassages.map(item=>item.id),
           evidence:evidence.map(({id,title,text})=>({id,title,text})),
