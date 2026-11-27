@@ -31,6 +31,8 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
   reason,prescribed:details.prescribed==='yes',questions:followUps,answers:followUpAnswers,
   interactions:guidance.interactions.length>0,needsInteractionReview:guidance.needsInteractionReview,needsReasonReview:guidance.needsReasonReview
  });
+ const followUpSources=[...new Map(followUps.filter(question=>Object.hasOwn(followUpAnswers,question.id)).map(({source})=>[source.url,source])).values()];
+ const supportingItems=[...guidance.interactions,...guidance.passages];
  const uncovered=guidance.uncoveredReasons??[];
  const format=new Intl.ListFormat('en');
  const sourceGap=uncovered.length?t.reasonCoverage(format.format(uncovered)):reason?t.reasonNotCovered(reason):t.gap.reason_evidence;
@@ -80,14 +82,14 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
    </div>
   </details>
   <GreenbookCheck ingredients={medicine.ingredients} suggestedNumber={suggestedRegistration} aiAvailable={aiAvailable}/>
-  {!pending&&<details className="answer-sources" open>
+  {!pending&&(supportingItems.length>0||followUpSources.length>0)&&<details className="answer-sources" open>
    <summary>{t.supporting}<ChevronDown size={20} aria-hidden="true" className="answer-chevron"/></summary>
    <div className="answer-expanded answer-guidance">
-    {[...guidance.interactions,...guidance.passages].map(item=><article className="answer-guidance-item" key={item.id}>
+    {supportingItems.map(item=><article className="answer-guidance-item" key={item.id}>
      <h3>{item.title}</h3><p>{item.text}</p>
      <a href={item.source.url} target="_blank" rel="noreferrer">{item.source.name} ↗</a>
     </article>)}
-    {[...new Map(followUps.filter(question=>Object.hasOwn(followUpAnswers,question.id)).map(({source})=>[source.url,source])).values()].map(source=>
+    {followUpSources.map(source=>
      <a href={source.url} key={source.url} target="_blank" rel="noreferrer">{source.name} ↗</a>
     )}
    </div>
@@ -126,7 +128,8 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
     </div>;
    })}
   </section>)}
-  <NextSteps medicine={medicine} clinician={clinician} reason={reason} prescribed={details.prescribed==='yes'}
+  <NextSteps medicine={medicine} clinician={clinician} reason={reason} prescribed={details.prescribed}
+   otherMedicines={details.medicines.map(entry=>guidanceMedicine(entry.choice)?.name??entry.name)}
    flagged={followUps.flatMap(question=>{
     const answer=followUpAnswers[question.id];
     return answer==='yes'||answer==='unsure'?[question.text+' '+copy.followUp[answer]+

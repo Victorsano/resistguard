@@ -58,11 +58,16 @@ test('not-in-list message names the ingredients the AI read and says the medicin
 
 test('share preview includes only the answers selected for sharing',()=>{
  const m=record('amoxicillin');
- const preview=clinicianMessage(m,true,'',[]);
+ const preview=clinicianMessage(m,'yes','prescriber','',[],[]);
  assert.match(preview,/prescribed it for this illness/);
  assert.doesNotMatch(preview,/Reason:|Things I reported/);
- const shared=clinicianMessage(m,true,'Fictional reason',['Fictional answer']);
+ const shared=clinicianMessage(m,'yes','prescriber','Fictional reason',['Fictional medicine'],['Fictional answer']);
  assert.match(shared,/Fictional reason/);
  assert.match(shared,/Fictional answer/);
+ assert.match(shared,/Fictional medicine/);
+ assert.match(shared,/What was this medicine prescribed to treat/);
+ const pharmacist=clinicianMessage(m,null,'pharmacist','',[],[]);
+ assert.doesNotMatch(pharmacist,/prescribed/);
+ assert.match(pharmacist,/interacts with anything else/);
  assert.equal(decode(clinicianWhatsAppLink(shared)),shared);
 });

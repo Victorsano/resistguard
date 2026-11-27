@@ -1,3 +1,6 @@
+import type {checkResult} from './check-result';
+import type {YesNo} from './flow';
+
 // Next steps after a confirmed match: hand the user to NAFDAC checks and to a pharmacist.
 // Plain functions only. Uses the confirmed record, never the scan, photo or product name.
 type ConfirmedMedicine={ingredients:readonly string[];antibiotic:boolean};
@@ -53,13 +56,23 @@ export function unlistedWhatsAppLink(ingredients:readonly string[],phone?:string
  return `https://wa.me/${number??''}?text=${encodeURIComponent(unlistedWhatsAppMessage(ingredients))}`;
 }
 
-export function clinicianMessage(medicine:ConfirmedMedicine,prescribed:boolean,reason:string,flagged:readonly string[]){
+export type CheckClinician=ReturnType<typeof checkResult>['clinician'];
+
+const clinicianQuestions:Record<CheckClinician,string>={
+ prescriber:'What was this medicine prescribed to treat, and do the details I shared affect my treatment plan?',
+ previous_clinician:'Does this medicine fit the plan you gave me when you assessed my symptoms?',
+ doctor:'Could you review my symptoms and tell me whether this medicine is appropriate?',
+ pharmacist:'Could you check whether this medicine interacts with anything else I take?'
+};
+
+export function clinicianMessage(medicine:ConfirmedMedicine,prescribed:YesNo|null,clinician:CheckClinician,reason:string,otherMedicines:readonly string[],flagged:readonly string[]){
  return [
   'Hello, could you help me check a medicine that contains '+joinIngredients(medicine.ingredients)+'?',
-  prescribed?'A doctor prescribed it for this illness.':'A doctor did not prescribe it for this illness.',
+  ...(prescribed===null?[]:[prescribed==='yes'?'A doctor prescribed it for this illness.':'A doctor did not prescribe it for this illness.']),
   ...(reason?['Reason: '+reason]:[]),
+  ...(otherMedicines.length?['Other products I reported: '+otherMedicines.join(', ')]:[]),
   ...(flagged.length?['Things I reported:',...flagged.map(item=>'- '+item)]:[]),
-  'What should we check about this medicine?'
+  clinicianQuestions[clinician]
  ].join('\n');
 }
 
