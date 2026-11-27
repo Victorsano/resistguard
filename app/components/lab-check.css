@@ -4,7 +4,17 @@
 .lab-check-intro h1{margin:0 0 var(--s3);font-size:clamp(30px,5vw,44px);line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
 .lab-check-intro p{margin:0;font-size:var(--text-body);line-height:var(--leading-body);color:var(--ink-2);max-width:62ch}
 .lab-check-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:var(--s5);align-items:start}
-.lab-check-entry,.lab-check-report{background:var(--card);border-radius:var(--radius-card);padding:var(--s5);min-width:0;display:grid;gap:var(--s4)}
+.lab-check-column{display:grid;gap:var(--s5);min-width:0}
+.lab-check-entry,.lab-check-report,.lab-check-photo{background:var(--card);border-radius:var(--radius-card);padding:var(--s5);min-width:0;display:grid;gap:var(--s4)}
+.lab-check-photo p{margin:0;font-size:var(--text-body);line-height:var(--leading-body);color:var(--ink-2)}
+.lab-check-preview{max-width:100%;max-height:320px;object-fit:contain;justify-self:start;border:1px solid var(--line);border-radius:var(--radius-control)}
+.lab-check-consent{display:flex;gap:var(--s3);align-items:flex-start;font-size:var(--text-body);line-height:1.4;cursor:pointer}
+.lab-check-consent input{width:24px;height:24px;flex-shrink:0;margin-top:2px;accent-color:var(--signal)}
+.lab-check-photo .lab-check-photo-note{padding:var(--s3) var(--s4);border-radius:var(--radius-control);color:var(--ink)}
+.lab-check-photo-note.is-done{background:var(--signal-50);color:var(--signal-ink)}
+.lab-check-photo-note.is-warn{background:var(--amber-50);color:var(--amber-ink)}
+.lab-check-download{display:grid;gap:var(--s2);justify-items:start}
+.lab-check-download p{margin:0;font-size:14px;color:var(--ink-2)}
 .lab-check-report{position:sticky;top:var(--s4)}
 .lab-check-field{display:grid;gap:var(--s2);font-size:var(--text-small);font-weight:600}
 .lab-check-field select{min-height:var(--control);border-radius:var(--radius-control);border:1px solid var(--line-strong);background:var(--card);color:var(--ink);font:inherit;font-size:var(--text-body);font-weight:500;padding:0 var(--s3)}
@@ -22,7 +32,7 @@
 .lab-check-organism em{color:var(--ink);font-weight:600}
 .lab-check-flags{list-style:none;margin:0;padding:0;display:grid;gap:var(--s3)}
 .lab-check-flag{border-radius:var(--radius-control);padding:var(--s3) var(--s4);display:grid;gap:var(--s1);background:var(--slate-50);color:var(--slate-ink);border-left:4px solid var(--slate-line)}
-.lab-check-flag.is-critical,.lab-check-flag.is-high{background:var(--amber-50);color:var(--amber-ink);border-left-color:var(--amber-line)}
+.lab-check-flag.is-critical,.lab-check-flag.is-high,.lab-check-flag.is-pattern{background:var(--amber-50);color:var(--amber-ink);border-left-color:var(--amber-line)}
 .lab-check-flag strong{font-size:var(--text-body)}
 .lab-check-flag p{margin:0;font-size:var(--text-small);line-height:1.45}
 .lab-check-level{display:inline-flex;align-items:center;gap:var(--s1);font-size:14px;font-weight:600;letter-spacing:.02em}
@@ -33,3 +43,4 @@
 .lab-check-limits svg{flex-shrink:0;margin-top:2px}
 @media (max-width:860px){.lab-check-layout{grid-template-columns:minmax(0,1fr)}.lab-check-report{position:static}}
 @media (max-width:420px){.lab-check-entry,.lab-check-report{padding:var(--s4)}.lab-check-choice{padding:0 var(--s2)}}
+.lab-check-file{display:none}

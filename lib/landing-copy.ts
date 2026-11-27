@@ -16,6 +16,16 @@ export const landing={
   {id:'pack',title:'Check the pack',text:'We point you to NAFDAC’s own checks. We don’t claim to spot fakes.'},
   {id:'privacy',title:'Your privacy',text:'Your photo goes only to the label reader and isn’t kept. Typing a name sends nothing.'}
  ],
+ research:{
+  title:'For labs and researchers',
+  lead:'Resistance is caught in the lab. Photograph an antibiogram and ResistGuard flags the results that need action.',
+  features:[
+   {id:'read',title:'Read the lab report',text:'Photograph a printed or handwritten antibiogram. Check what AI read before you rely on it.'},
+   {id:'flag',title:'Flag priority resistance',text:'WHO priority pathogens, multidrug resistance and results that should not be possible.'},
+   {id:'record',title:'Keep the record',text:'Save each result as a spreadsheet file for your lab records. ResistGuard keeps nothing.'}
+  ],
+  cta:'Check an antibiogram'
+ },
  closing:{text:'Not sure? Ask before you swallow.',em:'Ask'},
  honesty:'Not yet reviewed by a pharmacist.'
 } as const;
