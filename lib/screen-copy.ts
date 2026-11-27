@@ -89,6 +89,11 @@ export const copy={
  },
  answer:{
   antibiotic:'This is an antibiotic',
+  antibioticPurpose:(name:string,headache:boolean)=>`${name} treats certain bacterial infections.${headache?' It doesn’t relieve headache pain directly.':''}`,
+  headacheAction:(name:string,prescribed:boolean)=>prescribed
+   ? `Ask your prescribing doctor, “What infection is ${name} meant to treat, and is it related to my headache?”`
+   : `Tell a doctor about your headache and that you’re considering ${name}. Ask what might be causing the headache and whether an antibiotic is needed.`,
+  shareConditions:'Also tell the doctor about the conditions you listed.',
   notAntibiotic:'This is not an antibiotic',
   review:'Not yet reviewed by a pharmacist',
   boundary:"This tells you what's in the pack. Only a pharmacist or doctor can tell you if you need it.",

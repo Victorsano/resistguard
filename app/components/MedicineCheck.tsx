@@ -5,7 +5,7 @@ import {medicines} from '@/lib/safety';
 import {unavailableScan,type ScanResult} from '@/lib/scan';
 import {fullPhotoCrop,prepareImage,type PhotoCrop} from '@/lib/image';
 import {scanRecovery} from '@/lib/scan-guide';
-import {scanOutcome,staysOnPhoto,capitalise,emptyCheckDetails,type CheckDetails,type Screen,type Route} from '@/lib/flow';
+import {scanOutcome,staysOnPhoto,capitalise,normaliseCheckReason,emptyCheckDetails,type CheckDetails,type Screen,type Route} from '@/lib/flow';
 import {localGuidance,matchTypedMedicine,type CheckGuidance,type GuidanceContext} from '@/lib/check-guidance';
 import {availableFollowUps,selectFollowUps,type FollowUpAnswer,type FollowUpAnswers,type FollowUpDetails,type FollowUpQuestion} from '@/lib/check-follow-ups';
 import {unlistedWhatsAppLink} from '@/lib/next-steps';
@@ -201,7 +201,10 @@ export default function MedicineCheck({command,aiPaused=false,example=false}:{co
   {backButton}
   <CheckQuestions step={screen} details={details} medicineName={medicineName} aiAvailable={readiness==='available'} onChange={setDetails} onMedicineName={setMedicineName} onContinue={(next,useAI)=>{
    if(screen==='other-medicines')void completeCheck(next,useAI);
-   else go(screen==='reason'?'prescription':'other-medicines');
+   else {
+    if(screen==='reason')setDetails({...next,reason:normaliseCheckReason(next.reason)});
+    go(screen==='reason'?'prescription':'other-medicines');
+   }
   }}/>
  </section>}
  {screen==='follow-up'&&candidate&&<section data-motion="screen" className="medicine-check-screen">

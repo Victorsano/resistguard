@@ -46,7 +46,14 @@ const reasonPhrases={
 } as const;
 type ReasonId=keyof typeof reasonPhrases;
 
+export function normaliseCheckReason(reason:string){
+ return reason.replace(/\bheadace(s)?\b/gi,(word,plural)=>(
+  (word[0]==='H'?'Headache':'headache')+(plural?'s':'')
+ ));
+}
+
 export function suggestReasons(input:string):ReasonId[]{
+ input=normaliseCheckReason(input);
  // Keep negated descriptions for the user to classify. These are text matches, never diagnoses.
  if(/\b(?:no|not|without|never)\b|n['’]t\b/i.test(input))return [];
  const words=` ${input.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim()} `;

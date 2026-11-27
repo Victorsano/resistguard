@@ -2,7 +2,7 @@
 
 import {ChevronDown,RotateCcw,BadgeInfo} from 'lucide-react';
 import {type Medicine} from '@/lib/safety';
-import {type CheckDetails} from '@/lib/flow';
+import {normaliseCheckReason,suggestReasons,type CheckDetails} from '@/lib/flow';
 import {guidanceMedicine,type CheckGuidance} from '@/lib/check-guidance';
 import type {FollowUpQuestion,FollowUpAnswers,FollowUpDetails} from '@/lib/check-follow-ups';
 import {checkResult} from '@/lib/check-result';
@@ -26,7 +26,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
  onMatch:(index:number,id:string)=>void;
 }){
  const t=copy.answer;
- const reason=details.reason.trim();
+ const reason=normaliseCheckReason(details.reason.trim());
  const {status,clinician,assessment,gaps}=checkResult({
   reason,prescribed:details.prescribed==='yes',questions:followUps,answers:followUpAnswers,
   interactions:guidance.interactions.length>0,needsInteractionReview:guidance.needsInteractionReview,needsReasonReview:guidance.needsReasonReview
@@ -41,15 +41,20 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
  const checks=followUps.flatMap(({id})=>followUpAnswers[id]&&Object.hasOwn(t.checks,id)?[t.checks[id]]:[]);
  if(details.otherMedicines)checks.push(t.checks.other);
  const reported=[details.prescribed?t.reportedPrescription[details.prescribed]:'',assessment?t.reportedAssessment[assessment]:''].filter(Boolean);
- const useAppNextAction=clinician==='prescriber'||clinician==='previous_clinician';
- const defaultAction=clinician==='prescriber'&&namedConditions?t.prescriberConditions:
+ const antibioticForHeadache=medicine.antibiotic&&suggestReasons(reason).includes('headache');
+ const useAppNextAction=antibioticForHeadache||clinician==='prescriber'||clinician==='previous_clinician';
+ const usualAction=clinician==='prescriber'&&namedConditions?t.prescriberConditions:
   clinician==='prescriber'&&status==='concern'?t.prescriberConcern:t.nextActionFallback[clinician];
+ const action=antibioticForHeadache
+  ? t.headacheAction(medicine.name,details.prescribed==='yes')+(namedConditions?' '+t.shareConditions:'')
+  : usualAction;
  return <section className="answer" aria-labelledby="answer-guidance">
   <div className="answer-context"><span>{medicine.name}</span><span>{medicine.antibiotic?t.antibiotic:t.notAntibiotic}</span></div>
   <div className="answer-lead" data-outcome={pending?undefined:status} data-motion="verdict">
    <h1 id="answer-guidance" tabIndex={-1} data-screen-heading>{pending?t.guidance:t.status[status]}</h1>
    <div aria-live="polite">
     {pending?<p role="status">{t.guidancePending}</p>:<>
+     {medicine.antibiotic&&<p className="answer-takeaway">{t.antibioticPurpose(medicine.name,antibioticForHeadache)}</p>}
      {reported.length>0&&<p className="answer-reported">{reported.join(' ')}</p>}
      {namedConditions&&<p className="answer-source-gap"><strong>{t.reportedConditions}</strong><br/>{namedConditions}</p>}
      {status==='no_concern'&&checks.length>0&&<p className="answer-source-gap">{t.scope(format.format(checks))}</p>}
@@ -62,7 +67,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
       (status==='concern'||(status==='no_concern'&&!checks.length))&&<p className="answer-takeaway">{t.statusNote[status]}</p>}
      <div className="answer-action">
       <h2>{clinician==='prescriber'&&status!=='no_concern'?t.prescriberAction:t.nextAction[clinician]}</h2>
-      <p>{(!useAppNextAction&&guidance.synthesis?.nextAction)||defaultAction}</p>
+      <p>{(!useAppNextAction&&guidance.synthesis?.nextAction)||action}</p>
      </div>
      {guidance.fallback&&<p className="answer-provider-note">{guidance.fallback==='rate_limit'?t.guidanceBusy:t.guidanceFallback}{' '}
       <button type="button" className="text-button answer-guidance-retry" onClick={onRetry}>{t.guidanceRetry}</button>
