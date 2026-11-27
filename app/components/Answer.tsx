@@ -82,7 +82,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
    </div>
   </details>
   <GreenbookCheck ingredients={medicine.ingredients} suggestedNumber={suggestedRegistration} aiAvailable={aiAvailable}/>
-  {!pending&&(supportingItems.length>0||followUpSources.length>0)&&<details className="answer-sources" open>
+  {!pending&&(supportingItems.length>0||followUpSources.length>0)&&<details className="answer-sources">
    <summary>{t.supporting}<ChevronDown size={20} aria-hidden="true" className="answer-chevron"/></summary>
    <div className="answer-expanded answer-guidance">
     {supportingItems.map(item=><article className="answer-guidance-item" key={item.id}>
@@ -132,6 +132,7 @@ export default function Answer({medicine,details,guidance,pending,followUps,foll
    otherMedicines={details.medicines.map(entry=>guidanceMedicine(entry.choice)?.name??entry.name)}
    flagged={followUps.flatMap(question=>{
     const answer=followUpAnswers[question.id];
+    if(question.id==='reason-assessed'&&answer==='yes')return ['A doctor or pharmacist already checked my symptoms.'];
     return answer==='yes'||answer==='unsure'?[question.text+' '+copy.followUp[answer]+
       (followUpDetails[question.id]?.trim()?' · '+followUpDetails[question.id].trim():'')]:[];
    })}/>

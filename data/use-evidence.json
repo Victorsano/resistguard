@@ -64,6 +64,11 @@
       "name": "WHO · Diarrhoeal disease",
       "url": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
       "version": "Online fact sheet · Treatment"
+    },
+    "who_aware": {
+      "name": "WHO · AWaRe antibiotic book",
+      "url": "https://iris.who.int/bitstream/handle/10665/365237/9789240062382-eng.pdf",
+      "version": "2022"
     }
   },
   "checked": "2026-11-24",
@@ -177,6 +182,12 @@
       "text": "Diarrhoea can have several causes. WHO advises consulting a health professional, especially if it persists, there is blood in the stool, or there are signs of dehydration. A pack label cannot establish the cause.",
       "source": "who_diarrhoea",
       "section": "Causes and treatment"
+    },
+    "cough_aware": {
+      "title": "A cough can have different causes",
+      "text": "WHO guidance explains that antibiotics do not help with acute bronchitis. A cough alone cannot show whether someone has bronchitis or another condition, or whether they need an antibiotic.",
+      "source": "who_aware",
+      "section": "Acute bronchitis"
     }
   }
 }

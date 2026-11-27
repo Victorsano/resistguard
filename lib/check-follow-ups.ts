@@ -34,6 +34,10 @@ export function availableFollowUps(medicine:Medicine,context:GuidanceContext):Fo
    id:'prior-reaction',text:'Have you ever had an allergic reaction to this medicine or one of its ingredients?',
    mandatory:true,detailPrompt:'What happened?',concernOnYes:true,source:who
   },
+  ...(medicine.id==='co-amoxiclav'?[{
+   id:'co-amoxiclav-liver-reaction',text:'After taking co-amoxiclav, did your skin or eyes turn yellow, or were you told it caused liver problems?',
+   mandatory:true,concernOnYes:true,source:{name:'NAFDAC Greenbook · Co-amoxiclav product information, section 4.3',url:'https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2024/09/16/202409168dbda631-b788-59cd-b794-17c96b430497.pdf'}
+  }]:[]),
   ...(ibuprofenCheck?[
    {id:'stomach-ulcer',text:'Have you ever had a stomach ulcer?',mandatory:true,concernOnYes:true,source:ibuprofen},
    {id:'asthma',text:'Do you have asthma?',mandatory:false,concernOnYes:true,source:ibuprofen},

@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   const gate=await authorizeAI(request);
   if(!gate.ok)return Response.json({...fallback,fallback:gate.reason==='request_limit'?'rate_limit':'unavailable'},{headers});
 
-  const {candidates:evidence,reasonPassages,needsReasonReview,uncoveredReasons}=evidenceForCheck(medicine,context);
+  const {candidates:evidence,reasonPassages,backgroundPassages,needsReasonReview,uncoveredReasons}=evidenceForCheck(medicine,context);
   const knownInteractions=interactionEvidence(medicine,context.otherMedicines,context.namesIncomplete);
   const outcome=answers?checkResult({
     ...context,questions:available,answers,
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
       }
     }
     const corrected=context.otherMedicines.map((entry,index)=>({...entry,choice:corrections.find(item=>item.index===index)?.id??entry.choice}));
-    const selected=[...new Set([...selection.passageIds,...reasonPassages.map(item=>item.id)])].slice(0,4);
+    const selected=[...new Set([...reasonPassages.map(item=>item.id),...backgroundPassages.map(item=>item.id),...selection.passageIds])].slice(0,4);
     const reported={prescribed:context.prescribed,assessment:outcome?.assessment,reason:context.reason};
     let synthesis:CheckGuidance['synthesis'];
     // The app already states an unsupported reason plainly. Keep any separate documented concern.

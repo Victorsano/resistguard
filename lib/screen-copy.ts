@@ -106,7 +106,7 @@ export const copy={
   status:{concern:'Something to discuss',more_information:'More information needed',no_concern:'No concerns flagged by these checks'},
   reportedPrescription:{
    yes:'You said a doctor prescribed this medicine for this illness.',
-   no:'You said this medicine was not prescribed for this illness.'
+   no:'A doctor didn’t prescribe this medicine for these symptoms.'
   },
   reportedAssessment:{
    yes:'You said a doctor or pharmacist already checked your symptoms.',
@@ -125,7 +125,7 @@ export const copy={
   checks:{
    'penicillin-reaction':'past reactions to penicillin','prior-reaction':'past reactions to this medicine',
    'long-term-condition':'long-term health conditions','stomach-ulcer':'stomach ulcers',asthma:'asthma',
-   'kidney-or-liver':'kidney or liver conditions','paracetamol-overlap':'other medicines containing paracetamol',
+   'kidney-or-liver':'kidney or liver conditions','co-amoxiclav-liver-reaction':'past jaundice or liver problems after co-amoxiclav','paracetamol-overlap':'other medicines containing paracetamol',
    pregnancy:'pregnancy',other:'other medicines'
   } as Record<string,string>,
   scope:(checks:string)=>`This result covers your answers about ${checks}.`,
@@ -147,7 +147,7 @@ export const copy={
   },
   nextActionFallback:{
    prescriber:'If your instructions are unclear, ask what the medicine was prescribed for and how it fits your treatment plan.',
-   previous_clinician:'Tell the doctor that someone already checked your symptoms and that you’re considering this medicine. Ask whether you need it.',
+   previous_clinician:'Tell the doctor what symptoms you have and which medicine you’re considering. Ask whether you need it.',
    doctor:'Tell the doctor why you are considering this medicine and share any other medicines or reactions you reported.',
    pharmacist:'Show the pharmacist the packs for the medicines you take and ask them to check how they may interact.'
   },

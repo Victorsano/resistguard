@@ -34,6 +34,20 @@
       "ingredients": [
         "colchicine"
       ]
+    },
+    {
+      "id": "methotrexate",
+      "name": "Methotrexate",
+      "ingredients": [
+        "methotrexate"
+      ]
+    },
+    {
+      "id": "probenecid",
+      "name": "Probenecid",
+      "ingredients": [
+        "probenecid"
+      ]
     }
   ],
   "pairs": [
@@ -139,6 +153,42 @@
       "source": {
         "name": "NAFDAC Greenbook · Clarithromycin product information, sections 4.3 and 4.5",
         "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2024/02/16/2024021690374561-72ab-58a0-8ccd-a5870d1d886a.pdf"
+      }
+    },
+    {
+      "id": "co-amoxiclav-methotrexate",
+      "ingredients": [
+        [
+          "amoxicillin",
+          "clavulanic acid"
+        ],
+        [
+          "methotrexate"
+        ]
+      ],
+      "title": "Co-amoxiclav and methotrexate",
+      "text": "Co-amoxiclav can increase the risk of side effects from methotrexate. Ask a pharmacist or prescriber to check these medicines together.",
+      "source": {
+        "name": "NAFDAC Greenbook · Co-amoxiclav product information, section 4.5",
+        "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2024/09/16/202409168dbda631-b788-59cd-b794-17c96b430497.pdf"
+      }
+    },
+    {
+      "id": "co-amoxiclav-probenecid",
+      "ingredients": [
+        [
+          "amoxicillin",
+          "clavulanic acid"
+        ],
+        [
+          "probenecid"
+        ]
+      ],
+      "title": "Co-amoxiclav and probenecid",
+      "text": "Probenecid can raise and prolong amoxicillin levels when used with co-amoxiclav. Ask a pharmacist or prescriber to check these medicines together.",
+      "source": {
+        "name": "NAFDAC Greenbook · Co-amoxiclav product information, section 4.5",
+        "url": "https://admin.greenbook.nafdac.gov.ng/uploadImage/smpc_files/2024/09/16/202409168dbda631-b788-59cd-b794-17c96b430497.pdf"
       }
     }
   ]

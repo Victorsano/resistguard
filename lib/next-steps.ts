@@ -59,19 +59,19 @@ export function unlistedWhatsAppLink(ingredients:readonly string[],phone?:string
 export type CheckClinician=ReturnType<typeof checkResult>['clinician'];
 
 const clinicianQuestions:Record<CheckClinician,string>={
- prescriber:'What was this medicine prescribed to treat, and do the details I shared affect my treatment plan?',
- previous_clinician:'A doctor or pharmacist already checked my symptoms. Could you tell me whether I need this medicine?',
+ prescriber:'Could you explain what this medicine is meant to treat?',
+ previous_clinician:'Could you tell me whether I need this medicine for my symptoms?',
  doctor:'Could you review my symptoms and tell me whether this medicine is appropriate?',
  pharmacist:'Could you check whether this medicine interacts with anything else I take?'
 };
 
 export function clinicianMessage(medicine:ConfirmedMedicine,prescribed:YesNo|null,clinician:CheckClinician,reason:string,otherMedicines:readonly string[],flagged:readonly string[]){
  return [
-  'Hello, could you help me check a medicine that contains '+joinIngredients(medicine.ingredients)+'?',
+  'Hello, I’d like to ask about a medicine containing '+joinIngredients(medicine.ingredients)+'?',
   ...(prescribed===null?[]:[prescribed==='yes'?'A doctor prescribed it for this illness.':'A doctor did not prescribe it for this illness.']),
   ...(reason?['Reason: '+reason]:[]),
-  ...(otherMedicines.length?['Other products I reported: '+otherMedicines.join(', ')]:[]),
-  ...(flagged.length?['Things I reported:',...flagged.map(item=>'- '+item)]:[]),
+  ...(otherMedicines.length?['Other medicines or supplements: '+otherMedicines.join(', ')]:[]),
+  ...(flagged.length?['Details from my check:',...flagged.map(item=>'- '+item)]:[]),
   clinicianQuestions[clinician]
  ].join('\n');
 }

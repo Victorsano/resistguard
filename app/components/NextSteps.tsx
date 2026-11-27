@@ -20,17 +20,19 @@ export default function NextSteps({medicine,clinician,prescribed,reason,otherMed
 }){
  const [includeReason,setIncludeReason]=useState(false);
  const [includeAnswers,setIncludeAnswers]=useState(false);
+ const [includePrescription,setIncludePrescription]=useState(false);
  const [includeMedicines,setIncludeMedicines]=useState(false);
- const message=clinicianMessage(medicine,prescribed,clinician,includeReason?reason:'',
+ const message=clinicianMessage(medicine,includePrescription?prescribed:null,clinician,includeReason?reason:'',
   includeMedicines?otherMedicines:[],includeAnswers?flagged:[]);
  const phone=clinician==='pharmacist'?process.env.NEXT_PUBLIC_PHARMACIST_WHATSAPP:undefined;
 
  return <details className="answer-sources">
   <summary>Preview a WhatsApp message<ChevronDown size={20} aria-hidden="true" className="answer-chevron"/></summary>
   <div className="answer-expanded next-steps">
+   {prescribed!==null&&<label><input type="checkbox" checked={includePrescription} onChange={event=>setIncludePrescription(event.target.checked)}/> Include whether it was prescribed</label>}
    {reason&&<label><input type="checkbox" checked={includeReason} onChange={event=>setIncludeReason(event.target.checked)}/> Include my reason</label>}
    {otherMedicines.length>0&&<label><input type="checkbox" checked={includeMedicines} onChange={event=>setIncludeMedicines(event.target.checked)}/> Include my other medicines and supplements</label>}
-   {flagged.length>0&&<label><input type="checkbox" checked={includeAnswers} onChange={event=>setIncludeAnswers(event.target.checked)}/> Include my follow-up answers</label>}
+   {flagged.length>0&&<label><input type="checkbox" checked={includeAnswers} onChange={event=>setIncludeAnswers(event.target.checked)}/> Include details from my check</label>}
    <div className="next-steps-message" aria-label="Your message">{message}</div>
    <a className="secondary" href={clinicianWhatsAppLink(message,phone)} target="_blank" rel="noreferrer">
     <MessageCircle size={20} aria-hidden="true"/> Open in WhatsApp

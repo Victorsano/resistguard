@@ -128,7 +128,9 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     uncoveredReasons.push(reasonLabels[reason]);
     return [];
   });
+  const backgroundPassages=medicine.antibiotic&&topics.includes('cough')?[passage('cough_aware')]:[];
   const selection=[
+    ...backgroundPassages,
     ...relevant,
     {id:'label-caution',title:'What to check on the label',text:medicine.caution,source:productSource},
     ...(context.otherMedicines.length||context.namesIncomplete?[{
@@ -146,7 +148,7 @@ export function evidenceForCheck(medicine: Medicine, context: GuidanceContext) {
     text:'Ask your prescriber or pharmacist to explain any instructions you are unsure about.',source:whoSafety
   });
   return {
-    candidates:selection,fallback:selection.slice(0,3),reasonPassages:relevant,uncoveredReasons,
+    candidates:selection,fallback:selection.slice(0,3),reasonPassages:relevant,backgroundPassages,uncoveredReasons,
     needsReasonReview:(!context.prescribed||medicine.antibiotic)&&(!relevant.length||uncoveredReasons.length>0)
   };
 }

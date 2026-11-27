@@ -155,3 +155,24 @@ test('an unfamiliar reason remains an evidence gap even with a prescription',()=
  const explanation='The label describes the medicine, and the supplied sources do not explain its use for the skin condition you reported.';
  assert.deepEqual(validateCheckSynthesis(explanation,undefined,context),{takeaway:explanation});
 });
+
+test('cough guidance provides context without treating a cough as a diagnosis',()=>{
+ const context={...base,reason:'Cough'};
+ const guidance=localGuidance(medicine(context.medicineId),context);
+ assert.ok(guidance.passages.some(item=>item.id==='cough_aware'));
+ assert.equal(guidance.needsReasonReview,true);
+ assert.deepEqual(guidance.uncoveredReasons,['cough']);
+});
+
+test('co-amoxiclav asks about a past liver reaction and flags documented combinations',()=>{
+ const context={...base,medicineId:'co-amoxiclav',otherMedicines:[
+  {name:'Methotrexate',choice:'methotrexate'},{name:'Probenecid',choice:'probenecid'}
+ ]};
+ const candidate=medicine(context.medicineId);
+ const questions=availableFollowUps(candidate,context);
+ assert.ok(questions.some(question=>question.id==='co-amoxiclav-liver-reaction'&&question.mandatory&&question.concernOnYes));
+ assert.equal(parseFollowUpAnswers({'penicillin-reaction':'no'},questions),null);
+ assert.deepEqual(localGuidance(candidate,context).interactions.map(item=>item.id),['co-amoxiclav-methotrexate','co-amoxiclav-probenecid']);
+ assert.equal(checkResult({...context,questions,answers:{'penicillin-reaction':'no','co-amoxiclav-liver-reaction':'yes'},
+  interactions:false,needsInteractionReview:false,needsReasonReview:false}).status,'concern');
+});
