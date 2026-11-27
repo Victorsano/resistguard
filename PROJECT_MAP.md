@@ -21,6 +21,10 @@ ResistGuard helps people in Nigeria identify the active ingredients in a medicin
 6. Expand **Medicine record** for ingredients and uses and **Supporting sources** for links and where they were used. The in-app NAFDAC Greenbook lookup checks a registration number. Saved records are dated fallbacks.
 7. Preview a WhatsApp draft and choose whether to include prescription status, reason, other medicines or relevant follow-up details. The user chooses the recipient and sends the message.
 
+## Antibiogram check (demo)
+
+`/lab` (`app/lab/page.tsx` -> `app/components/LabCheck.tsx`) lets a lab scientist enter one antibiogram and flags WHO priority resistance (Bacterial Priority Pathogens List 2024), multidrug and extensively drug resistance (ECDC and CDC definitions) and results that contradict expected resistance (EUCAST). It covers 7 bacteria. The rules are plain functions in `lib/antibiogram.ts` with tests in `tests/antibiogram.test.ts`, built from the eight fictional sample sheets. No AI call and nothing stored. No link to `/lab` from the checker yet. The rules have not been checked line by line against the source documents, and the page says so. Not built yet: reading a photo of the report, and an export for WHONET or NCDC.
+
 ## Evidence and result decisions
 
 - `lib/flow.ts` handles reason wording and conservative phrase matching. `lib/check-guidance.ts` selects passages and checks documented interactions. `data/use-evidence.json` holds symptom passages and source links. `data/medicines.json` and `data/nigeria-catalogue.json` hold medicine records. `data/check-interactions.json` holds the documented pairs. `lib/check-follow-ups.ts` holds sourced questions.

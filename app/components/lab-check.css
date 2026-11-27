@@ -1,0 +1,35 @@
+/* Antibiogram check at /lab. Values come from app/tokens.css. Amber marks priority findings; there is no red. */
+.lab-check{background:var(--paper);color:var(--ink);padding-block:var(--s6) var(--s8);padding-inline:var(--gutter);min-height:calc(100vh - var(--bar))}
+.lab-check-intro{max-width:46rem;margin-bottom:var(--s6)}
+.lab-check-intro h1{margin:0 0 var(--s3);font-size:clamp(30px,5vw,44px);line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
+.lab-check-intro p{margin:0;font-size:var(--text-body);line-height:var(--leading-body);color:var(--ink-2);max-width:62ch}
+.lab-check-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:var(--s5);align-items:start}
+.lab-check-entry,.lab-check-report{background:var(--card);border-radius:var(--radius-card);padding:var(--s5);min-width:0;display:grid;gap:var(--s4)}
+.lab-check-report{position:sticky;top:var(--s4)}
+.lab-check-field{display:grid;gap:var(--s2);font-size:var(--text-small);font-weight:600}
+.lab-check-field select{min-height:var(--control);border-radius:var(--radius-control);border:1px solid var(--line-strong);background:var(--card);color:var(--ink);font:inherit;font-size:var(--text-body);font-weight:500;padding:0 var(--s3)}
+.lab-check-results-head{display:flex;justify-content:space-between;align-items:center;gap:var(--s3)}
+.lab-check h2{display:flex;align-items:center;gap:var(--s2);margin:0;font-size:22px;letter-spacing:-.01em}
+.lab-check-rows{list-style:none;margin:0;padding:0;display:grid}
+.lab-check-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:var(--s2) var(--s3);padding-block:var(--s2);border-bottom:1px solid var(--line)}
+.lab-check-drug{font-size:var(--text-body);font-weight:500;min-width:0}
+.lab-check-choices{display:flex;gap:var(--s1)}
+.lab-check-choice{min-width:52px;min-height:52px;padding:0 var(--s3);border-radius:var(--radius-control);border:1px solid var(--line-strong);background:var(--card);color:var(--ink);font:inherit;font-size:var(--text-body);font-weight:600;cursor:pointer}
+.lab-check-choice.is-none{font-size:var(--text-small);font-weight:500;color:var(--ink-2)}
+.lab-check-choice.is-active{background:var(--signal);border-color:var(--signal);color:var(--on-signal)}
+.lab-check-choice:focus-visible{outline:3px solid var(--signal-300);outline-offset:2px}
+.lab-check-empty,.lab-check-organism{margin:0;font-size:var(--text-body);color:var(--ink-2)}
+.lab-check-organism em{color:var(--ink);font-weight:600}
+.lab-check-flags{list-style:none;margin:0;padding:0;display:grid;gap:var(--s3)}
+.lab-check-flag{border-radius:var(--radius-control);padding:var(--s3) var(--s4);display:grid;gap:var(--s1);background:var(--slate-50);color:var(--slate-ink);border-left:4px solid var(--slate-line)}
+.lab-check-flag.is-critical,.lab-check-flag.is-high{background:var(--amber-50);color:var(--amber-ink);border-left-color:var(--amber-line)}
+.lab-check-flag strong{font-size:var(--text-body)}
+.lab-check-flag p{margin:0;font-size:var(--text-small);line-height:1.45}
+.lab-check-level{display:inline-flex;align-items:center;gap:var(--s1);font-size:14px;font-weight:600;letter-spacing:.02em}
+.lab-check-flag.is-critical .lab-check-level{text-transform:uppercase;letter-spacing:.06em}
+.lab-check-steps h3{display:flex;align-items:center;gap:var(--s2);margin:0 0 var(--s2);font-size:var(--text-body)}
+.lab-check-steps ul{margin:0;padding-left:22px;display:grid;gap:var(--s1);font-size:var(--text-body);line-height:1.45}
+.lab-check-limits{display:flex;gap:var(--s2);align-items:flex-start;margin:0;padding-top:var(--s3);border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2)}
+.lab-check-limits svg{flex-shrink:0;margin-top:2px}
+@media (max-width:860px){.lab-check-layout{grid-template-columns:minmax(0,1fr)}.lab-check-report{position:static}}
+@media (max-width:420px){.lab-check-entry,.lab-check-report{padding:var(--s4)}.lab-check-choice{padding:0 var(--s2)}}
