@@ -123,6 +123,7 @@ export default function LabCheck(){
       <h3>{t.summaryTitle(summary.counts.total)}</h3>
       <p className="lab-check-headline">{t.summaryHeadline(summary.counts.action,summary.counts.total)}</p>
       <dl className="lab-check-counts">{(['whoCritical','whoHigh','multidrug','recheck','clear'] as const).map(key=><div key={key} className={`is-${key}`}><dt>{t.summaryCounts[key]}</dt><dd>{summary.counts[key]}</dd></div>)}</dl>
+      <details className="lab-check-key" open><summary>{t.keyTitle}</summary><dl>{t.key.map(item=><div key={item.term}><dt>{item.term}</dt><dd>{item.text}</dd></div>)}</dl></details>
       <h3><ListOrdered size={20} aria-hidden="true"/> {t.rankTitle}</h3>
       <ol className="lab-check-rank">{summary.ranked.map(row=>{const item=filled[row.index];return <li key={item.id}><button type="button" className={`lab-check-rank-item${item.id===selected?' is-active':''}`} onClick={()=>setSelected(item.id)}><span className="lab-check-rank-label">{row.label} · <em>{organisms[row.antibiogram.organism].name}</em></span>{row.top?<><LevelChip level={row.top.level}/><strong>{row.top.title}</strong></>:<span className="lab-check-rank-none">{t.noFinding}</span>}</button></li>;})}</ol>
      </div>}
