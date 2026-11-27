@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {antibiogramCsv,antibiogramScanPrompt,checkAntibiogram,classCounts,parseAntibiogramScan,sampleAntibiograms,type Antibiogram} from '../lib/antibiogram';
+import {antibiogramCsv,antibiogramScanPrompt,checkAntibiogram,classCounts,parseAntibiogramScan,sampleAntibiograms,summariseAntibiograms,type Antibiogram} from '../lib/antibiogram';
 
 const sheet=(id:string)=>sampleAntibiograms.find(item=>item.id===id)!.antibiogram;
 const titles=(a:Antibiogram)=>checkAntibiogram(a).flags.map(flag=>flag.title);
@@ -54,18 +54,38 @@ test('the check never names an antibiotic to treat with',()=>{
  }
 });
 
-test('a photo reading becomes an antibiogram only with a listed organism and valid results',()=>{
- const read=parseAntibiogramScan(JSON.stringify({organism:'klebsiella-pneumoniae',legibility:'clear',results:{meropenem:'R',ampicillin:'S'}}));
- assert.deepEqual(read,{status:'read',partial:false,antibiogram:{organism:'klebsiella-pneumoniae',results:{meropenem:'R',ampicillin:'S'}}});
- assert.equal(parseAntibiogramScan(JSON.stringify({organism:'escherichia-coli',legibility:'partial',results:{ampicillin:'R'}})).status,'read');
- assert.deepEqual(parseAntibiogramScan(JSON.stringify({organism:null,legibility:'partial',results:{ampicillin:'R'}})),{status:'unreadable'});
- assert.deepEqual(parseAntibiogramScan(JSON.stringify({organism:'escherichia-coli',legibility:'unreadable',results:{}})),{status:'unreadable'});
+test('a photo can hold several isolates; each is checked on its own and unreadable ones are skipped, never guessed',()=>{
+ const iso=(organism:string|null,legibility:string,results:object,position='top left')=>({position,organism,legibility,results});
+ const read=parseAntibiogramScan(JSON.stringify({reportCount:1,isolates:[iso('klebsiella-pneumoniae','clear',{meropenem:'R',ampicillin:'S'}),iso('escherichia-coli','partial',{ampicillin:'R'},'top right'),iso(null,'partial',{ampicillin:'R'},'bottom left'),iso('escherichia-coli','unreadable',{},'bottom right')]}));
+ assert.deepEqual(read,{status:'read',skipped:2,isolates:[
+  {position:'top left',partial:false,antibiogram:{organism:'klebsiella-pneumoniae',results:{meropenem:'R',ampicillin:'S'}}},
+  {position:'top right',partial:true,antibiogram:{organism:'escherichia-coli',results:{ampicillin:'R'}}}
+ ]});
+ assert.deepEqual(parseAntibiogramScan(JSON.stringify({reportCount:1,isolates:[]})),{status:'unreadable',skipped:0});
+ assert.deepEqual(parseAntibiogramScan(JSON.stringify({reportCount:1,isolates:[iso(null,'unreadable',{})]})),{status:'unreadable',skipped:1});
  for(const bad of [
-  {organism:'candida-albicans',legibility:'clear',results:{}},
-  {organism:'escherichia-coli',legibility:'clear',results:{aspirin:'R'}},
-  {organism:'escherichia-coli',legibility:'clear',results:{ampicillin:'resistant'}},
-  {organism:'escherichia-coli',legibility:'clear',results:{},patient:'A Name'}
+  {reportCount:1,isolates:[iso('candida-albicans','clear',{})]},
+  {reportCount:1,isolates:[iso('escherichia-coli','clear',{aspirin:'R'})]},
+  {reportCount:1,isolates:[iso('escherichia-coli','clear',{ampicillin:'resistant'})]},
+  {reportCount:1,isolates:[{...iso('escherichia-coli','clear',{}),patient:'A Name'}]},
+  {reportCount:1,isolates:Array.from({length:9},()=>iso('escherichia-coli','clear',{ampicillin:'R'}))},
+  {organism:'escherichia-coli',legibility:'clear',results:{}}
  ])assert.throws(()=>parseAntibiogramScan(JSON.stringify(bad)));
+});
+
+test('a photo with several reports is not read; the user is asked for one photo per report',()=>{
+ assert.deepEqual(parseAntibiogramScan(JSON.stringify({reportCount:4,isolates:[]})),{status:'several',reports:4});
+ assert.throws(()=>parseAntibiogramScan(JSON.stringify({reportCount:1.5,isolates:[]})));
+ assert.throws(()=>parseAntibiogramScan(JSON.stringify({isolates:[]})));
+});
+
+test('the summary ranks many antibiograms by their most serious finding and counts them',()=>{
+ const list=sampleAntibiograms.map(({label,antibiogram})=>({label,antibiogram}));
+ const {ranked,counts}=summariseAntibiograms(list);
+ assert.deepEqual(counts,{total:7,whoCritical:3,whoHigh:3,multidrug:6,recheck:2,action:6,clear:1});
+ assert.deepEqual(ranked.slice(0,3).map(row=>row.top?.level),['critical','critical','critical']);
+ assert.equal(ranked.at(-1)!.label,'Sheet 1 · E. coli, urine');
+ assert.equal(ranked.at(-1)!.top,null);
 });
 
 test('the photo prompt treats image text as data and never returns personal details',()=>{
@@ -74,11 +94,12 @@ test('the photo prompt treats image text as data and never returns personal deta
  assert.match(antibiogramScanPrompt,/Never guess/);
 });
 
-test('the CSV is one isolate row with a column per antibiotic and the flags, and contains nothing personal',()=>{
- const csv=antibiogramCsv(sheet('2'));
- const [header,row]=csv.trim().split('\n');
- assert.equal(header,'organism,Ampicillin,Amoxicillin-clavulanate,Ceftriaxone,Ceftazidime,Meropenem,Ciprofloxacin,Gentamicin,Trimethoprim-sulfamethoxazole,resistguard_flags');
- assert.equal(row,'Klebsiella pneumoniae,S,R,R,R,R,R,R,R,Carbapenem-resistant Enterobacterales; Multidrug resistant; Check the ampicillin result');
+test('the CSV has one row per isolate with a column per antibiotic and the flags, and contains nothing personal',()=>{
+ const csv=antibiogramCsv([{label:'Photo 1',antibiogram:sheet('2')},{label:'Photo 2',antibiogram:sheet('7')}]);
+ const [header,row,second]=csv.trim().split('\n');
+ assert.equal(header,'isolate,organism,Ampicillin,Amoxicillin-clavulanate,Ceftriaxone,Ceftazidime,Meropenem,Ciprofloxacin,Gentamicin,Trimethoprim-sulfamethoxazole,Chloramphenicol,Azithromycin,resistguard_flags');
+ assert.equal(row,'Photo 1,Klebsiella pneumoniae,S,R,R,R,R,R,R,R,,,Carbapenem-resistant Enterobacterales; Multidrug resistant; Check the ampicillin result');
+ assert.equal(second,'Photo 2,Salmonella Typhi,R,,S,,,R,,R,R,S,Fluoroquinolone-resistant Salmonella Typhi; Multidrug-resistant typhoid');
  assert.doesNotMatch(csv,/DEMO-|patient/i);
 });
 

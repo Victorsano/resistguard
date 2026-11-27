@@ -42,7 +42,7 @@ Rules:
   | Lead | 20px | 400, `--ink-2` | 1.5 |
   | Small and notes | 16px | 400–600 | 1.5 |
   | Buttons | 18–19px | 600 | 1.2 |
-  | Wordmark | 22px (20px on phones) | 720 / 86%; "Demo" 14px at `.56` | 1 |
+  | Wordmark | 22px (20px on phones) | 720 / 86% | 1 |
 
 - **Fraunces italic** (weight 400; `opsz 144`, `SOFT 100`, `WONK 1`) in signal, for **one `<em>` per heading** only. Use `app/components/Emphasis.tsx`. Never use it in body text, buttons, verdicts or medical text.
 - Nothing below 14px. Body is never below 18px in the tool. No caps, no monospace, no system fonts.
@@ -58,7 +58,7 @@ Rules:
 
 ## Components
 
-- **Wordmark:** `app/components/Wordmark.tsx`. "ResistGuard" followed by "Demo" in small text. No monogram, no badge.
+- **Wordmark:** `app/components/Wordmark.tsx`. "ResistGuard" on its own. No monogram, no badge.
 - **Buttons:** `.primary` (signal fill), `.secondary` (white with a 1px border), `.text-button` (signal underline). The landing page uses `.landing-button` with a trailing arrow: one rectangle, one arrow.
 - **Notes:** `.note` (signal-50) for information; `.caution` (white card) for medicine cautions.
 - **Hero media:** `app/components/HeroMedia.tsx`. The rules are in `lib/hero-media.ts`:

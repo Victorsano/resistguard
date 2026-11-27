@@ -18,13 +18,13 @@ export const landing={
  ],
  research:{
   title:'For labs and researchers',
-  lead:'Resistance is caught in the lab. Photograph an antibiogram and ResistGuard flags the results that need action.',
+  lead:'Resistance is caught in the lab. Photograph a stack of antibiograms and ResistGuard ranks which results need action first.',
   features:[
-   {id:'read',title:'Read the lab report',text:'Photograph a printed or handwritten antibiogram. Check what AI read before you rely on it.'},
-   {id:'flag',title:'Flag priority resistance',text:'WHO priority pathogens, multidrug resistance and results that should not be possible.'},
-   {id:'record',title:'Keep the record',text:'Save each result as a spreadsheet file for your lab records. ResistGuard keeps nothing.'}
+   {id:'read',title:'Read the whole stack',text:'Upload a photo of each printed or handwritten report, all at once. Check what AI read before you rely on it.'},
+   {id:'flag',title:'Rank what needs action',text:'WHO priority pathogens first, then multidrug resistance, then results that should not be possible.'},
+   {id:'record',title:'Feed surveillance',text:'Save every result as one spreadsheet, one row per bacterium, ready for WHONET. ResistGuard keeps nothing.'}
   ],
-  cta:'Check an antibiogram'
+  cta:'Check antibiograms'
  },
  closing:{text:'Not sure? Ask before you swallow.',em:'Ask'},
  honesty:'Not yet reviewed by a pharmacist.'
