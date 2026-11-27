@@ -70,3 +70,8 @@
 .lab-check-rank-none{font-size:var(--text-small);color:var(--ink-2)}
 .lab-check-level.is-critical,.lab-check-level.is-high,.lab-check-level.is-pattern{color:var(--amber-ink)}
 .lab-check-level.is-critical{text-transform:uppercase;letter-spacing:.06em}
+.lab-check-key{border-radius:var(--radius-control);background:var(--paper);padding:var(--s2) var(--s3)}
+.lab-check-key summary{min-height:44px;display:flex;align-items:center;font-size:var(--text-small);font-weight:600;color:var(--signal-ink);cursor:pointer}
+.lab-check-key dl{display:grid;gap:var(--s2);margin:var(--s2) 0 var(--s1)}
+.lab-check-key dt{font-size:var(--text-small);font-weight:600}
+.lab-check-key dd{margin:0;font-size:var(--text-small);line-height:1.45;color:var(--ink-2)}

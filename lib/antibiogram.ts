@@ -95,39 +95,39 @@ export function checkAntibiogram(a:Antibiogram):{flags:Flag[];resistantClasses:s
  const counts=classCounts(a);
  const enterobacterale=enterobacterales.includes(a.organism);
  // WHO priority patterns
- if(enterobacterale&&any(a,carbapenems))flags.push({level:'critical',title:'Carbapenem-resistant Enterobacterales',detail:'WHO critical priority. Carbapenems are last-line antibiotics for these bacteria.'});
- else if(enterobacterale&&any(a,thirdGen))flags.push({level:'critical',title:'Third-generation cephalosporin-resistant Enterobacterales',detail:'WHO critical priority. Carbapenems still test susceptible, so this may be an ESBL producer. Confirm with an ESBL test.'});
- if(a.organism==='acinetobacter-baumannii'&&any(a,carbapenems))flags.push({level:'critical',title:'Carbapenem-resistant Acinetobacter baumannii',detail:'WHO critical priority.'});
- if(a.organism==='pseudomonas-aeruginosa'&&any(a,carbapenems))flags.push({level:'high',title:'Carbapenem-resistant Pseudomonas aeruginosa',detail:'WHO high priority.'});
- if(isMrsa(a))flags.push({level:'high',title:'Methicillin-resistant Staphylococcus aureus (MRSA)',detail:'WHO high priority. Oxacillin or the cefoxitin screen tests resistant.'});
- if(a.organism==='staphylococcus-aureus'&&notSusceptible(a.results.vancomycin))flags.push({level:'review',title:'Vancomycin non-susceptible Staphylococcus aureus',detail:'This is very rare. Confirm the identification and the result at a reference laboratory before release.'});
- if(a.organism==='enterococcus-faecium'&&notSusceptible(a.results.vancomycin))flags.push({level:'high',title:'Vancomycin-resistant Enterococcus faecium',detail:'WHO high priority.'});
- if(a.organism==='salmonella-typhi'&&notSusceptible(a.results.ciprofloxacin))flags.push({level:'high',title:'Fluoroquinolone-resistant Salmonella Typhi',detail:'WHO high priority.'});
+ if(enterobacterale&&any(a,carbapenems))flags.push({level:'critical',title:'Carbapenem-resistant Enterobacterales',detail:'This gut germ resists carbapenems (such as meropenem), the antibiotics kept for when everything else fails. It can spread between patients. WHO lists it in its top tier, critical.'});
+ else if(enterobacterale&&any(a,thirdGen))flags.push({level:'critical',title:'Third-generation cephalosporin-resistant Enterobacterales',detail:'This gut germ resists ceftriaxone-type antibiotics, which hospitals rely on every day. Carbapenems still work. It may make ESBL, an enzyme that destroys these antibiotics, so confirm with an ESBL test. WHO lists it in its top tier, critical.'});
+ if(a.organism==='acinetobacter-baumannii'&&any(a,carbapenems))flags.push({level:'critical',title:'Carbapenem-resistant Acinetobacter baumannii',detail:'This germ resists carbapenems, the last-resort antibiotics. It survives on hospital surfaces and spreads easily in intensive care. WHO lists it in its top tier, critical.'});
+ if(a.organism==='pseudomonas-aeruginosa'&&any(a,carbapenems))flags.push({level:'high',title:'Carbapenem-resistant Pseudomonas aeruginosa',detail:'This germ resists carbapenems, the last-resort antibiotics. WHO lists it in its second tier, high.'});
+ if(isMrsa(a))flags.push({level:'high',title:'Methicillin-resistant Staphylococcus aureus (MRSA)',detail:'This Staph germ resists the usual penicillin-type antibiotics: oxacillin or the cefoxitin screen tests resistant. WHO lists it in its second tier, high.'});
+ if(a.organism==='staphylococcus-aureus'&&notSusceptible(a.results.vancomycin))flags.push({level:'review',title:'Vancomycin non-susceptible Staphylococcus aureus',detail:'This almost never happens. Confirm the germ and the result at a reference laboratory before release.'});
+ if(a.organism==='enterococcus-faecium'&&notSusceptible(a.results.vancomycin))flags.push({level:'high',title:'Vancomycin-resistant Enterococcus faecium',detail:'This germ resists vancomycin, a key hospital antibiotic. WHO lists it in its second tier, high.'});
+ if(a.organism==='salmonella-typhi'&&notSusceptible(a.results.ciprofloxacin))flags.push({level:'high',title:'Fluoroquinolone-resistant Salmonella Typhi',detail:'This typhoid germ resists ciprofloxacin, a common typhoid antibiotic. WHO lists it in its second tier, high.'});
  // Typhoid has its own standard definitions
  const typhoidMdr=a.organism==='salmonella-typhi'&&(['ampicillin','chloramphenicol','trimethoprim-sulfamethoxazole'] as AntibioticId[]).every(id=>notSusceptible(a.results[id]));
  if(typhoidMdr){
   const xdr=notSusceptible(a.results.ciprofloxacin)&&a.results.ceftriaxone==='R';
   flags.push(xdr
-   ?{level:'pattern',title:'Extensively drug-resistant typhoid',detail:'Resistant to ampicillin, chloramphenicol, trimethoprim-sulfamethoxazole and third-generation cephalosporins, and non-susceptible to fluoroquinolones.'}
-   :{level:'pattern',title:'Multidrug-resistant typhoid',detail:'Resistant to ampicillin, chloramphenicol and trimethoprim-sulfamethoxazole.'+(a.results.ceftriaxone==='S'?' Ceftriaxone still tests susceptible, so this is not extensively drug resistant.':'')});
+   ?{level:'pattern',title:'Extensively drug-resistant typhoid',detail:'This typhoid germ resists the three older typhoid antibiotics (ampicillin, chloramphenicol, trimethoprim-sulfamethoxazole), ciprofloxacin and ceftriaxone. Very few options remain.'}
+   :{level:'pattern',title:'Multidrug-resistant typhoid',detail:'This typhoid germ resists the three older typhoid antibiotics: ampicillin, chloramphenicol and trimethoprim-sulfamethoxazole.'+(a.results.ceftriaxone==='S'?' Ceftriaxone still works, so it is not the extensively resistant kind.':'')});
  }
  // Multidrug resistant (ECDC and CDC definition), judged on the classes tested. Extensive resistance is judged across every
  // category in the full definition, which one routine panel does not cover, so it is only ever reported as possible.
  if(!typhoidMdr){
   const xdrPossible=counts.tested>=7&&counts.susceptible<=2;
-  if(xdrPossible)flags.push({level:'pattern',title:'Possibly extensively drug resistant',detail:`Non-susceptible in ${counts.resistant.length} of ${counts.tested} classes tested. Only ${counts.susceptible===0?'no class':counts.susceptible===1?'1 class':'2 classes'} still tests susceptible. Confirming extensive resistance needs testing across the full standard panel.`});
-  else if(counts.resistant.length>=3||isMrsa(a))flags.push({level:'pattern',title:'Multidrug resistant',detail:isMrsa(a)?'MRSA always counts as multidrug resistant.':`Non-susceptible in ${counts.resistant.length} classes. The standard threshold is 3 or more.`});
+  if(xdrPossible)flags.push({level:'pattern',title:'Possibly extensively drug resistant',detail:`It resists ${counts.resistant.length} of the ${counts.tested} antibiotic types tested. Only ${counts.susceptible===0?'none':counts.susceptible===1?'1 type':'2 types'} still work${counts.susceptible===1?'s':''}. To confirm, the lab must test more antibiotic types.`});
+  else if(counts.resistant.length>=3||isMrsa(a))flags.push({level:'pattern',title:'Multidrug resistant',detail:isMrsa(a)?'MRSA always counts as multidrug resistant: it resists several antibiotic types at once.':`It resists ${counts.resistant.length} different antibiotic types. Three or more counts as multidrug resistant, so options are shrinking.`});
  }
  // Results that contradict expected resistance
  for(const id of organism.expectedResistant){
   const result=a.results[id];
-  if(result==='S'||result==='I')flags.push({level:'review',title:`Check the ${antibiotics[id].name.toLowerCase()} result`,detail:`${organism.name} is naturally resistant to ${antibiotics[id].name.toLowerCase()}, so "${result}" is unexpected. Check the identification and repeat the test before release.`});
+  if(result==='S'||result==='I')flags.push({level:'review',title:`Check the ${antibiotics[id].name.toLowerCase()} result`,detail:`${organism.name} is always resistant to ${antibiotics[id].name.toLowerCase()} by nature, so "${result}" should not be possible. The germ name or the test is probably wrong. Repeat it before the report goes to the doctor.`});
  }
  const priority=flags.some(f=>f.level!=='review');
  const review=flags.some(f=>f.level==='review');
  const steps=[
   ...(review?['Recheck the flagged results before you release this report.']:[]),
-  ...(priority?['Tell your infection prevention and control team today.','Send the isolate to a reference laboratory to confirm the resistance.','Report it through your national antimicrobial resistance surveillance contact at NCDC.']:[]),
+  ...(priority?['Tell the patient’s doctor about this result today.','Tell your infection prevention and control team today, so the germ does not spread to other patients.','Send the isolate to a reference laboratory to confirm the resistance.','Report it to NCDC through your national antimicrobial resistance surveillance contact.']:[]),
   ...(!priority&&!review?['No priority pattern in the antibiotics tested. Report as usual.']:[])
  ];
  return {flags,resistantClasses:counts.resistant,testedClasses:counts.tested,steps};
@@ -230,14 +230,22 @@ export const labCopy={
  summaryTitle:(n:number)=>`Across ${n} antibiograms`,
  summaryHeadline:(action:number,total:number)=>action===0?`None of the ${total} needs priority action.`:`${action} of ${total} need action today.`,
  summaryCounts:{whoCritical:'WHO critical',whoHigh:'WHO high',multidrug:'Multidrug resistant',recheck:'Need a recheck',clear:'No priority finding'},
+ keyTitle:'What these mean',
+ key:[
+  {term:'WHO critical',text:'The germ is on the top tier of WHO’s list of the most dangerous resistant germs. Even last-resort antibiotics may fail.'},
+  {term:'WHO high',text:'The germ is on WHO’s second tier. Dangerous, but some options remain.'},
+  {term:'Multidrug resistant',text:'The germ resists 3 or more types of antibiotic, so options are shrinking.'},
+  {term:'Need a recheck',text:'A result that should be impossible for this germ. Probably a lab error.'},
+  {term:'No priority finding',text:'Nothing alarming in the antibiotics tested.'}
+ ],
  rankTitle:'Act on these first',
  noFinding:'No priority finding',
  detailTitle:(label:string)=>`Details: ${label}`,
  edit:'Check and correct the results',
- classes:(resistant:number,tested:number)=>`Non-susceptible in ${resistant} of ${tested} antibiotic classes tested.`,
+ classes:(resistant:number,tested:number)=>`Resists ${resistant} of the ${tested} antibiotic types tested.`,
  next:'Next steps',
  limits:'Screening support for lab teams. It does not replace your laboratory information system. Priority levels follow the WHO Bacterial Priority Pathogens List 2024. Unexpected results follow EUCAST Expected Resistant Phenotypes v1.2. Multidrug resistance uses simplified antibiotic classes based on the ECDC and CDC definitions. Confirm every result with your lab’s own standards. ResistGuard does not choose a treatment and stores nothing.',
- levels:{critical:'WHO critical',high:'WHO high',pattern:'Resistance pattern',review:'Check result'},
+ levels:{critical:'WHO critical · last-resort antibiotics may fail',high:'WHO high · dangerous resistant germ',pattern:'Resists many antibiotic types',review:'Check result · likely lab error'},
  photoTitle:'Read photos of your reports',
  photoLead:'Take one photo per report. Upload a whole stack at once and ResistGuard reads and ranks them all. Crop out or cover patient names first.',
  takePhoto:'Take photo',
